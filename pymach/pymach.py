@@ -10,6 +10,6 @@ from prepare import Prepare
 #print obj.corr()
 if __name__ == "__main__":
     obj = Analyze(className='species')
-    obj.read("iris.csv")
-    print(obj.scatter())
+    #obj.read("iris.csv")
+    #print(obj.scatter())
 
