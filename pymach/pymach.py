@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from analyze import Analyze
+from prepare import Prepare
 
 obj = Analyze(className='species')
 obj.read("iris.csv")

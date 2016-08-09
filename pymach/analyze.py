@@ -1,3 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# Author: Gusseppe Bravo <gbravor@uni.pe>
+# License: BSD 3 clause
 """
 This module provides a few of useful functions (actually, methods)
 for describing the dataset which is to be studied.
@@ -10,7 +15,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 __all__ = [
-    'read', 'description', 'classBalance']
+    'read', 'description', 'classBalance', 'hist', 'density']
 
 
 class Analyze():

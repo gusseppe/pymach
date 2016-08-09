@@ -5,7 +5,7 @@
 # License: BSD 3 clause
 """
 This module provides a few of useful functions (actually, methods)
-for preparing the dataset which is to be studied.
+for feature selection the dataset which is to be studied.
 
 """
 from __future__ import print_function
@@ -16,7 +16,7 @@ __all__ = [
     'read', 'clean', 'reescale', 'standardize', 'normalize', 'binarize']
 
 
-class Prepare():
+class FeatureSelection():
     """ A class for data preparation """
 
     data = None
