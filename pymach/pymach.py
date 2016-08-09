@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+#import analyze
 from analyze import Analyze
-from prepare import Prepare
 
 #print obj.data
 #print obj.description()
