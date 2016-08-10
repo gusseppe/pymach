@@ -14,8 +14,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-#__all__ = [
-    #'read', 'description', 'classBalance', 'hist', 'density']
+__all__ = [
+    'read', 'description', 'classBalance', 'hist', 'density']
 
 
 class Analyze():
