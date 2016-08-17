@@ -9,6 +9,9 @@ for feature selection the dataset which is to be studied.
 
 """
 from __future__ import print_function
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_regression
 import numpy as np
 import pandas as pd
 
@@ -17,11 +20,11 @@ __all__ = [
 
 
 class FeatureSelection():
-    """ A class for data preparation """
+    """ A class for feature selection """
 
     data = None
 
-    def __init__(self, typeModel='class', className=''):
+    def __init__(self, typeModel='clasification', className=''):
         self.typeModel = typeModel
         self.className = className
 
@@ -29,19 +32,16 @@ class FeatureSelection():
         data = pd.read_csv(name)
         Prepare.data = data
 
-    def clean(self):
-        Prepare.data.dropna()
+    def univariateSelection(self):
+        if typeModel == 'clasification':
+            pass
 
-    def reescale(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
 
-        scaler = MinMaxScaler(feature_range=(0,1))
-        rescaledX = scaler.fit_transform(X)
+    def recursiveFeature(self):
+        pass
 
-        return rescaledX, scaler
 
-    def standardize(self):
+    def pca(self):
         X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
         #Y = Prepare.data.values[:, len(data.columns)-1]
 
@@ -50,7 +50,7 @@ class FeatureSelection():
 
         return rescaledX, scaler
 
-    def normalize(self):
+    def featureImportance(self):
         X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
         #Y = Prepare.data.values[:, len(data.columns)-1]
 

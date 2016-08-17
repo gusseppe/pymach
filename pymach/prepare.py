@@ -67,3 +67,6 @@ class Prepare():
         binaryX = binarizer.fit_transform(X)
 
         return binaryX, binarizer
+
+    def labelEncoder(self):
+        """If a dataset has categorical variables, change it"""

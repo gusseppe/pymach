@@ -1,4 +1,13 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+# Author: Gusseppe Bravo <gbravor@uni.pe>
+# License: BSD 3 clause
+
+"""
+This module provides the logic of the whole project.
+
+"""
 #import analyze
 #import analyze
 #print obj.data
