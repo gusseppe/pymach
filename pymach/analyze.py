@@ -41,20 +41,9 @@ class Analyze():
     def read(self, name):
         """Read the dataset.
 
-        Long description.
-
-        Parameters
-        ----------
-        typeModel : string
-            String that indicates if the model will be train for clasification
-            or regression.
-        className : string
-            String that indicates which column in the dataset is the class.
-
         Returns
         -------
         out : ndarray
-        Array representing the result of the multiplication.
 
         """
         data = pd.read_csv(name)
@@ -63,36 +52,15 @@ class Analyze():
     def description(self):
         """Shows a basic data description .
 
-        Long description.
-
-        Parameters
-        ----------
-        typeModel : string
-            String that indicates if the model will be train for clasification
-            or regression.
-        className : string
-            String that indicates which column in the dataset is the class.
-
         Returns
         -------
         out : ndarray
-        Array representing the result of the multiplication.
 
         """
         return Analyze.data.describe()
 
     def classBalance(self):
         """Shows how balanced the class values are.
-
-        Long description.
-
-        Parameters
-        ----------
-        typeModel : string
-            String that indicates if the model will be train for clasification
-            or regression.
-        className : string
-            String that indicates which column in the dataset is the class.
 
         Returns
         -------

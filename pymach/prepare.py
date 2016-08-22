@@ -11,9 +11,12 @@ for preparing the dataset which is to be studied.
 from __future__ import print_function
 import numpy as np
 import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.pipeline import FeatureUnion
+from sklearn.base import BaseEstimator, TransformerMixin
 
 __all__ = [
-    'read', 'clean', 'reescale', 'standardize', 'normalize', 'binarize']
+    'pipeline']
 
 
 class Prepare():
@@ -21,52 +24,77 @@ class Prepare():
 
     data = None
 
-    def __init__(self, typeModel='class', className=''):
+    def __init__(self, typeModel='class', typeAlgorithm=''):
         self.typeModel = typeModel
-        self.className = className
+        self.typeAlgorithm = typeAlgorithm
 
-    def read(self, name):
-        data = pd.read_csv(name)
-        Prepare.data = data
+    def pipeline(self):
+        transformers = []
 
-    def clean(self):
-        Prepare.data.dropna()
+        clean = self.Clean()
+        transformers.append(('clean', clean))
 
-    def reescale(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
+        if typeAlgorithm in ["NeuralN", "K-N"]:
+            minmax = MinMaxScaler(feature_range=(0,1))
+            normalizer = Normalizer()
+            transformers.append(('minmax', minmax))
+            transformers.append(('normalizer', normalizer))
+        elif typeAlgorithm in ["LinearR", "LogisticR"]:
+            scaler = StandardScaler()
+            transformers.append(('scaler', scaler))
+        else:
+            scaler = StandardScaler()
+            transformers.append(('scaler', scaler))
 
-        scaler = MinMaxScaler(feature_range=(0,1))
-        rescaledX = scaler.fit_transform(X)
+        #binarizer = Binarizer()
+        return FeatureUnion(transformers)
 
-        return rescaledX, scaler
+    class Clean(TransformerMixin):
+        """ A class for removing NAN values """
 
-    def standardize(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
+        def transform(self, X, **transform_params):
+            return pandas.DataFrame(X).dropna()
 
-        scaler = StandardScaler()
-        rescaledX = scaler.fit_transform(X)
+        def fit(self, X, y=None, **fit_params):
+            return self
 
-        return rescaledX, scaler
 
-    def normalize(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
 
-        normalizer = Normalizer()
-        normalizedX = normalizer.fit_transform(X)
+    #def reescale(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+        ##Y = Prepare.data.values[:, len(data.columns)-1]
 
-        return normalizedX, normalizer
+        #scaler = MinMaxScaler(feature_range=(0,1))
+        #rescaledX = scaler.fit_transform(X)
 
-    def binarize(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
+        #return rescaledX, scaler
 
-        binarizer = Binarizer()
-        binaryX = binarizer.fit_transform(X)
+    #def standardize(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+        ##Y = Prepare.data.values[:, len(data.columns)-1]
 
-        return binaryX, binarizer
+        #scaler = StandardScaler()
+        #rescaledX = scaler.fit_transform(X)
+
+        #return rescaledX, scaler
+
+    #def normalize(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+        ##Y = Prepare.data.values[:, len(data.columns)-1]
+
+        #normalizer = Normalizer()
+        #normalizedX = normalizer.fit_transform(X)
+
+        #return normalizedX, normalizer
+
+    #def binarize(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+        ##Y = Prepare.data.values[:, len(data.columns)-1]
+
+        #binarizer = Binarizer()
+        #binaryX = binarizer.fit_transform(X)
+
+        #return binaryX, binarizer
 
     def labelEncoder(self):
         """If a dataset has categorical variables, change it"""
