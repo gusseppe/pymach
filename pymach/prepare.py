@@ -14,6 +14,7 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.pipeline import FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.preprocessing import *
 
 __all__ = [
     'pipeline']
@@ -29,6 +30,8 @@ class Prepare():
         self.typeAlgorithm = typeAlgorithm
 
     def pipeline(self):
+        """ This function chooses the best way to scale a data"""
+
         transformers = []
 
         clean = self.Clean()
@@ -98,3 +101,4 @@ class Prepare():
 
     def labelEncoder(self):
         """If a dataset has categorical variables, change it"""
+        pass

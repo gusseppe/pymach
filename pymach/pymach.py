@@ -17,7 +17,9 @@ This module provides the logic of the whole project.
 #print obj.density()
 #print obj.corr()
 #if __name__ == "__main__":
-#obj = analyze.Analyze(className='species')
+    #analyzer = analyze.Analyze(className='species')
+    #analyzer.pipeline()
+    #print analyzer.data
     #obj.read("iris.csv")
     #print(obj.scatter())
 
