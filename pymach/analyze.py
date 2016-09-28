@@ -23,7 +23,7 @@ class Analyze():
 
     data = None
 
-    def __init__(self, typeModel='class', className='', nameData='iris.csv'):
+    def __init__(self, definer):
         """The init class.
 
         Parameters
@@ -35,9 +35,10 @@ class Analyze():
             String that indicates which column in the dataset is the class.
 
         """
-        self.typeModel = typeModel#la clase define provee el typeMode
-        self.className = className#la clase define provee el className
-        self.nameData = nameData#la clase define provee el nombre
+        self.typeModel = definer.typeModel
+        self.typeAlgorithm = definer.typeAlgorithm
+        self.className = definer.className
+        self.nameData = definer.nameData
 
     def pipeline(self):
 
@@ -50,7 +51,6 @@ class Analyze():
 
         [m() for m in analyzers]
 
-        
 
     def read(self):
         """Read the dataset.
@@ -61,7 +61,9 @@ class Analyze():
 
         """
         data = pd.read_csv(self.nameData)
-        Analyze.data = data
+        Analyze.data = data.ix[:, data.columns != self.className]
+
+        return Analyze.data
 
     def description(self):
         """Shows a basic data description .
