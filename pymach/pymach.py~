@@ -17,19 +17,22 @@ from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.svm import SVC
 from sklearn import cross_validation
 
-#STEP 0: Define workflow parameters
-definer = define.Define().pipeline()
+#STEP 1
+analyzer = analyze.Analyze(define)
+analyzer.pipeline()
+#analyzer.read()
 
-#STEP 1: Analyze data by ploting it
-analyze.Analyze(definer).pipeline()
 
-#STEP 2: Prepare data by scaling, normalizing, etc. 
-preparer = prepare.Prepare(definer).pipeline()
+#STEP 2
+preparer = prepare.Prepare(define)
+preparer = preparer.pipeline()
 
-#STEP 3: Feature selection
-featurer = feature_selection.FeatureSelection(definer).pipeline()
 
-#STEP4: 
+#STEP 3
+featurer = feature_selection.FeatureSelection(define)
+featurer = featurer.pipeline()
+
+#STEP4
 pipeline = Pipeline([
     ('preparer', preparer),
     ('featurer', featurer),
@@ -39,7 +42,7 @@ pipeline = Pipeline([
 #STEP Evaluation
 test_size = 0.33
 seed = 7
-X_train, X_test, Y_train, Y_test =  cross_validation.train_test_split(definer.X, definer.y,
+X_train, X_test, Y_train, Y_test =  cross_validation.train_test_split(analyzer.X, analyzer.y,
 test_size=test_size, random_state=seed)
 
 f = open('test', 'w')

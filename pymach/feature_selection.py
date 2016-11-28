@@ -9,14 +9,19 @@ for feature selection the dataset which is to be studied.
 
 """
 from __future__ import print_function
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
-from sklearn.feature_selection import f_regression
 import numpy as np
 import pandas as pd
 
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_regression
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline, FeatureUnion
+from sklearn.base import BaseEstimator, TransformerMixin
+
 __all__ = [
-    'read', 'clean', 'reescale', 'standardize', 'normalize', 'binarize']
+    'read']
 
 
 class FeatureSelection():
@@ -24,46 +29,81 @@ class FeatureSelection():
 
     data = None
 
-    def __init__(self, typeModel='clasification', className=''):
-        self.typeModel = typeModel
-        self.className = className
+    def __init__(self, definer):
+        self.typeModel = definer.typeModel
+        self.typeAlgorithm = definer.typeAlgorithm
+        self.className = definer.className
+        self.nameData = definer.nameData
+        self.n_features = definer.n_features
 
-    def read(self, name):
-        data = pd.read_csv(name)
-        Prepare.data = data
+    def pipeline(self):
+        """ This function chooses the best way to find features"""
 
-    def univariateSelection(self):
-        if typeModel == 'clasification':
-            pass
+        transformers = []
+
+        custom = self.CustomFeature()
+        #transformers.append(('custom', custom))
+        n_features = int(self.n_features/2)
+
+        #kbest = SelectKBest(score_func=chi2, k=n_features)
+        #transformers.append(('kbest', kbest))
+
+        pca = PCA(n_components=n_features)
+        transformers.append(('pca', pca))
+
+        extraTC = ExtraTreesClassifier()
+        transformers.append(('extraTC', extraTC))
+
+        #scaler = StandardScaler()
+        #transformers.append(('scaler', scaler))
+        #binarizer = Binarizer()
+        return FeatureUnion(transformers)
+
+    class CustomFeature(TransformerMixin):
+        """ A custome class for featuring """
+
+        def transform(self, X, **transform_params):
+            #X = pd.DataFrame(X)
+            return X
+
+        def fit(self, X, y=None, **fit_params):
+            return self
+    #def read(self, name):
+        #data = pd.read_csv(name)
+        #Prepare.data = data
+
+    #def univariateSelection(self):
+        #if typeModel == 'clasification':
+            #pass
 
 
-    def recursiveFeature(self):
-        pass
+    #def recursiveFeature(self):
+        #pass
 
 
-    def pca(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+    #def pca(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
         #Y = Prepare.data.values[:, len(data.columns)-1]
 
-        scaler = StandardScaler()
-        rescaledX = scaler.fit_transform(X)
+        #scaler = StandardScaler()
+        #rescaledX = scaler.fit_transform(X)
 
-        return rescaledX, scaler
+        #return rescaledX, scaler
 
-    def featureImportance(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+    #def featureImportance(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
         #Y = Prepare.data.values[:, len(data.columns)-1]
 
-        normalizer = Normalizer()
-        normalizedX = normalizer.fit_transform(X)
+        #normalizer = Normalizer()
+        #normalizedX = normalizer.fit_transform(X)
 
-        return normalizedX, normalizer
+        #return normalizedX, normalizer
 
-    def binarize(self):
-        X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
+    #def binarize(self):
+        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
         #Y = Prepare.data.values[:, len(data.columns)-1]
 
-        binarizer = Binarizer()
-        binaryX = binarizer.fit_transform(X)
+        #binarizer = Binarizer()
+        #binaryX = binarizer.fit_transform(X)
 
-        return binaryX, binarizer
+        #return binaryX, binarizer
