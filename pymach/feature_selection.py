@@ -72,38 +72,3 @@ class FeatureSelection():
         #data = pd.read_csv(name)
         #Prepare.data = data
 
-    #def univariateSelection(self):
-        #if typeModel == 'clasification':
-            #pass
-
-
-    #def recursiveFeature(self):
-        #pass
-
-
-    #def pca(self):
-        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
-
-        #scaler = StandardScaler()
-        #rescaledX = scaler.fit_transform(X)
-
-        #return rescaledX, scaler
-
-    #def featureImportance(self):
-        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
-
-        #normalizer = Normalizer()
-        #normalizedX = normalizer.fit_transform(X)
-
-        #return normalizedX, normalizer
-
-    #def binarize(self):
-        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        #Y = Prepare.data.values[:, len(data.columns)-1]
-
-        #binarizer = Binarizer()
-        #binaryX = binarizer.fit_transform(X)
-
-        #return binaryX, binarizer
