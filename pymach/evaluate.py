@@ -57,10 +57,12 @@ class Evaluate():
     def pipeline(self):
 
         #evaluators = []
-        #evaluators.append(self.evaluatePipelines())
+        self.buildPipelines(self.defineAlgorithms())
+        #evaluators.append(self.defineTrainingData())
+        self.evaluatePipelines()
+
         #[m() for m in evaluators]
 
-        Evaluate.pipelines = self.buildPipelines(self.defineAlgorithms())
 
 
         return self
@@ -78,13 +80,18 @@ class Evaluate():
 
         return models
 
-    def defineTrainingData(self, test_size, seed):
+    def defineTrainingData(self, test_size=0.33, seed=7):
         """ Need to fill """
 
-        X_train, X_test, Y_train, Y_test =  train_test_split(
+        X_train, X_test, y_train, y_test =  train_test_split(
                 self.definer.X, self.definer.y, test_size=test_size, random_state=seed)
 
-        return X_train, X_test, Y_train, Y_test
+        Evaluate.X_train = X_train
+        Evaluate.X_test = X_test
+        Evaluate.y_train = y_train
+        Evaluate.y_test = y_test
+
+        #return X_train, X_test, Y_train, Y_test
 
 
     def buildPipelines(self, models):
@@ -100,9 +107,9 @@ class Evaluate():
                 ])
             ))
 
-        #print(models[0][0])
+        Evaluate.pipelines = pipelines
 
-        return pipelines
+        #return pipelines
 
     def evaluatePipelines(self):
 
@@ -111,8 +118,9 @@ class Evaluate():
         seed = 7
         scoring = 'accuracy'
 
-        pipelines = self.buildPipelines(self.defineAlgorithms())
-        X_train, X_test, Y_train, Y_test = self.defineTrainingData(test_size, seed)
+        #pipelines = self.buildPipelines(self.defineAlgorithms())
+        #pipelines = Evaluate.pipelines
+        self.defineTrainingData(test_size, seed)
 
 
         #report = {}
@@ -121,9 +129,9 @@ class Evaluate():
         results = []
         names = []
 
-        for name, model in pipelines:
+        for name, model in Evaluate.pipelines:
             kfold = KFold(n_splits=num_folds, random_state=seed)
-            cv_results = cross_val_score(model, X_train, Y_train, cv=kfold, 
+            cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, 
                     scoring=scoring)
             results.append(cv_results)
             names.append(name)
@@ -157,6 +165,9 @@ class Evaluate():
         Evaluate.bestAlgorithms = report
 
         print(Evaluate.bestAlgorithms)
+
+    def bestPipelines(self):
+        pass
 
     def plotModels(self, results, names):
         """" Plot the best two algorithms by using box plots"""

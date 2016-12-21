@@ -34,6 +34,7 @@ featurer = feature_selection.FeatureSelection(definer).pipeline()
 evaluator = evaluate.Evaluate(definer, preparer, featurer)
 evaluator.pipeline()
 
+#print(evaluator.pipelines)
 #print(evaluator.bestAlgorithms)
 #pipeline = Pipeline([
     #('preparer', preparer),

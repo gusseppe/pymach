@@ -49,7 +49,7 @@ class Define():
 
     def description(self):
         Define.n_features = len(Define.data.columns)-1
-        Define.className = Define.data.columns[-1]
+        #Define.className = Define.data.columns[-1]
         Define.samples = len(Define.data)
 
     #def likelyAlgorithms(self):
