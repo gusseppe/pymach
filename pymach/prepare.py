@@ -14,7 +14,7 @@ import pandas as pd
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import MinMaxScaler, Normalizer,\
-StandardScaler
+StandardScaler, RobustScaler, LabelEncoder, FunctionTransformer
 
 
 __all__ = [
@@ -25,11 +25,12 @@ class Prepare():
     """ A class for data preparation """
 
     data = None
+    categoricalData = False
 
     def __init__(self, definer):
         self.typeModel = definer.typeModel
         self.typeAlgorithm = definer.typeAlgorithm
-        self.className = definer.className
+        #self.className = definer.className
         self.nameData = definer.nameData
 
     def pipeline(self):
@@ -38,7 +39,11 @@ class Prepare():
         transformers = []
 
         clean = self.Clean()
-        transformers.append(('clean', clean))
+        #transformers.append(('clean', FunctionTransformer(clean, validate=False)))
+        #transformers.append(('clean', clean))
+
+        catToNumeric = self.CategoricalToNumeric()
+        transformers.append(('catToNumeric', catToNumeric))
 
         if self.typeAlgorithm in ["NeuralN", "K-N"]:
             minmax = MinMaxScaler(feature_range=(0,1))
@@ -46,11 +51,12 @@ class Prepare():
             transformers.append(('minmax', minmax))
             transformers.append(('normalizer', normalizer))
         elif self.typeAlgorithm in ["LinearR", "LogisticR"]:
-            #print('hola')
-            scaler = StandardScaler()
-            transformers.append(('scaler', scaler))
+            scaler = RobustScaler()
+            #scaler = StandardScaler()
+            #transformers.append(('scaler', scaler))
         else:
-            scaler = StandardScaler()
+            #scaler = StandardScaler()
+            scaler = RobustScaler()
             transformers.append(('scaler', scaler))
 
         #scaler = StandardScaler()
@@ -58,26 +64,51 @@ class Prepare():
         #binarizer = Binarizer()
         return FeatureUnion(transformers)
 
-    class Clean(TransformerMixin):
+    class Clean(BaseEstimator, TransformerMixin):
         """ A class for removing NAN values """
 
-        def transform(self, X, **transform_params):
+        def transform(self, X, y=None, **transform_params):
             #X = pd.DataFrame(X)
-            return X.dropna()
+            X.dropna(inplace=True)
+            #return X.dropna()
+            return X
 
+        def fit_transform(self, X, y=None, **fit_params):
+            self.fit(X, y, **fit_params)
+            return self.transform(X)
+            
         def fit(self, X, y=None, **fit_params):
             return self
 
+    class CategoricalToNumeric(BaseEstimator, TransformerMixin):
+        """ A class for parsing categorical columns """
 
-    #def binarize(self):
-        #X = Prepare.data.values[:, 0:len(Prepare.data.columns)-1]
-        ##Y = Prepare.data.values[:, len(data.columns)-1]
+        def categoricalColumns(self, df):
+            cols = df.columns
+            cols_numeric = df._get_numeric_data().columns
+            return list(set(cols) - set(cols_numeric))
 
-        #binarizer = Binarizer()
-        #binaryX = binarizer.fit_transform(X)
+        def categoricalToNumeric(self, df):
+            cat_columns = self.categoricalColumns(df)
+            if cat_columns:
+                Prepare.categoricalData = True
+                for category in cat_columns:
+                    encoder = LabelEncoder()
+                    #df.loc[:, category+'_n'] = encoder.fit_transform(df[category])
+                    df.loc[:, category] = encoder.fit_transform(df[category])
+                    
+            #df.drop(cat_columns, axis=1, inplace=True)
+            return df
 
-        #return binaryX, binarizer
+        def transform(self, X, y=None, **transform_params):
+            #X = pd.DataFrame(X)
+            return self.categoricalToNumeric(X)
+            #return X.dropna()
 
-    def labelEncoder(self):
-        """If a dataset has categorical variables, change it"""
-        pass
+        def fit_transform(self, X, y=None, **fit_params):
+            self.fit(X, y, **fit_params)
+            return self.transform(X)
+            
+        def fit(self, X, y=None, **fit_params):
+            return self
+

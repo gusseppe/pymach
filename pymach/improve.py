@@ -26,76 +26,57 @@ from sklearn.grid_search import GridSearchCV
 
 
 class Improve():
-    """ A class for resampling and evaluation """
+    """ A class for improving """
 
-    bestAlgorithms = {}
-    pipelines = None
-    X_train = None
-    y_train = None
-    X_test = None
-    y_test = None
+    bestConfiguration = None
 
 
-    def __init__(self, definer, preparer, featurer):
-        self.definer = definer 
-        self.preparer = preparer
-        self.featurer = featurer
+    def __init__(self, evaluator):
+        self.pipeline = evaluator.pipelines 
 
 
     def pipeline(self):
 
-        #evaluators = []
-        #evaluators.append(self.evaluatePipelines())
-        #[m() for m in evaluators]
-
-        Evaluate.pipelines = self.buildPipelines(self.defineAlgorithms())
-
+        self.evaluatePipelines()
 
         return self
 
 
     def evaluatePipelines(self):
+        pipeline = Pipeline([
+            ('vect', CountVectorizer()),
+            ('tfidf', TfidfTransformer()),
+            ('clf', SGDClassifier()),
+        ])
 
-        test_size = 0.33
-        num_folds = 10
-        seed = 7
-        scoring = 'accuracy'
+        parameters = {
+            '__max_df': (0.5, 0.75, 1.0),
+            #'vect__max_features': (None, 5000, 10000, 50000),
+            'vect__ngram_range': ((1, 1), (1, 2)),  # unigrams or bigrams
+            #'tfidf__use_idf': (True, False),
+            #'tfidf__norm': ('l1', 'l2'),
+            'clf__alpha': (0.00001, 0.000001),
+            'clf__penalty': ('l2', 'elasticnet'),
+            #'clf__n_iter': (10, 50, 80),
+        }
 
-        pipelines = self.buildPipelines(self.defineAlgorithms())
-        X_train, X_test, Y_train, Y_test = self.defineTrainingData(test_size, seed)
+        grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
+        print("Performing grid search...")
+        print("pipeline:", [name for name, _ in pipeline.steps])
+        print("parameters:")
+        pprint(parameters)
+        t0 = time()
+        grid_search.fit(data.data, data.target)
+        print("done in %0.3fs" % (time() - t0))
+        print()
 
-        #report = {}
-        #report_element = {}
-        report = [["Model", "Mean", "STD"]]
-        results = []
-        names = []
+        print("Best score: %0.3f" % grid_search.best_score_)
+        print("Best parameters set:")
+        best_parameters = grid_search.best_estimator_.get_params()
+        for param_name in sorted(parameters.keys()):
+            print("\t%s: %r" % (param_name, best_parameters[param_name]))
 
-        for name, model in pipelines:
-            kfold = KFold(n_splits=num_folds, random_state=seed)
-            cv_results = cross_val_score(model, X_train, Y_train, cv=kfold, 
-                    scoring=scoring)
-            results.append(cv_results)
-            names.append(name)
-
-            mean = cv_results.mean()
-            std = cv_results.std()
-            #report_element[name] = {'mean':mean, 'std':std}
-            #report.update(report_element)
-
-            #report_print = "Model: {}, mean: {}, std: {}".format(name, 
-                    #mean, std)
-            report.append([name, mean, std])
-            #print(report_print)
-
-        headers = report.pop(0)
-        df_report = pd.DataFrame(report, columns=headers)
-        #print(df_report)
-
-        #print(report)
-        #self.chooseTopRanked(report)
-        self.chooseTopRanked(df_report)
-        #self.plotModels(results, names)
 
         
     def chooseTopRanked(self, report):

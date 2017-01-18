@@ -21,7 +21,6 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
-from sklearn.preprocessing import FunctionTransformer
 
 #Algorithms
 from sklearn.linear_model import LogisticRegression
@@ -36,7 +35,6 @@ from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.ensemble import VotingClassifier
 
 
 class Evaluate():
@@ -61,8 +59,9 @@ class Evaluate():
 
         #evaluators = []
         self.buildPipelines(self.defineAlgorithms())
+        #evaluators.append(self.defineTrainingData())
         self.evaluatePipelines()
-        self.setBestPipelines()
+        self.bestPipelines()
 
         #[m() for m in evaluators]
 
@@ -82,18 +81,10 @@ class Evaluate():
         #models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
-        #models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
-        #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
-        #                                                        n_estimators=30)))
-        #models.append(('RandomForestClassifier', RandomForestClassifier()))
-        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
-        
-        #Voting
-        estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
-        estimators.append(("Voting_RandomForestClassifier", RandomForestClassifier()))
-        voting = VotingClassifier(estimators)
-        #models.append(('VotingClassifier', voting))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
+        models.append(('AdaBoostClassifier', AdaBoostClassifier()))
+        models.append(('RandomForestClassifier', RandomForestClassifier()))
+        #models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
 
         return models
 
@@ -114,10 +105,10 @@ class Evaluate():
     def buildPipelines(self, models):
         pipelines = []
 
+
         for m in models:
             pipelines.append((m[0],
                 Pipeline([
-                    #('preparer', FunctionTransformer(self.preparer)),
                     ('preparer', self.preparer),
                     ('featurer', self.featurer),
                     m,
@@ -126,12 +117,11 @@ class Evaluate():
 
         Evaluate.pipelines = pipelines
 
-        #print(type(Evaluate.pipelines))
         #return pipelines
 
-    def evaluatePipelines(self, ax=None):
+    def evaluatePipelines(self):
 
-        test_size = 0.2
+        test_size = 0.33
         num_folds = 10
         seed = 7
         scoring = 'accuracy'
@@ -149,11 +139,8 @@ class Evaluate():
 
         for name, model in Evaluate.pipelines:
             kfold = KFold(n_splits=num_folds, random_state=seed)
-            #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
-                    #scoring=scoring) 
-            cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, \
-                    scoring=scoring) 
-
+            cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, 
+                    scoring=scoring)
             results.append(cv_results)
             names.append(name)
 
@@ -174,7 +161,7 @@ class Evaluate():
         #print(report)
         #self.chooseTopRanked(report)
         self.chooseTopRanked(df_report)
-        self.plotModels(results, names)
+        #self.plotModels(results, names)
 
         
     def chooseTopRanked(self, report):
@@ -187,7 +174,7 @@ class Evaluate():
 
         print(Evaluate.report)
 
-    def setBestPipelines(self):
+    def bestPipelines(self):
         alg = list(Evaluate.report.Model)[0:2]
         bestPipelines = []
         
@@ -204,12 +191,10 @@ class Evaluate():
 
         fig = plt.figure()
         fig.suptitle("Model Comparison")
-        #ax1 = fig.add_subplot(111) 
         ax = fig.add_subplot(111) 
-        ax.set_xticklabels(names)
         plt.boxplot(results)
-        #ax1.set_xticklabels(names)
-        #plt.show()
+        ax.set_xticklabels(names)
+        plt.show()
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """

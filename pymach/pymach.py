@@ -17,9 +17,18 @@ import evaluate
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.svm import SVC
 from sklearn import cross_validation
+import pandas as pd
+
+
+#name = "inputLocalizacion.csv"
+name = "iris.csv"
+#name = "inputBus.csv"
+# className = "Ruta"
+#className = "position"
+className = "class"
 
 #STEP 0: Define workflow parameters
-definer = define.Define().pipeline()
+definer = define.Define(nameData=name, className=className).pipeline()
 
 #STEP 1: Analyze data by ploting it
 #analyze.Analyze(definer).pipeline()
@@ -31,8 +40,23 @@ preparer = prepare.Prepare(definer).pipeline()
 featurer = feature_selection.FeatureSelection(definer).pipeline()
 
 #STEP4: 
-evaluator = evaluate.Evaluate(definer, preparer, featurer)
-evaluator.pipeline()
+evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+
+#print definer.data.head(20)
+#print ""
+
+#preparer.fit(definer.X, definer.y)
+#x,y = preparer.ransform(definer.X, definer.y)
+#x,y = preparer.fit_transform(definer.X, definer.y)
+#t = pd.DataFrame(t, columns=definer.data.columns)
+#print t.head(20)
+
+
+
+
+
+
+
 
 #print(evaluator.pipelines)
 #print(evaluator.bestAlgorithms)

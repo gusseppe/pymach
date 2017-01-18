@@ -21,7 +21,6 @@ __all__ = [
 class Analyze():
     """ A class for data analysis """
 
-
     def __init__(self, definer):
         """The init class.
 
@@ -43,15 +42,16 @@ class Analyze():
     def pipeline(self):
 
         analyzers = []
-        #analyzers.append(self.read)
+        analyzers.append(self.description)
         analyzers.append(self.hist)
+        analyzers.append(self.box)
         analyzers.append(self.density)
         analyzers.append(self.corr)
         analyzers.append(self.scatter)
 
         [m() for m in analyzers]
 
-        #return self
+        return self
 
     def description(self):
         """Shows a basic data description .
@@ -61,7 +61,8 @@ class Analyze():
         out : ndarray
 
         """
-        return self.data.describe()
+        #return self.data.describe()
+        return pd.DataFrame(self.data.describe())
 
     def classBalance(self):
         """Shows how balanced the class values are.
@@ -74,26 +75,34 @@ class Analyze():
         """
         return self.data.groupby(self.className).size()
 
-    def hist(self):
-        self.data.hist(color=[(0.196, 0.694, 0.823)]) 
-        plt.show()
+    def hist(self, ax=None):
+        #plt.figure(figsize=(10.8, 3.6))
+        self.data.hist(color=[(0.196, 0.694, 0.823)], ax=ax) 
+        #plt.show()
 
-    def density(self):
+    def density(self, ax=None):
         #Analyze.data.plot(color=[(0.196, 0.694, 0.823)], kind='density', 
                 #subplots=True, layout=(3,3), sharex=False, figsize = (10, 10)) 
         self.data.plot(kind='density', 
-                subplots=True, layout=(3,3), sharex=False) 
-        plt.show()
+                subplots=True, layout=(3,3), sharex=False, ax=ax) 
+        #plt.show()
 
-    def corr(self):
+    def corr(self, ax=None):
         corr = self.data.corr()
-        fig, ax = plt.subplots()
+        fig, ax1 = plt.subplots()
         bar = ax.matshow(corr, vmin=-1, vmax=1)
         fig.colorbar(bar)
-        plt.xticks(range(len(corr.columns)), corr.columns);
-        plt.yticks(range(len(corr.columns)), corr.columns);
-        plt.show()
+        plt.xticks(range(len(corr.columns)), corr.columns)
+        plt.yticks(range(len(corr.columns)), corr.columns)
 
-    def scatter(self):
-        scatter_matrix(self.data, alpha=0.7, figsize=(6, 6), diagonal='kde')
-        plt.show()
+        #return ax
+        #plt.show()
+
+    def scatter(self, ax=None):
+        scatter_matrix(self.data, alpha=0.7, figsize=(6, 6), diagonal='kde', ax=ax)
+        #plt.show()
+        
+    def box(self, ax=None):
+        self.data.plot(kind="box" , subplots=True, layout=(3,3), sharex=False, sharey=False, ax=ax)
+        #plt.show()
+
