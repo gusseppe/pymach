@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style> 
+div #sidebar
+{
+  border:2px solid #a1a1a1;
+  padding:10px 20px; 
+  border-radius:15px;
+}
+</style>
+
+<h2>Defining your dataset</h2>
+
+<!--Input Data-->
+<h1>Upload the file.csv</h1>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="data_file" />
+    <!--<input type="submit">-->
+<!--</form>-->
+
+<br>
+<h1>Enter the class name</h1>
+<!--<form action="/input" method="POST">-->
+    <input type="text" name="text"><br><br>
+    <input type="submit" name="my-form" value="Submit">
+</form>
+<br><br>
+
+{% endblock %}
