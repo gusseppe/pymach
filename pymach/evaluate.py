@@ -85,7 +85,7 @@ class Evaluate():
         #models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
         #                                                        n_estimators=30)))
-        #models.append(('RandomForestClassifier', RandomForestClassifier()))
+        models.append(('RandomForestClassifier', RandomForestClassifier()))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
         
         #Voting
@@ -197,7 +197,7 @@ class Evaluate():
                 
         Evaluate.bestPipelines = bestPipelines
         
-        print(Evaluate.bestPipelines)
+        #print(Evaluate.bestPipelines)
 
     def plotModels(self, results, names):
         """" Plot the best two algorithms by using box plots"""
