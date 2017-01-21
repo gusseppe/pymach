@@ -51,9 +51,9 @@ class Prepare():
             transformers.append(('minmax', minmax))
             transformers.append(('normalizer', normalizer))
         elif self.typeAlgorithm in ["LinearR", "LogisticR"]:
-            scaler = RobustScaler()
-            #scaler = StandardScaler()
-            #transformers.append(('scaler', scaler))
+            #scaler = RobustScaler()
+            scaler = StandardScaler()
+            transformers.append(('scaler', scaler))
         else:
             #scaler = StandardScaler()
             scaler = RobustScaler()
@@ -62,6 +62,7 @@ class Prepare():
         #scaler = StandardScaler()
         #transformers.append(('scaler', scaler))
         #binarizer = Binarizer()
+        #print(transformers)
         return FeatureUnion(transformers)
 
     class Clean(BaseEstimator, TransformerMixin):

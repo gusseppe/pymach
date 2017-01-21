@@ -78,31 +78,35 @@ class Analyze():
     def hist(self, ax=None):
         #plt.figure(figsize=(10.8, 3.6))
         self.data.hist(color=[(0.196, 0.694, 0.823)], ax=ax) 
-        #plt.show()
+        if ax is None:
+            plt.show()
 
     def density(self, ax=None):
         #Analyze.data.plot(color=[(0.196, 0.694, 0.823)], kind='density', 
                 #subplots=True, layout=(3,3), sharex=False, figsize = (10, 10)) 
         self.data.plot(kind='density', 
                 subplots=True, layout=(3,3), sharex=False, ax=ax) 
-        #plt.show()
+        if ax is None:
+            plt.show()
 
     def corr(self, ax=None):
         corr = self.data.corr()
         fig, ax1 = plt.subplots()
-        bar = ax.matshow(corr, vmin=-1, vmax=1)
+        bar = ax1.matshow(corr, vmin=-1, vmax=1)
         fig.colorbar(bar)
         plt.xticks(range(len(corr.columns)), corr.columns)
         plt.yticks(range(len(corr.columns)), corr.columns)
 
-        #return ax
-        #plt.show()
+        if ax is None:
+            plt.show()
 
     def scatter(self, ax=None):
         scatter_matrix(self.data, alpha=0.7, figsize=(6, 6), diagonal='kde', ax=ax)
-        #plt.show()
+        if ax is None:
+            plt.show()
         
     def box(self, ax=None):
         self.data.plot(kind="box" , subplots=True, layout=(3,3), sharex=False, sharey=False, ax=ax)
-        #plt.show()
+        if ax is None:
+            plt.show()
 

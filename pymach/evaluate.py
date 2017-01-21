@@ -82,9 +82,9 @@ class Evaluate():
         #models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
-        #models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
-        #                                                        n_estimators=30)))
+        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
         

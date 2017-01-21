@@ -20,12 +20,14 @@ from sklearn import cross_validation
 import pandas as pd
 
 
-#name = "inputLocalizacion.csv"
-name = "iris.csv"
+#name = "datasets/LocalizationNew.csv"
+name = "datasets/LocalizationOld.csv"
+#name = "datasets/breast-cancer-wisconsin.csv"
+#name = "breast-cancer-wisconsin.csv"
 #name = "inputBus.csv"
 # className = "Ruta"
-#className = "position"
-className = "class"
+className = "position"
+#className = "class"
 
 def main():
     #STEP 0: Define workflow parameters
@@ -40,7 +42,7 @@ def main():
     #STEP 3: Feature selection
     featurer = feature_selection.FeatureSelection(definer).pipeline()
 
-    #STEP4: 
+    #STEP4: Evalute the algorithms by using the pipelines
     evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
 
 if __name__ == '__main__':
