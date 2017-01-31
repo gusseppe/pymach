@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedShuffleSplit 
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import FunctionTransformer
@@ -74,12 +75,12 @@ class Evaluate():
 
         models = []
         #LDA : Warning(Variables are collinear)
-        #models.append(('LDA', LinearDiscriminantAnalysis()))
-        #models.append(('SVC', SVC()))
-        #models.append(('GaussianNB', GaussianNB()))
-        #models.append(('KNeighborsClassifier', KNeighborsClassifier()))
-        #models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
-        #models.append(('LogisticRegression', LogisticRegression()))
+        models.append(('LDA', LinearDiscriminantAnalysis()))
+        models.append(('SVC', SVC()))
+        models.append(('GaussianNB', GaussianNB()))
+        models.append(('KNeighborsClassifier', KNeighborsClassifier()))
+        models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
+        models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
         models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))

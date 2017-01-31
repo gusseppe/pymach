@@ -42,8 +42,8 @@ class Prepare():
         #transformers.append(('clean', FunctionTransformer(clean, validate=False)))
         #transformers.append(('clean', clean))
 
-        catToNumeric = self.CategoricalToNumeric()
-        transformers.append(('catToNumeric', catToNumeric))
+        #catToNumeric = self.CategoricalToNumeric()
+        #transformers.append(('catToNumeric', catToNumeric))
 
         if self.typeAlgorithm in ["NeuralN", "K-N"]:
             minmax = MinMaxScaler(feature_range=(0,1))

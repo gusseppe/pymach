@@ -1,0 +1,111 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<nav id="sidebar" class="sidebar" role="navigation">
+    <div class="js-sidebar-content">
+        <header class="logo hidden-sm-down">
+            <a href="/">PyMach</a>
+        </header>
+        <div class="sidebar-status hidden-md-up">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="thumb-sm avatar pull-xs-right">
+                    <img class="img-circle" src="{{url_for('static', filename = 'demo/img/people/a5.jpg')}}" alt="...">
+                </span>
+                &nbsp;
+                <strong>Administrador</strong>
+            </a>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a class="collapsed" href="#sidebar-pagos" data-toggle="collapse" data-parent="#sidebar">
+                    <span class="icon">
+                        <i class="glyphicon glyphicon-user"></i>
+                    </span>
+                    Administration
+                    <i class="toggle fa fa-angle-down"></i>
+                </a>
+                <ul id="sidebar-pagos" class="collapse">
+                    <li id="viewAction1"><a>Accion 1</a></li>
+                    <li id="viewAction2"><a>Accion 2</a></li>
+                    <li id="viewAction3"><a>Accion 3</a></li>  
+                </ul>                 
+            </li>
+            
+            <li id="viewDefine"><a><span class="icon"><i class="glyphicon glyphicon-upload"></i></span>Define</a></li>
+            <li id="viewAnalyze"><a><span class="icon"><i class="fa fa-bar-chart-o"></i></span>Analyze</a></li>
+            <li id="viewModels"><a><span class="icon"><i class="glyphicon glyphicon-th"></i></span>Model</a></li>
+            <li id="viewPrediction"><a><span class="icon"><i class="glyphicon glyphicon-ok"></i></span>Prediction</a></li>
+        </ul>
+        
+    </div>
+</nav>
+<nav class="page-controls navbar navbar-dashboard">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    <a class="hidden-md-down nav-link" id="nav-state-toggle" href="#" data-html="true" data-placement="bottom">
+                        <i class="fa fa-bars fa-lg"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden-md-up">
+                <li>
+                    <a href="#" data-toggle="chat-sidebar">
+                        <span class="rounded rounded-lg bg-gray text-white"><i class="fa fa-globe fa-lg"></i></span>
+                    </a>
+                </li>
+            </ul>
+            <a class="navbar-brand hidden-md-up" href="/">
+                <i class="fa fa-circle text-gray mr-n-sm"></i>
+                <i class="fa fa-circle text-warning"></i>
+                &nbsp;
+                PyMach
+                &nbsp;
+                <i class="fa fa-circle text-warning mr-n-sm"></i>
+                <i class="fa fa-circle text-gray"></i>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav pull-xs-right">
+                <li class="dropdown nav-item">
+                    <a href="#" class="dropdown-toggle dropdown-toggle-notifications nav-link" id="notifications-dropdown-toggle">
+                        <span class="thumb-sm avatar pull-xs-left">
+                            <img class="img-circle" src="{{url_for('static', filename = 'demo/img/people/a5.jpg')}}" alt="...">
+                        </span>
+                        &nbsp;
+                        <strong>Admin</strong>&nbsp;
+                    <div class="dropdown-menu dropdown-menu-right animated fadeInUp" id="notifications-dropdown-menu">
+                        <section class="card notifications">
+                            <div id="notifications-list" >
+                                <a class="list-group-item" href="#">
+                                </a>
+                            </div>                            
+                        </section>
+                    </div>
+                </li>
+                <li class="dropdown nav-item">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <i class="fa fa-cog fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="profile.html"><i class="glyphicon glyphicon-user"></i> &nbsp; Mi Perfil</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Mensajes &nbsp;&nbsp;<span class="label label-pill label-danger animated bounceIn">9</span></a></li>
+                        <li class="dropdown-divider"></li>                         
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="content-wrap">
+    <main id="content" class="content" role="main">
+        {%block content_dashboard%}{% endblock %}
+    </main>
+</div>
+<div class="loader-wrap hiding hide">
+    <i class="fa fa-circle-o-notch fa-spin-fast"></i>
+</div>
+
+{% endblock %}
