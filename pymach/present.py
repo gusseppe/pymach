@@ -38,5 +38,15 @@ def analyzeData():
 	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
 	return render_template('uploadData.html', files = dirs)	
 	
+@app.route('/models', methods = ['GET', 'POST'])
+def models():
+	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+	return render_template('uploadData.html', files = dirs)	
+
+@app.route('/prediction', methods = ['GET', 'POST'])
+def prediction():
+	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+	return render_template('uploadData.html', files = dirs)	
+
 if __name__ == '__main__':
    app.run( debug = True)
