@@ -1,4 +1,4 @@
-xit// Fake data for countries and cities from 2003 to 2013
+// Fake data for countries and cities from 2003 to 2013
 var fakeWorldData = {
     "2008": {
         "areas": {

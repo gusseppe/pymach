@@ -1,41 +1,46 @@
 {% extends "layouts/base_dashboard.html" %}
 
-{%  block content_dashboard %} 
+{%  block content_dashboard %}
 
 <div class="row">
     <div class="col-lg-12">
-                <section class="widget">
-                    <header>
-                        <h6>
-                            <strong>Upload</strong> Data
-                        </h6>
-                    </header>
-                    <div class="widget-body">                    
-                        <form class="dropzone" action="/storeData" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">                            
-                            <div class="dz-message">
-                                <p class="mb-xs fw-normal">Drop your csv files here or click to upload.</p>
-                                <p class="text-muted">Files must have the <strong>.csv</strong> extension</p>
-                            </div>
-                        </form>
-                        <div><br><h3>Files Dropped are automatically uploaded</h3><br></div>
+        <section class="widget">
+            <header>
+                <h6>
+                    <strong>Upload</strong> Data
+                </h6>
+            </header>
+            <div class="widget-body">
+                <form class="dropzone" action="/storeData" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">
+                    <div class="dz-message">
+                        <p class="mb-xs fw-normal">Drop your csv files here or click to upload.</p>
+                        <p class="text-muted">Files must have the <strong>.csv</strong> extension</p>
                     </div>
-                    <div>
-                        {% if not files %}
-                            <div><br> There are not files in the system yet <br></div>
-                        {% else %}
-                            <div><br> csv files already in the system: <br></div>
-                            <ul>
-                            {% for file in files %}
-                                {% if file.endswith(".csv") or  file.endswith(".txt")%}
-                                    <li> {{file }}</li>
-                                {% endif %}                            
-                            {% endfor %}
-                        {% endif %}
-                         </ul>
-                    </div>
-                </section>
+                </form>
+                <div><br><h3>Files Dropped are automatically uploaded</h3><br></div>
             </div>
+            <div>
+                {% if not filenames %}
+                    <div><br> There are not files in the system yet <br></div>
+                {% else %}
+                    <div><br> csv files already in the system: <br></div>
+                    <form id="target" action="/table" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="filename" id="filename"/>
+                        <ul>
+                        {% for filename in filenames %}
+                            {% if filename.endswith(".csv") or  filename.endswith(".txt")%}
+                            <li><input class="btn btn-inverse width-150 mb-xs" type="submit" onclick="helper(this)" value={{ filename }}>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </form>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 </div>
+
 {% endblock %}
 
 {% block specific_libraries %}
@@ -57,4 +62,11 @@
 <script src="{{url_for('static', filename = 'vendor/bootstrap-markdown/js/bootstrap-markdown.js')}}"></script>
 <script src="{{url_for('static', filename = 'vendor/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js')}}"></script>
 <script src="{{url_for('static', filename = 'js/form-elements.js')}}"></script>
+
+<script>
+    function helper(value) {
+        $('#filename').val($(value).val());
+    }
+</script>
+
 {% endblock %}

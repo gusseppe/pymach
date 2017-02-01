@@ -14,8 +14,13 @@ def home():
 
 @app.route('/defineData', methods = ['GET', 'POST'])
 def defineData():
-	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
-	return render_template('uploadData.html', files = dirs)	
+    files = []
+    dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        f = open(filepath, 'r')
+        files.append(f)
+    return render_template('uploadData.html', filenames = dirs, files = files)
 
 @app.route('/storeData', methods = [ 'GET', 'POST'])
 def guardarData():
@@ -25,7 +30,7 @@ def guardarData():
 			now = datetime.now()
 			filename = os.path.join(app.config['UPLOAD_FOLDER'], "%s" % (file.filename))
 			file.save(filename)
-			return jsonify({"success":True})
+			return jsonify({ "success": True })
 		return redirect(url_for('defineData'))
 	else:
 		return redirect(url_for('home'))
@@ -35,18 +40,29 @@ def allowed_file(filename):
 
 @app.route('/analyzeData', methods = ['GET', 'POST'])
 def analyzeData():
-	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
-	return render_template('uploadData.html', files = dirs)	
-	
+    dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+    data_class = request.form['class']
+    filename = request.form['filename']
+    print('this is just the beginning ', request.form)
+    return render_template('analyzeData.html', data_class = data_class, filename = filename)
+
 @app.route('/models', methods = ['GET', 'POST'])
 def models():
 	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
-	return render_template('uploadData.html', files = dirs)	
+	return render_template('uploadData.html', files = dirs)
 
 @app.route('/prediction', methods = ['GET', 'POST'])
 def prediction():
 	dirs = os.listdir(app.config['UPLOAD_FOLDER'])
-	return render_template('uploadData.html', files = dirs)	
+	return render_template('uploadData.html', files = dirs)
+
+@app.route('/table', methods = ['GET', 'POST'])
+def table():
+    dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+    filename = request.form['filename']
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    f = open(filepath, 'r')
+    return render_template('showTable.html', file = f, filename = filename)
 
 if __name__ == '__main__':
    app.run( debug = True)
