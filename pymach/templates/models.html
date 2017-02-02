@@ -7,18 +7,9 @@
                 <section class="widget">
                     <header>
                         <h1>
-                            <strong>Defining Data</strong>
+                            <strong>Modeling data</strong>
                         </h1>
                     </header>
-                    <div class="widget-body">                    
-                        <form class="dropzone" action="/storeData" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">                            
-                            <div class="dz-message">
-                                <p class="mb-xs fw-normal">Drop your csv files here or click to upload.</p>
-                                <p class="text-muted">Files must have the <strong>.csv</strong> extension</p>
-                            </div>
-                        </form>
-                        <div><br><h3>Files Dropped are automatically uploaded</h3><br></div>
-                    </div>
                     <div>
                         {% if not files %}
                             <div><br> There are not files in the system yet <br></div>
@@ -26,7 +17,7 @@
                             <div><br> csv files already in the system: <br><br></div>
 
                             <ul>
-                            <form  action="/chooseData" method="POST"> 
+                            <form  action="/modelingData" method="POST"> 
                                 {% for file in files %}
                                     {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                         <li> <button value="{{file}}" name="submit" type="submit" class="btn btn-success">{{file }}</button></li>
@@ -39,8 +30,34 @@
                     </div>
                 </section>
             </div>
-            {{ dataframe|safe }}
+            {{ model|safe }}
 </div>
+
+<!--<script type="text/javascript">   -->
+
+<!--$("#query").click(function() {  -->
+
+  <!--$("#container").hide();-->
+  <!--var plot_type = $('input:radio[name=plot_type]:checked').val();-->
+  <!--var qu = {"plot_type":plot_type}-->
+  <!--$.ajax({-->
+    <!--type: "POST",-->
+    <!--async:true,-->
+    <!--contentType: "application/json; charset=utf-8",-->
+    <!--url: "/analyzeData",-->
+    <!--data: JSON.stringify(qu),-->
+    <!--success: function (data) {     -->
+     <!--var graph = $("#container");-->
+     <!--graph.html(data);   -->
+     <!--$("#loading-div-background").hide();      -->
+     <!--$("#container").show();-->
+   <!--},-->
+   <!--dataType: "html"-->
+ <!--});-->
+<!--});-->
+
+</script>
+
 {% endblock %}
 
 {% block specific_libraries %}

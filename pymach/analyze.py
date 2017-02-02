@@ -77,7 +77,10 @@ class Analyze():
 
     def hist(self, ax=None):
         #plt.figure(figsize=(10.8, 3.6))
-        self.data.hist(color=[(0.196, 0.694, 0.823)], ax=ax) 
+        #for column in df:
+            #df[column].hist(color=[(0.196, 0.694, 0.823)], ax=ax, align='left', label = 'Frequency bar of subsectors') 
+        self.data.hist(color=[(0.196, 0.694, 0.823)], ax=ax, label='frecuencia') 
+        plt.legend(loc='best')
         if ax is None:
             plt.show()
 
@@ -91,11 +94,21 @@ class Analyze():
 
     def corr(self, ax=None):
         corr = self.data.corr()
+        names = list(self.data.columns.values)
         fig, ax1 = plt.subplots()
-        bar = ax1.matshow(corr, vmin=-1, vmax=1)
+
+        if ax is not None:
+            bar = ax.matshow(corr, vmin=-1, vmax=1)
+        else:
+            bar = ax1.matshow(corr, vmin=-1, vmax=1)
+
         fig.colorbar(bar)
-        plt.xticks(range(len(corr.columns)), corr.columns)
-        plt.yticks(range(len(corr.columns)), corr.columns)
+        #plt.xticks(range(len(corr.columns)), corr.columns)
+        #plt.yticks(range(len(corr.columns)), corr.columns)
+        ax.set_xticks(range(len(corr.columns)))
+        ax.set_yticks(range(len(corr.columns)))
+        ax.set_xticklabels(names)
+        ax.set_yticklabels(names)
 
         if ax is None:
             plt.show()

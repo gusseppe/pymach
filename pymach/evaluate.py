@@ -13,6 +13,7 @@ import pandas as pd
 import operator
 import matplotlib.pyplot as plt
 import warnings
+import pickle
 #sklearn warning
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
@@ -154,6 +155,10 @@ class Evaluate():
                     #scoring=scoring) 
             cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, \
                     scoring=scoring) 
+
+            # save the model to disk
+            filename = name+'.ml'
+            pickle.dump(model, open('./models/'+filename, 'wb'))
 
             results.append(cv_results)
             names.append(name)
