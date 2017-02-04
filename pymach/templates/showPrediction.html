@@ -1,0 +1,79 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{%  block content_dashboard %}
+
+    <form id="table_form" action="/analyzeData" method="post">
+        <section class="widget">
+            <header>
+                <h4>Test your <span class="fw-semi-bold">Model</span></h4>
+            </header>
+            <div class="widget-body">
+                <form class="form-horizontal" role="form">
+                    <fieldset>
+                        <legend>Predict with your <strong>data</strong></legend>
+
+                        <div class="alert alert-info alert-sm"><b>Modelo Utilizado</b> {{ model }}</div>
+
+                        {% for item in attributes %}
+                        <div class="form-group row">
+                            <label for="normal-field" class="col-md-4 form-control-label text-md-right">{{ item }}</label>
+                            <div class="col-md-7">
+                                <input type="text" id="normal-field" class="form-control" placeholder={{ item }}>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <fieldset>
+                        <legend>Class <strong>predicted</strong></legend>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label text-md-right" for="transparent-input">
+                                {{ data_class }}
+                            </label>
+                            <div class="col-md-7">
+                                <div class="input-group input-group-transparent">
+                                    <input id="transparent-input" class="form-control" type="text" readonly>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-4 col-md-7">
+                                <button type="submit" class="btn btn-primary">Predecir</button>
+                                <button type="button" class="btn btn-inverse" onclick="clean_fields()">Limpiar Campos</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <input type="hidden" id="filename" name="filename" value={{ filename }} />
+        </section>
+    </form>
+
+
+    <script>
+        function clean_fields() {
+            $('input').val('');
+        }
+    </script>
+
+{% endblock %}
+
+{% block specific_libraries %}
+<!-- page specific libs -->
+<script src="{{url_for('static', filename = 'vendor/underscore/underscore-min.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/backbone/backbone.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/backbone.paginator/lib/backbone.paginator.min.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/backgrid/lib/backgrid.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/backgrid-paginator/backgrid-paginator.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/datatables/media/js/jquery.dataTables.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
+
+<!-- page specific js -->
+<script src="{{url_for('static', filename = 'js/tables-dynamic.js')}}"></script>
+{% endblock %}
