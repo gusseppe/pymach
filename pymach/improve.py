@@ -41,13 +41,35 @@ class Improve():
 
         return self
 
+    def gradientBoostingParameters(self):
+        param_GBC = { 
+            'featurer__extraTC__n_estimators':  [10, 16, 32],
+            'featurer__extraTC__criterion': ['gini','entropy'],
+            'featurer__extraTC__n_jobs': [-1],
+            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'featurer__pca__whiten': [True],
+            'GradientBoostingClassifier__n_estimators': [100, 150, 200],
+            'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]    
+        }
 
-    def evaluatePipelines(self):
-        pipeline = Pipeline([
-            ('vect', CountVectorizer()),
-            ('tfidf', TfidfTransformer()),
-            ('clf', SGDClassifier()),
-        ])
+        return param_GBC
+
+    def AdaBoostParameters(self):
+        param_AdaBoost = { 
+            'featurer__extraTC__n_estimators':  [10, 16, 32],
+            'featurer__extraTC__criterion': ['gini','entropy'],
+            'featurer__extraTC__n_jobs': [-1],
+            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'featurer__pca__whiten': [True],
+            'AdaBoostClassifier__base_estimator__criterion': ['gini','entropy'],
+            'AdaBoostClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0],
+            'AdaBoostClassifier__n_estimators': [50, 100, 150, 200]
+        }
+
+        return param_AdaBoost
+
+    def improve(self):
+        pipe = self.pipeline
 
         parameters = {
             '__max_df': (0.5, 0.75, 1.0),
@@ -72,10 +94,6 @@ class Improve():
         print()
 
         print("Best score: %0.3f" % grid_search.best_score_)
-        print("Best parameters set:")
-        best_parameters = grid_search.best_estimator_.get_params()
-        for param_name in sorted(parameters.keys()):
-            print("\t%s: %r" % (param_name, best_parameters[param_name]))
 
 
         

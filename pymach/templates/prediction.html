@@ -20,7 +20,8 @@
                             <form  action="/predictData" method="POST"> 
                                 {% for file in files %}
                                     {% if file.endswith(".ml") %}
-                                        <li> <button value="{{file}}" name="submit" type="submit" class="btn btn-success">{{file }}</button></li>
+                                        <input value="{{file}}" name="submit" type="radio" class="btn btn-success"> {{ file[:-3] }}</input>
+                                        </br>
                                         </br>
                                     {% endif %}                            
                                 {% endfor %}

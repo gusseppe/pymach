@@ -1,4 +1,4 @@
-Hora,DiaSemana,busID,Orientacion,ProximaParada,class
+Hora,DiaSemana,busID,Orientacion,ProximaParada,Ruta
 21,4,5693,0,MTA_401686,MTANYCT_M15
 11,4,4557,0,MTA_306960,MTANYCT_B62
 8,4,4007,0,NULL,MTANYCT_S62

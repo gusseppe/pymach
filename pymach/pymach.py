@@ -20,7 +20,7 @@ from sklearn import cross_validation
 import pandas as pd
 
 
-name = "datasets/LocalizationNew.csv"
+name = "datasets/iris.csv"
 #name = "datasets/LocalizationOld.csv"
 #name = "datasets/seguridad.csv"
 #name = "datasets/breast-cancer-wisconsin.csv"
@@ -28,8 +28,8 @@ name = "datasets/LocalizationNew.csv"
 #name = "inputBus.csv"
 # className = "Ruta"
 #className = "CATEGORY"
-#className = "class"
-className = "position"
+className = "class"
+#className = "position"
 
 def main():
     #STEP 0: Define workflow parameters

@@ -49,10 +49,12 @@ class Define():
         """
         try:            
             if self.header is not None:
-                Define.data = pd.read_csv('./uploads/'+self.nameData, names=self.header)
+                #Define.data = pd.read_csv('./uploads/'+self.nameData, names=self.header)
+                Define.data = pd.read_csv(self.nameData, names=self.header)
                 Define.header = self.header
             else:    
-                Define.data = pd.read_csv('./uploads/'+self.nameData)
+                #Define.data = pd.read_csv('./uploads/'+self.nameData)
+                Define.data = pd.read_csv(self.nameData)
             
             Define.data.dropna(inplace=True)
 

@@ -141,16 +141,32 @@ def modelingData():
         name = request.form['submit']
     return render_template('models.html', files=dirs, model=draw_fig(plot_type, classname, name))	
 
+#@app.route('/prediction', methods = ['GET', 'POST'])
+#def prediction():
+	#dirs = os.listdir(app.config['MODELS_FOLDER'])
+        #print dirs
+	#return render_template('prediction.html', files = dirs)	
+
+#@app.route('/predictData', methods = ['GET', 'POST'])
+#def predictionData():
+	#dirs = os.listdir(app.config['MODELS_FOLDER'])
+	#return render_template('prediction.html', files = dirs)	
+
 @app.route('/prediction', methods = ['GET', 'POST'])
 def prediction():
-	dirs = os.listdir(app.config['MODELS_FOLDER'])
-        print dirs
-	return render_template('prediction.html', files = dirs)	
-
-@app.route('/predictData', methods = ['GET', 'POST'])
-def predictionData():
-	dirs = os.listdir(app.config['MODELS_FOLDER'])
-	return render_template('prediction.html', files = dirs)	
+    attributes = []
+    dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+    data_class = 'class'
+    filename = 'LocalizationNew.csv'
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    model = 'Naive Bayes'
+    f = open(filepath, 'r')
+    g = open(filepath, 'r')
+    for item in g.readline().split(','):
+        if item.strip() != data_class:
+            attributes.append(item)
+    print(attributes, ' this is something')
+    return render_template('showPrediction.html', file = f, attributes = attributes, data_class = data_class, model = model)
 
 if __name__ == '__main__':
-   app.run( debug = True)
+   app.run( debug = True, port=5000)
