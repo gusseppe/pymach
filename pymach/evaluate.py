@@ -15,12 +15,12 @@ import matplotlib.pyplot as plt
 import warnings
 import pickle
 #sklearn warning
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import StratifiedShuffleSplit 
+from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import FunctionTransformer
@@ -54,7 +54,7 @@ class Evaluate():
 
 
     def __init__(self, definer, preparer, featurer):
-        self.definer = definer 
+        self.definer = definer
         self.preparer = preparer
         self.featurer = featurer
 
@@ -67,9 +67,6 @@ class Evaluate():
         self.setBestPipelines()
 
         #[m() for m in evaluators]
-
-
-
         return self
 
     def defineAlgorithms(self):
@@ -89,7 +86,7 @@ class Evaluate():
         models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
-        
+
         #Voting
         estimators = []
         estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
@@ -152,9 +149,9 @@ class Evaluate():
         for name, model in Evaluate.pipelines:
             kfold = KFold(n_splits=num_folds, random_state=seed)
             #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
-                    #scoring=scoring) 
+                    #scoring=scoring)
             cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, \
-                    scoring=scoring) 
+                    scoring=scoring)
 
             # save the model to disk
             filename = name+'.ml'
@@ -168,7 +165,7 @@ class Evaluate():
             #report_element[name] = {'mean':mean, 'std':std}
             #report.update(report_element)
 
-            #report_print = "Model: {}, mean: {}, std: {}".format(name, 
+            #report_print = "Model: {}, mean: {}, std: {}".format(name,
                     #mean, std)
             report.append([name, mean, std])
             #print(report_print)
@@ -182,7 +179,7 @@ class Evaluate():
         self.chooseTopRanked(df_report)
         self.plotModels(results, names)
 
-        
+
     def chooseTopRanked(self, report):
         """" Choose the best two algorithms"""
 
@@ -196,13 +193,13 @@ class Evaluate():
     def setBestPipelines(self):
         alg = list(Evaluate.report.Model)[0:2]
         bestPipelines = []
-        
+
         for p in Evaluate.pipelines:
             if p[0] in alg:
                 bestPipelines.append(p)
-                
+
         Evaluate.bestPipelines = bestPipelines
-        
+
         #print(Evaluate.bestPipelines)
 
     def plotModels(self, results, names):
@@ -210,8 +207,8 @@ class Evaluate():
 
         fig = plt.figure()
         fig.suptitle("Model Comparison")
-        #ax1 = fig.add_subplot(111) 
-        ax = fig.add_subplot(111) 
+        #ax1 = fig.add_subplot(111)
+        ax = fig.add_subplot(111)
         ax.set_xticklabels(names)
         plt.boxplot(results)
         #ax1.set_xticklabels(names)
