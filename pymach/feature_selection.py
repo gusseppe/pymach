@@ -57,7 +57,7 @@ class FeatureSelection():
         #scaler = StandardScaler()
         #transformers.append(('scaler', scaler))
         #binarizer = Binarizer()
-        return FeatureUnion(transformers)
+        return FeatureUnion(transformers, n_jobs=-1)
 
     class CustomFeature(TransformerMixin):
         """ A custome class for featuring """

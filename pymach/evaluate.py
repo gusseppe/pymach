@@ -78,13 +78,13 @@ class Evaluate():
         models.append(('GaussianNB', GaussianNB()))
         models.append(('KNeighborsClassifier', KNeighborsClassifier()))
         models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
-        models.append(('LogisticRegression', LogisticRegression()))
+        models.append(('LogisticRegression', LogisticRegression(n_jobs=-1)))
 
         #Bagging and Boosting
-        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_jobs=-1)))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
         models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        models.append(('RandomForestClassifier', RandomForestClassifier()))
+        models.append(('RandomForestClassifier', RandomForestClassifier(n_jobs=-1)))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
 
         #Voting
