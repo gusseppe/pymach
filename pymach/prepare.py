@@ -63,7 +63,7 @@ class Prepare():
         #transformers.append(('scaler', scaler))
         #binarizer = Binarizer()
         #print(transformers)
-        return FeatureUnion(transformers, n_jobs=-1)
+        return FeatureUnion(transformers)
 
     class Clean(BaseEstimator, TransformerMixin):
         """ A class for removing NAN values """

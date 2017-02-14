@@ -78,13 +78,13 @@ class Evaluate():
         models.append(('GaussianNB', GaussianNB()))
         models.append(('KNeighborsClassifier', KNeighborsClassifier()))
         models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
-        models.append(('LogisticRegression', LogisticRegression(n_jobs=-1)))
+        models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
-        models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_jobs=-1)))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
         models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        models.append(('RandomForestClassifier', RandomForestClassifier(n_jobs=-1)))
+        models.append(('RandomForestClassifier', RandomForestClassifier()))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
 
         #Voting
@@ -154,8 +154,8 @@ class Evaluate():
                     scoring=scoring)
 
             # save the model to disk
-            filename = name+'.ml'
-            pickle.dump(model, open('./models/'+filename, 'wb'))
+            #filename = name+'.ml'
+            #pickle.dump(model, open('./models/'+filename, 'wb'))
 
             results.append(cv_results)
             names.append(name)
