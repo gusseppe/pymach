@@ -60,7 +60,7 @@ class Define():
                 Define.X = Define.data.ix[:, Define.data.columns != self.className]
                 Define.y = Define.data[self.className]
         except:
-            print "Error reading"
+            print("Error reading")
             
     def description(self):
         Define.n_features = len(Define.data.columns)-1

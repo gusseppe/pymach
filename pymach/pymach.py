@@ -14,13 +14,16 @@ import prepare
 import feature_selection
 import evaluate
 
+import time
+
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.svm import SVC
 from sklearn import cross_validation
 import pandas as pd
 
 
-name = "datasets/miningData.csv"
+name = "datasets/iris.csv"
+#name = "datasets/miningData.csv"
 #name = "datasets/LocalizationOld.csv"
 #name = "datasets/seguridad.csv"
 #name = "datasets/breast-cancer-wisconsin.csv"
@@ -28,8 +31,9 @@ name = "datasets/miningData.csv"
 #name = "inputBus.csv"
 # className = "Ruta"
 #className = "CATEGORY"
-className = "accident_type"
+#className = "accident_type"
 #className = "position"
+className = "class"
 
 def main():
     #STEP 0: Define workflow parameters
@@ -48,4 +52,10 @@ def main():
     evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
 
 if __name__ == '__main__':
+    start = time.time()
     main()
+    end = time.time()
+
+    print()
+    print("Execution time for all the steps: ", end-start)
+
