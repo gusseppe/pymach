@@ -83,9 +83,9 @@ class Evaluate():
         #Bagging and Boosting
         models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
-        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
+        #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
-        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
+        #models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
 
         #Voting
         estimators = []

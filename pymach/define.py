@@ -47,21 +47,20 @@ class Define():
         out : ndarray
 
         """
-        try:            
-            if self.header is not None:
-                #Define.data = pd.read_csv('./uploads/'+self.nameData, names=self.header)
-                Define.data = pd.read_csv(self.nameData, names=self.header)
-                Define.header = self.header
-            else:    
-                #Define.data = pd.read_csv('./uploads/'+self.nameData)
-                Define.data = pd.read_csv(self.nameData)
-            
-            Define.data.dropna(inplace=True)
+        try: 
+            if self.nameData is not None and self.className is not None:
+                if self.header is not None:
+                    Define.data = pd.read_csv(self.nameData, names=self.header)
+                    Define.header = self.header
+                else:    
+                    Define.data = pd.read_csv(self.nameData)
 
-            Define.X = Define.data.ix[:, Define.data.columns != self.className]
-            Define.y = Define.data[self.className]
+                Define.data.dropna(inplace=True)
+
+                Define.X = Define.data.ix[:, Define.data.columns != self.className]
+                Define.y = Define.data[self.className]
         except:
-            print "Enter classname"
+            print "Error reading"
             
     def description(self):
         Define.n_features = len(Define.data.columns)-1

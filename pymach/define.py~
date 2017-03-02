@@ -15,15 +15,19 @@ class Define():
 
     typeModel = 'clasification'
     typeAlgorithm = 'LogisticR'
-    className = 'species'
-    nameData = 'iris.csv'
+    #className = 'species'
+    #nameData = 'iris.csv'
     n_features = None
     samples = None
+    data = None
+    header = None
     X = None
     y = None
 
-    def __init__(self):
-        pass
+    def __init__(self, nameData, header=None, className=None):
+        self.nameData = nameData
+        self.header = header
+        self.className = className
 
     def pipeline(self):
 
@@ -43,23 +47,23 @@ class Define():
         out : ndarray
 
         """
-        Define.data = pd.read_csv(Define.nameData)
-        Define.X = Define.data.ix[:, Define.data.columns != Define.className]
-        Define.y = Define.data[Define.className]
+        try: 
+            if self.nameData is not None and self.className is not None:
+                if self.header is not None:
+                    Define.data = pd.read_csv(self.nameData, names=self.header)
+                    Define.header = self.header
+                else:    
+                    Define.data = pd.read_csv(self.nameData)
 
+                Define.data.dropna(inplace=True)
+
+                Define.X = Define.data.ix[:, Define.data.columns != self.className]
+                Define.y = Define.data[self.className]
+        except:
+            print "Error reading"
+            
     def description(self):
         Define.n_features = len(Define.data.columns)-1
-        #Define.className = Define.data.columns[-1]
         Define.samples = len(Define.data)
 
-    #def likelyAlgorithms(self):
-        #if Define.samples < 50:
-            #print("Not enough data")
-        #else:
-            #pass
-
-
-
-
-        
 

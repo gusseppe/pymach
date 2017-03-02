@@ -38,7 +38,7 @@ class Prepare():
 
         transformers = []
 
-        clean = self.Clean()
+        #clean = self.Clean()
         #transformers.append(('clean', FunctionTransformer(clean, validate=False)))
         #transformers.append(('clean', clean))
 

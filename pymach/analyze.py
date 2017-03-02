@@ -42,9 +42,7 @@ class Analyze():
     def pipeline(self):
 
         analyzers = []
-        analyzers.append(self.description)
         analyzers.append(self.hist)
-        analyzers.append(self.box)
         analyzers.append(self.density)
         analyzers.append(self.corr)
         analyzers.append(self.scatter)
