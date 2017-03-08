@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Gusseppe Bravo Rocca <gbravor@uni.pe>
+* Gusseppe Bravo-Rocca <gbravor@uni.pe>
 
 Contributors
 ------------
