@@ -20,6 +20,7 @@ pymach
 
 Pymach is a tool to accelerate the development of models based on Machine Learning, looking for the best model for your data.
 
+![portada2](https://github.com/gusseppe/pymach/blob/master/examples/1.png)
 
 * Free software: MIT license
 * Documentation: https://pymach.readthedocs.io.
