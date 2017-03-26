@@ -73,26 +73,26 @@ class Evaluate():
 
         models = []
         #LDA : Warning(Variables are collinear)
-        models.append(('LDA', LinearDiscriminantAnalysis()))
-        models.append(('SVC', SVC()))
-        models.append(('GaussianNB', GaussianNB()))
-        models.append(('KNeighborsClassifier', KNeighborsClassifier()))
-        models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
-        models.append(('LogisticRegression', LogisticRegression()))
+        #models.append(('LDA', LinearDiscriminantAnalysis()))
+        #models.append(('SVC', SVC()))
+        #models.append(('GaussianNB', GaussianNB()))
+        #models.append(('KNeighborsClassifier', KNeighborsClassifier()))
+        #models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
+        #models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
         models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        models.append(('RandomForestClassifier', RandomForestClassifier()))
-        #models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
+        #models.append(('RandomForestClassifier', RandomForestClassifier()))
+        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
 
         #Voting
         estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
-        estimators.append(("Voting_RandomForestClassifier", RandomForestClassifier()))
+        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(n_estimators=200)))
+        estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
         voting = VotingClassifier(estimators)
-        #models.append(('VotingClassifier', voting))
+        models.append(('Voting', voting))
 
         return models
 
