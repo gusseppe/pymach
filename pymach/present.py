@@ -40,34 +40,34 @@ header = None
 
 def draw_fig(fig_type, className, name):
 
-    with lock:
-        #fig, ax = plt.subplots()
-        fig, ax = plt.subplots(figsize=(10, 7))
-        definer = define.Define(name, header, className).pipeline()
-        analyzer = analyze.Analyze(definer)
-        #fig = plt.figure(figsize=(10,10))
-        if fig_type == "data":
-            d = definer.data
-            return d.head(20).to_html(show_dimensions=True)
-        elif fig_type == "description":
-            desc = analyzer.description()
-            return desc.to_html(show_dimensions=True)
-        elif fig_type == "hist":
-            analyzer.hist(ax)
-        elif fig_type == "box":
-            analyzer.box(ax)
-        elif fig_type == "density":
-            analyzer.density(ax)
-        elif fig_type == "corr":
-            analyzer.corr(ax)
-        elif fig_type == "scatter":
-            analyzer.scatter(ax)
-        elif fig_type == "model":
-            preparer = prepare.Prepare(definer).pipeline()
-            featurer = feature_selection.FeatureSelection(definer).pipeline()
-            evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
-            results = evaluator.report
-            return results.to_html(show_dimensions=True)
+    #with lock:
+    #fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10, 7))
+    definer = define.Define(name, header, className).pipeline()
+    analyzer = analyze.Analyze(definer)
+    #fig = plt.figure(figsize=(10,10))
+    if fig_type == "data":
+        d = definer.data
+        return d.head(20).to_html(show_dimensions=True)
+    elif fig_type == "description":
+        desc = analyzer.description()
+        return desc.to_html(show_dimensions=True)
+    elif fig_type == "hist":
+        analyzer.hist(ax)
+    elif fig_type == "box":
+        analyzer.box(ax)
+    elif fig_type == "density":
+        analyzer.density(ax)
+    elif fig_type == "corr":
+        analyzer.corr(ax)
+    elif fig_type == "scatter":
+        analyzer.scatter(ax)
+    elif fig_type == "model":
+        preparer = prepare.Prepare(definer).pipeline()
+        featurer = feature_selection.FeatureSelection(definer).pipeline()
+        evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+        results = evaluator.report
+        return results.to_html(show_dimensions=True)
     
     return mpld3.fig_to_html(fig)
 
