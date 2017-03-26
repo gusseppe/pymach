@@ -40,34 +40,34 @@ header = None
 
 def draw_fig(fig_type, className, name):
 
-    #with lock:
-    #fig, ax = plt.subplots()
-    fig, ax = plt.subplots(figsize=(10, 7))
-    definer = define.Define(name, header, className).pipeline()
-    analyzer = analyze.Analyze(definer)
-    #fig = plt.figure(figsize=(10,10))
-    if fig_type == "data":
-        d = definer.data
-        return d.head(20).to_html(show_dimensions=True)
-    elif fig_type == "description":
-        desc = analyzer.description()
-        return desc.to_html(show_dimensions=True)
-    elif fig_type == "hist":
-        analyzer.hist(ax)
-    elif fig_type == "box":
-        analyzer.box(ax)
-    elif fig_type == "density":
-        analyzer.density(ax)
-    elif fig_type == "corr":
-        analyzer.corr(ax)
-    elif fig_type == "scatter":
-        analyzer.scatter(ax)
-    elif fig_type == "model":
-        preparer = prepare.Prepare(definer).pipeline()
-        featurer = feature_selection.FeatureSelection(definer).pipeline()
-        evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
-        results = evaluator.report
-        return results.to_html(show_dimensions=True)
+    with lock:
+        #fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(10, 7))
+        definer = define.Define(name, header, className).pipeline()
+        analyzer = analyze.Analyze(definer)
+        #fig = plt.figure(figsize=(10,10))
+        if fig_type == "data":
+            d = definer.data
+            return d.head(20).to_html(show_dimensions=True)
+        elif fig_type == "description":
+            desc = analyzer.description()
+            return desc.to_html(show_dimensions=True)
+        elif fig_type == "hist":
+            analyzer.hist(ax)
+        elif fig_type == "box":
+            analyzer.box(ax)
+        elif fig_type == "density":
+            analyzer.density(ax)
+        elif fig_type == "corr":
+            analyzer.corr(ax)
+        elif fig_type == "scatter":
+            analyzer.scatter(ax)
+        elif fig_type == "model":
+            preparer = prepare.Prepare(definer).pipeline()
+            featurer = feature_selection.FeatureSelection(definer).pipeline()
+            evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+            results = evaluator.report
+            return results.to_html(show_dimensions=True)
     
     return mpld3.fig_to_html(fig)
 
@@ -102,10 +102,10 @@ def chooseData():
     #data = json.loads(request.data)
     plot_type = 'data'
     classname = "class"
-    name = ''
+    name = 'uploads/'
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = request.form['submit']
+        name = name + request.form['submit']
     return render_template('uploadData.html', files = dirs, dataframe=draw_fig(plot_type, classname, name))	
 
 @app.route('/analyzeData', methods = ['GET', 'POST'])
@@ -119,10 +119,10 @@ def plotData():
     plot_type2 = 'corr'
     plot_type3 = 'scatter'
     classname = "class"
-    name = ''
+    name = 'uploads/'
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = request.form['submit']
+        name = name + request.form['submit']
     ##print(dirs)
     return render_template('analyzeData.html', files = dirs, plot1=draw_fig(plot_type1, classname, name), plot2=draw_fig(plot_type2, classname, name), plot3=draw_fig(plot_type3, classname, name))	
 	
@@ -135,10 +135,10 @@ def models():
 def modelingData():
     plot_type = 'model'
     classname = "class"
-    name = ''
+    name = 'uploads/'
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = request.form['submit']
+        name = name + request.form['submit']
     return render_template('models.html', files=dirs, model=draw_fig(plot_type, classname, name))	
 
 #@app.route('/prediction', methods = ['GET', 'POST'])
@@ -157,7 +157,7 @@ def prediction():
     attributes = []
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     data_class = 'class'
-    filename = 'LocalizationNew.csv'
+    filename = 'iris.csv'
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     model = 'Naive Bayes'
     f = open(filepath, 'r')
@@ -169,4 +169,4 @@ def prediction():
     return render_template('showPrediction.html', file = f, attributes = attributes, data_class = data_class, model = model)
 
 if __name__ == '__main__':
-   app.run( debug = True, port=5000)
+   app.run(host='0.0.0.0', debug = True, port=8001)
