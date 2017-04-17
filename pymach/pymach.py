@@ -16,12 +16,6 @@ import evaluate
 
 import time
 
-from sklearn.pipeline import Pipeline, FeatureUnion
-from sklearn.svm import SVC
-from sklearn import cross_validation
-import pandas as pd
-
-
 name = "datasets/iris.csv"
 #name = "datasets/miningData.csv"
 #name = "datasets/LocalizationOld.csv"
@@ -49,7 +43,7 @@ def main():
     featurer = feature_selection.FeatureSelection(definer).pipeline()
 
     #STEP4: Evalute the algorithms by using the pipelines
-    evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+    #evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
 
 if __name__ == '__main__':
     start = time.time()

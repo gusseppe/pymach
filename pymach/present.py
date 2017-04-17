@@ -169,4 +169,4 @@ def prediction():
     return render_template('showPrediction.html', file = f, attributes = attributes, data_class = data_class, model = model)
 
 if __name__ == '__main__':
-   app.run(host='0.0.0.0', debug = True, port=8001)
+   app.run(host='0.0.0.0', debug = True, port=8002)
