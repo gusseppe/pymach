@@ -12,15 +12,21 @@ ALLOWED_EXTENSIONS = ['txt', 'csv']
 def home():
    return render_template("home.html")
 
+#@app.route('/defineData', methods = ['GET', 'POST'])
+#def defineData():
+    #files = []
+    #dirs = os.listdir(app.config['UPLOAD_FOLDER'])
+    #for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        #filepath = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        #f = open(filepath, 'r')
+        #files.append(f)
+    #return render_template('uploadData.html', filenames = dirs, files = files)
+
 @app.route('/defineData', methods = ['GET', 'POST'])
 def defineData():
-    files = []
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
-    for file in os.listdir(app.config['UPLOAD_FOLDER']):
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file)
-        f = open(filepath, 'r')
-        files.append(f)
-    return render_template('uploadData.html', filenames = dirs, files = files)
+    #print(dirs)
+    return render_template('uploadData.html', files = dirs)	
 
 @app.route('/storeData', methods = [ 'GET', 'POST'])
 def guardarData():

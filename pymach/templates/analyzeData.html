@@ -1,40 +1,77 @@
 {% extends "layouts/base_dashboard.html" %}
 
+
 {%  block content_dashboard %} 
+<!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>-->
+<script src="{{url_for('static', filename = 'js/plotly-latest.min.js')}}"></script>
 
 <div class="row">
-    <div class="col-lg-12">
+
+<!--Files uploaded-->
+    <div class="col-lg-6">
+            <section class="widget">
+                <header>
+                    <h3>
+                        <strong>Analyzing data</strong>
+                    </h3>
+                </header>
+                <div class="widget-body">
+                    <p class="fs-mini text-muted">
+                        Use any of the available button classes to quickly create a styled button.
+                        Semantically distinguishable beauty.
+                    </p>
+                    {% if not files %}
+                        <div><br> There are not files in the system yet <br></div>
+                    {% else %}
+                        <form  action="/plotData" method="POST"> 
+                            <div><br> csv files already in the system: <br><br></div>
+                            {% for file in files %}
+                                {% if file.endswith(".csv") or  file.endswith(".txt")%}
+                                    <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
+                                {% endif %}                            
+                            {% endfor %}
+                        </form>
+                    {% endif %}
+
+                </div>
+            </section>
+    </div>
+<!--End Files uploaded-->
+
+<!--Plot-->
+    {% if not figures %}
+        <!--<div><br> Figures will be ploted here and below <br></div>-->
+    {% else %}
+        {% for name, fig in figures.items() %}
+            <div class="col-lg-6">
                 <section class="widget">
                     <header>
-                        <h1>
-                            <strong>Analyzing data</strong>
-                        </h1>
+                        <h5>
+                            {{name}}
+                        </h5>
+                        <div class="widget-controls">
+                            <a href="#" data-widgster="close"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>
                     </header>
-                    <div>
-                        {% if not files %}
-                            <div><br> There are not files in the system yet <br></div>
-                        {% else %}
-                            <div><br> csv files already in the system: <br><br></div>
-
-                            <ul>
-                            <form  action="/plotData" method="POST"> 
-                                {% for file in files %}
-                                    {% if file.endswith(".csv") or  file.endswith(".txt")%}
-                                        <li> <button value="{{file}}" name="submit" type="submit" class="btn btn-success">{{file }}</button></li>
-                                        </br>
-                                    {% endif %}                            
-                                {% endfor %}
-                            </form>
-                        {% endif %}
-                         </ul>
+                    <div class="widget-body">
+                        <p class="fs-mini text-muted">
+                            Use any of the available button classes to quickly create a styled button.
+                            Semantically distinguishable beauty.
+                        </p>
+                        <div class="btn-toolbar">
+                                    <button type="button" class="m-t-1 btn btn-info" data-toggle="popover" title="" data-placement="right" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">
+                                        Titled Popover
+                                    </button>
+                        </div>
                     </div>
+                        {{ fig |safe }}
                 </section>
             </div>
-            {{ plot1|safe }}
-            {{ plot2|safe }}
-            {{ plot3|safe }}
-</div>
+        {% endfor %}
+    {% endif %}
+<!--End Plot-->
 
+</div>
 <!--<script type="text/javascript">   -->
 
 <!--$("#query").click(function() {  -->
@@ -64,6 +101,10 @@
 
 {% block specific_libraries %}
 <script src="{{url_for('static', filename = 'vendor/bootstrap/js/dist/modal.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/bootstrap/js/dist/button.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/bootstrap/js/dist/tooltip.js')}}"></script>
+<script src="{{url_for('static', filename = 'vendor/bootstrap/js/dist/popover.js')}}"></script>
+<script src="{{url_for('static', filename = 'js/ui-components.js')}}"></script>
 <script src="{{url_for('static', filename = 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
 <script src="{{url_for('static', filename = 'vendor/jquery-autosize/jquery.autosize.min.js')}}"></script>
 <script src="{{url_for('static', filename = 'vendor/bootstrap3-wysihtml5/lib/js/wysihtml5-0.3.0.min.js')}}"></script>

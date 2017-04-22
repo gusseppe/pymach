@@ -203,7 +203,7 @@ class Evaluate():
         #print(Evaluate.bestPipelines)
 
     def plotModels(self, results, names):
-        """" Plot the best two algorithms by using box plots"""
+        """" Plot the algorithms by using box plots"""
 
         fig = plt.figure()
         fig.suptitle("Model Comparison")
