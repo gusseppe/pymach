@@ -14,6 +14,7 @@ import analyze
 import prepare
 import feature_selection
 import evaluate
+import tools
 
 from flask import Flask, flash, render_template, \
         redirect, json, request, url_for, jsonify
@@ -101,7 +102,8 @@ def storedata():
     """  Upload a new file """
     if request.method == 'POST':
         file = request.files['file']
-        if file and allowed_file(file.filename):
+        #if file and allowed_file(file.filename):
+        if file:
             now = datetime.now()
             filename = os.path.join(app.config['UPLOAD_FOLDER'], "%s" % (file.filename))
             file.save(filename)
@@ -115,6 +117,8 @@ def storedata():
 def chooseData():
     """  choose a file and show its content """
     from itertools import islice
+    tools.localization()
+
     plot_type = 'data'
     classname = "class"
     data_name = ''
