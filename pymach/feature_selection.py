@@ -21,7 +21,7 @@ from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 
 __all__ = [
-    'read']
+    'pipeline']
 
 
 class FeatureSelection():
@@ -30,10 +30,10 @@ class FeatureSelection():
     data = None
 
     def __init__(self, definer):
-        self.typeModel = definer.typeModel
-        self.typeAlgorithm = definer.typeAlgorithm
-        self.className = definer.className
-        self.nameData = definer.nameData
+        self.problem_type = definer.problem_type
+        self.infer_algorithm = definer.infer_algorithm
+        self.class_name = definer.class_name
+        self.data_name = definer.data_name
         self.n_features = definer.n_features
 
     def pipeline(self):
@@ -68,7 +68,3 @@ class FeatureSelection():
 
         def fit(self, X, y=None, **fit_params):
             return self
-    #def read(self, name):
-        #data = pd.read_csv(name)
-        #Prepare.data = data
-

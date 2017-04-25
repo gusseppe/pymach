@@ -4,30 +4,65 @@
 # Author: Gusseppe Bravo <gbravor@uni.pe>
 # License: BSD 3 clause
 """
-En esta clase se define que problema se va a solucionar.
-Sea de clasificacion, regression, clustering. Ademas se debe
-dar una idea de los posibles algoritmos que pueden ser usados.
+This module will define the dataset. Thoughts:
+    - Type of model: Clasification, Regression, Clustering.
+    - Data: save the dataset.
+    - header: the dataset's header.
+and so forth.
 """
+
+__all__ = [
+    'pipeline']
 
 import pandas as pd
 
-class Define():
+from collections import OrderedDict
+from tools import sizeof_file
 
-    typeModel = 'clasification'
-    typeAlgorithm = 'LogisticR'
-    #className = 'species'
-    #nameData = 'iris.csv'
+
+class Define():
+    """Define module.
+
+    Parameters
+    ------------
+    data_name : string
+    The dataset's name which is expected to be a csv file.
+
+    header : list
+    The dataset's header, i.e, the features and the class name.
+
+    class_name : string
+    The name of the variable will be used for prediction.
+
+    Attributes
+    -----------
+    n_features : int
+    number of features or predictors.
+
+    samples : int
+    Number of rows in the dataset.
+
+    """
+
+    problem_type = 'classification'
+    infer_algorithm = 'LogisticR'
     n_features = None
     samples = None
+    size = None
     data = None
     header = None
     X = None
     y = None
 
-    def __init__(self, nameData, header=None, className=None):
-        self.nameData = nameData
+    def __init__(self, 
+            data_name, 
+            header=None, 
+            class_name='class',
+            problem_type='classification'):
+
+        self.data_name = data_name
         self.header = header
-        self.className = className
+        self.class_name = class_name
 
     def pipeline(self):
 
@@ -48,22 +83,38 @@ class Define():
 
         """
         try: 
-            if self.nameData is not None and self.className is not None:
+            if self.data_name is not None and self.class_name is not None:
                 if self.header is not None:
-                    Define.data = pd.read_csv(self.nameData, names=self.header)
+                    Define.data = pd.read_csv(self.data_name, names=self.header)
                     Define.header = self.header
                 else:    
-                    Define.data = pd.read_csv(self.nameData)
+                    Define.data = pd.read_csv(self.data_name)
 
                 Define.data.dropna(inplace=True)
 
-                Define.X = Define.data.ix[:, Define.data.columns != self.className]
-                Define.y = Define.data[self.className]
+                Define.X = Define.data.ix[:, Define.data.columns != self.class_name]
+                Define.y = Define.data[self.class_name]
         except:
             print("Error reading")
             
     def description(self):
         Define.n_features = len(Define.data.columns)-1
         Define.samples = len(Define.data)
+        Define.size = sizeof_file(self.data_name)
+
+        dict_description = OrderedDict()
+        dict_description["name"] = self.data_name
+        dict_description["n_features"] = Define.n_features
+        dict_description["samples"] = Define.samples
+        dict_description["size"] = Define.size
+
+        return dict_description
+
+
+    def infer(self):
+        """ Infer algorithm considering dataset shape, n_features, etc. 
+        
+        """
+        pass
 
 

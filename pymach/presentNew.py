@@ -1,29 +1,27 @@
+#Standard Libraries
 import os
+import datetime
+import json
+import random
+
+#Third Libraries
+import pandas as pd
+import numpy as np
+
+#Local Libraries
 import define
 import analyze
 import prepare
 import feature_selection
 import evaluate
-import json
-import random
-import pandas as pd
-#import matplotlib
-#import matplotlib.pyplot as plt
-import numpy as np
-import datetime
-#import mpld3
 
-from flask import Flask, flash, render_template, redirect, json, request, url_for, jsonify
+from flask import Flask, flash, render_template, \
+        redirect, json, request, url_for, jsonify
 from threading import Lock
 from mpld3 import plugins
 from werkzeug import secure_filename
 from datetime import datetime
 from collections import OrderedDict
-
-#matplotlib.use('Agg')
-#plt.ioff()
-
-#lock = Lock()
 
 
 app = Flask(__name__)
@@ -33,51 +31,25 @@ app.config['UPLOAD_FOLDER'] = os.path.join(APP_PATH, 'uploads')
 app.config['MODELS_FOLDER'] = os.path.join(APP_PATH, 'models')
 ALLOWED_EXTENSIONS = ['txt', 'csv', 'ml']
 
-# Setting up matplotlib sytles using BMH
-#MATPLOT_STYLES_PATH = os.path.join(APP_PATH, 'static/bmh_matplotlibrc.json')
-#s = json.load(open("./static/bmh_matplotlibrc.json"))
-#s = json.load(open(MATPLOT_STYLES_PATH))
-#matplotlib.rcParams.update(s)
 
 #name = "iris.csv"
 header = None
 
 def draw_fig(figures, className, name):
 
-    #with lock:
-    #fig, ax = plt.subplots()
-    #fig, ax = plt.subplots(figsize=(10, 7))
-    definer = define.Define(name, header, className).pipeline()
+    definer = define.Define(
+            data_name=name,
+            header=header,
+            class_name=className).pipeline()
+
     analyzer = analyze.Analyze(definer)
-    #fig = plt.figure(figsize=(10,10))
-    #if fig_type == "data":
-        #d = definer.data
-        #return d.head(20).to_html(show_dimensions=True)
+
     dict_figures = OrderedDict()
     for fig in figures:
         dict_figures[fig] = analyzer.plot(fig)
         #if fig == "description":
             #desc = analyzer.description()
             #return desc.to_html(show_dimensions=True)
-        #elif fig == "hist":
-            ##analyzer.hist(ax)
-            #return analyzer.histogram()
-            ##with open('div') as f:
-                ##t = f.read()
-                ##print t
-                ##return t
-        #elif fig == "box":
-            #return analyzer.boxplot()
-            ##analyzer.box(ax)
-        #elif fig == "density":
-            #pass
-            ##analyzer.density(ax)
-        #elif fig == "corr":
-            #return analyzer.correlation()
-            ##analyzer.corr(ax)
-        #elif fig == "scatter":
-            #return analyzer.scatter()
-            ##analyzer.scatter(ax)
         #elif fig == "model":
             #preparer = prepare.Prepare(definer).pipeline()
             #featurer = feature_selection.FeatureSelection(definer).pipeline()
@@ -86,10 +58,31 @@ def draw_fig(figures, className, name):
             #return results.to_html(show_dimensions=True)
     
     return dict_figures
+
+def report_model(class_name, data_name):
+    definer = define.Define(
+            data_name=data_name,
+            header=header,
+            class_name=class_name).pipeline()
+
+    preparer = prepare.Prepare(definer).pipeline()
+    featurer = feature_selection.FeatureSelection(definer).pipeline()
+    evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+    #results = evaluator.report
+
+    #print(evaluator.plot_models()) 
+    plot = evaluator.plot_models()
+    table = evaluator.report
+    dict_report = {'plot':plot, 'table':table}
+    #return  evaluator.plot_models()
+        
+    #return results.to_html(show_dimensions=True)
+
+    return dict_report
     #return mpld3.fig_to_html(fig)
 
 def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 #@app.route('/')
 #def home():
@@ -107,15 +100,16 @@ def defineData():
 def storedata():
     """  Upload a new file """
     if request.method == 'POST':
-            file = request.files['file']
-            if file and allowed_file(file.filename):
-                    now = datetime.now()
-                    filename = os.path.join(app.config['UPLOAD_FOLDER'], "%s" % (file.filename))
-                    file.save(filename)
-                    return jsonify({"success":True})
-            return redirect(url_for('defineData'))
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            now = datetime.now()
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], "%s" % (file.filename))
+            file.save(filename)
+            return jsonify({"success":True})
+
+        return redirect(url_for('defineData'))
     else:
-            return redirect(url_for('defineData'))
+        return redirect(url_for('defineData'))
 
 @app.route('/chooseData', methods = ['GET', 'POST'])
 def chooseData():
@@ -123,17 +117,23 @@ def chooseData():
     from itertools import islice
     plot_type = 'data'
     classname = "class"
-    name = ''
+    data_name = ''
+    path_name = ''
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = os.path.join(app.config['UPLOAD_FOLDER'], request.form['submit'])
+        data_name = request.form['submit']
+        path_data = os.path.join(app.config['UPLOAD_FOLDER'], data_name)
+
     dataset = []
-    with open(name) as myfile:
+    with open(path_data) as myfile:
         dataset = list(islice(myfile, 20))
         dataset = [line[:-1] for line in dataset]
-    #print dataset
-    #return render_template('uploadData.html', files = dirs, f=f, dataframe=draw_fig(plot_type, classname, name))	
-    return render_template('uploadData.html', files = dirs, dataset=dataset)	
+
+    return render_template(
+            'uploadData.html',
+            files = dirs,
+            dataset=dataset,
+            data_name=data_name)	
 
 
 ########################### End Upload Button ##################################
@@ -146,16 +146,21 @@ def analyzeData():
 
 @app.route('/plotData', methods = ['GET', 'POST'])
 def plotData():
-    figures = ['histogram', 'box', 'corr', 'scatter']
+    figures = ['histogram', 'box', 'corr']
     classname = "class"
-    name = ''
+    data_name = ''
+    path_name = ''
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = os.path.join(app.config['UPLOAD_FOLDER'], request.form['submit'])
-        #name = name + request.form['submit']
+        data_name = request.form['submit']
+        path_data = os.path.join(app.config['UPLOAD_FOLDER'], data_name)
 
-    return render_template('analyzeData.html', files=dirs, figures=draw_fig(figures, classname, name))	
-	
+    return render_template(
+            'analyzeData.html',
+            files=dirs,
+            figures=draw_fig(figures, classname, path_data),
+            data_name=data_name)	
+
 ########################### End Analyze Button ##################################
 
 ########################### Start Model Button ##################################
@@ -166,14 +171,20 @@ def models():
 
 @app.route('/modelingData', methods = ['GET', 'POST'])
 def modelingData():
-    plot_type = 'model'
+    #plot_type = 'model'
     classname = "class"
-    name = ''
+    data_name = ''
+    path_name = ''
     dirs = os.listdir(app.config['UPLOAD_FOLDER'])
     if request.method == 'POST':
-        name = os.path.join(app.config['UPLOAD_FOLDER'], request.form['submit'])
+        data_name = request.form['submit']
+        path_data = os.path.join(app.config['UPLOAD_FOLDER'], data_name)
         #name = name + request.form['submit']
-    return render_template('models.html', files=dirs, model=draw_fig(plot_type, classname, name))	
+    return render_template(
+            'models.html', 
+            files=dirs,
+            report=report_model(classname, path_data),
+            data_name=data_name)	
 
 ########################### End Model Button ##################################
 

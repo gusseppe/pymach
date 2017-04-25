@@ -9,13 +9,14 @@ for describing the dataset which is to be studied.
 
 """
 from __future__ import print_function
-from pandas.tools.plotting import scatter_matrix
+#from pandas.tools.plotting import scatter_matrix
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.plotly as py
 import cufflinks as cf
 from plotly.offline.offline import _plot_html
+from collections import namedtuple
 
 __all__ = [
     'read', 'description', 'classBalance', 'hist', 'density']
@@ -24,22 +25,24 @@ __all__ = [
 class Analyze():
     """ A class for data analysis """
 
+    FigureStruct = namedtuple("FigureStruct", "figure explanation")
+    
     def __init__(self, definer):
         """The init class.
 
         Parameters
         ----------
         typeModel : string
-            String that indicates if the model will be train for clasification
+            String that indicates if the model will be trained for clasification
             or regression.
         className : string
             String that indicates which column in the dataset is the class.
 
         """
-        self.typeModel = definer.typeModel
-        self.typeAlgorithm = definer.typeAlgorithm
-        self.className = definer.className
-        self.nameData = definer.nameData
+        self.problem_type = definer.problem_type
+        self.infer_algorithm = definer.infer_algorithm
+        self.class_name = definer.class_name
+        self.data_name = definer.data_name
         self.data = definer.data
 
     def pipeline(self):
@@ -74,20 +77,11 @@ class Analyze():
         Serie showing the count of classes.
 
         """
-        return self.data.groupby(self.className).size()
+        return self.data.groupby(self.class_name).size()
 
-    #def hist(self, ax=None):
-        ##plt.figure(figsize=(10.8, 3.6))
-        ##for column in df:
-            ##df[column].hist(color=[(0.196, 0.694, 0.823)], ax=ax, align='left', label = 'Frequency bar of subsectors') 
-        #self.data.hist(color=[(0.196, 0.694, 0.823)], ax=ax, label='frecuencia') 
-        #plt.legend(loc='best')
-        #if ax is None:
-            #plt.show()
-
-    def init_plot(self):
-        cf.set_config_file(offline=True, world_readable=True, 
-                theme='pearl')
+    #def init_plot(self):
+        #cf.set_config_file(offline=True, world_readable=True, 
+                #theme='pearl')
 
     def plot_to_html(self, fig):
         plotly_html_div, plotdivid, width, height = _plot_html(
@@ -117,6 +111,8 @@ class Analyze():
                 xTitle="Features",
                 yTitle="Values",
                 boxpoints="outliers",
+                mode='markers',
+                text=['Text A', 'Text B', 'Text C'],
                 theme="white")
 
         return self.plot_to_html(fig)
@@ -133,9 +129,7 @@ class Analyze():
         return self.plot_to_html(fig)
 
     def scatter(self):
-        corr_data = self.data.corr()
-        fig = corr_data.iplot(
-                kind="scatter",
+        fig = self.data.scatter_matrix(
                 asFigure=True,
                 #title="Correlation Matrix",
                 xTitle="Features",
@@ -143,6 +137,7 @@ class Analyze():
                 theme="white")
 
         return self.plot_to_html(fig)
+
 
     def plot(self, name):
         if name == "histogram":
@@ -153,43 +148,4 @@ class Analyze():
             return self.correlation()
         elif name == "scatter":
             return self.scatter()
-
-    #def density(self, ax=None):
-        ##Analyze.data.plot(color=[(0.196, 0.694, 0.823)], kind='density', 
-                ##subplots=True, layout=(3,3), sharex=False, figsize = (10, 10)) 
-        #self.data.plot(kind='density', 
-                #subplots=True, layout=(3,3), sharex=False, ax=ax) 
-        #if ax is None:
-            #plt.show()
-
-    #def corr(self, ax=None):
-        #corr = self.data.corr()
-        #names = list(self.data.columns.values)
-        #fig, ax1 = plt.subplots()
-
-        #if ax is not None:
-            #bar = ax.matshow(corr, vmin=-1, vmax=1)
-        #else:
-            #bar = ax1.matshow(corr, vmin=-1, vmax=1)
-
-        #fig.colorbar(bar)
-        ##plt.xticks(range(len(corr.columns)), corr.columns)
-        ##plt.yticks(range(len(corr.columns)), corr.columns)
-        #ax.set_xticks(range(len(corr.columns)))
-        #ax.set_yticks(range(len(corr.columns)))
-        #ax.set_xticklabels(names)
-        #ax.set_yticklabels(names)
-
-        #if ax is None:
-            #plt.show()
-
-    #def scatter(self, ax=None):
-        #scatter_matrix(self.data, alpha=0.7, figsize=(6, 6), diagonal='kde', ax=ax)
-        #if ax is None:
-            #plt.show()
-        
-    #def box(self, ax=None):
-        #self.data.plot(kind="box" , subplots=True, layout=(3,3), sharex=False, sharey=False, ax=ax)
-        #if ax is None:
-            #plt.show()
 

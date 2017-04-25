@@ -4,11 +4,17 @@
 # Author: Gusseppe Bravo <gbravor@uni.pe>
 # License: BSD 3 clause
 """
-This module provides a few of useful functions (actually, methods)
-for preparing the dataset which is to be studied.
-
+This module will prepare the dataset, i.e, modify the data. Thoughts:
+    - Applying scaling, normalizing, cleaning, etc.
+    - Processing will be performed depending of the infered algorithm.
+and so forth.
 """
+
 from __future__ import print_function
+
+__all__ = [
+    'pipeline']
+
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -17,8 +23,6 @@ from sklearn.preprocessing import MinMaxScaler, Normalizer,\
 StandardScaler, RobustScaler, LabelEncoder, FunctionTransformer
 
 
-__all__ = [
-    'pipeline']
 
 
 class Prepare():
@@ -28,10 +32,10 @@ class Prepare():
     categoricalData = False
 
     def __init__(self, definer):
-        self.typeModel = definer.typeModel
-        self.typeAlgorithm = definer.typeAlgorithm
+        self.problem_type = definer.problem_type
+        self.infer_algorithm = definer.infer_algorithm
         #self.className = definer.className
-        self.nameData = definer.nameData
+        self.data_name = definer.data_name
 
     def pipeline(self):
         """ This function chooses the best way to scale a data"""
@@ -45,12 +49,12 @@ class Prepare():
         #catToNumeric = self.CategoricalToNumeric()
         #transformers.append(('catToNumeric', catToNumeric))
 
-        if self.typeAlgorithm in ["NeuralN", "K-N"]:
+        if self.infer_algorithm in ["NeuralN", "K-N"]:
             minmax = MinMaxScaler(feature_range=(0,1))
             normalizer = Normalizer()
             transformers.append(('minmax', minmax))
             transformers.append(('normalizer', normalizer))
-        elif self.typeAlgorithm in ["LinearR", "LogisticR"]:
+        elif self.infer_algorithm in ["LinearR", "LogisticR"]:
             #scaler = RobustScaler()
             scaler = StandardScaler()
             transformers.append(('scaler', scaler))

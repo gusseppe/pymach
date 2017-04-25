@@ -12,13 +12,12 @@
             <section class="widget">
                 <header>
                     <h3>
-                        <strong>Analyzing data</strong>
+                        <strong>Analyzing {{ data_name }}</strong>
                     </h3>
                 </header>
                 <div class="widget-body">
                     <p class="fs-mini text-muted">
-                        Use any of the available button classes to quickly create a styled button.
-                        Semantically distinguishable beauty.
+                        Click any button below for plotting.
                     </p>
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
@@ -55,8 +54,7 @@
                     </header>
                     <div class="widget-body">
                         <p class="fs-mini text-muted">
-                            Use any of the available button classes to quickly create a styled button.
-                            Semantically distinguishable beauty.
+                            What's a {{name}} ?
                         </p>
                         <div class="btn-toolbar">
                                     <button type="button" class="m-t-1 btn btn-info" data-toggle="popover" title="" data-placement="right" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">

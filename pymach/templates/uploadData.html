@@ -34,19 +34,18 @@
             <section class="widget">
                 <header>
                     <h3>
-                        <strong>Analyzing data</strong>
+                        <strong>Files uploaded </strong>
                     </h3>
                 </header>
                 <div class="widget-body">
                     <p class="fs-mini text-muted">
-                        Use any of the available button classes to quickly create a styled button.
-                        Semantically distinguishable beauty.
+                        Click any button below for showing the dataset.
                     </p>
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
                         <form  action="/chooseData" method="POST"> 
-                            <div><br> csv files already in the system: <br><br></div>
+                            <!--<div><br> csv files already in the system: <br><br></div>-->
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
@@ -69,7 +68,7 @@
                 <section class="widget">
                     <header>
                         <h3>
-                            <strong>Analyzing data</strong>
+                            <strong>Showing {{ data_name }}</strong>
                         </h3>
                     </header>
                     <div class="widget-body">
