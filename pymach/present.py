@@ -19,7 +19,7 @@ import tools
 from flask import Flask, flash, render_template, \
         redirect, json, request, url_for, jsonify
 from threading import Lock
-from mpld3 import plugins
+#from mpld3 import plugins
 from werkzeug import secure_filename
 from datetime import datetime
 from collections import OrderedDict
