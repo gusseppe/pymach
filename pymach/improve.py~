@@ -11,7 +11,7 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 import operator
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import warnings
 #sklearn warning
 warnings.filterwarnings("ignore", category=DeprecationWarning) 

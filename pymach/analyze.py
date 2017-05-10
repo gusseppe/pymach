@@ -11,7 +11,7 @@ for describing the dataset which is to be studied.
 from __future__ import print_function
 #from pandas.tools.plotting import scatter_matrix
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.plotly as py
 import cufflinks as cf
