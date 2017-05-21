@@ -8,14 +8,21 @@ This module provides ideas for evaluating some machine learning algorithms.
 
 """
 from __future__ import print_function
-import numpy as np
-import pandas as pd
 import operator
-import matplotlib.pyplot as plt
 import warnings
 import pickle
+
+import numpy as np
+import pandas as pd
+#import matplotlib.pyplot as plt
+import plotly.plotly as py
+import plotly.graph_objs as go
+import cufflinks as cf
 #sklearn warning
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+from collections import OrderedDict
+from plotly.offline.offline import _plot_html
 
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -45,6 +52,7 @@ class Evaluate():
     """ A class for resampling and evaluation """
 
     report = None
+    raw_results = None
     bestPipelines = None
     pipelines = None
     X_train = None
@@ -81,18 +89,19 @@ class Evaluate():
         models.append(('LogisticRegression', LogisticRegression()))
 
         #Bagging and Boosting
-        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
-        #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3),
+        #models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier())
+        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3))))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
-        #models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=200)))
+        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
 
         #Voting
         estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
-        estimators.append(("Voting_RandomForestClassifier", RandomForestClassifier()))
+        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(n_estimators=150)))
+        estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
         voting = VotingClassifier(estimators)
-        #models.append(('VotingClassifier', voting))
+        models.append(('Voting(GBC-ET)', voting))
 
         return models
 
@@ -157,19 +166,24 @@ class Evaluate():
             #filename = name+'.ml'
             #pickle.dump(model, open('./models/'+filename, 'wb'))
 
-            results.append(cv_results)
-            names.append(name)
-
+            #results.append(cv_results)
             mean = cv_results.mean()
             std = cv_results.std()
+
+            d = {'name':name, 'values':cv_results, 'mean':round(mean,3), 'std':round(std,3)}
+            results.append(d)
+            #results['result'] = cv_results
+            #names.append(name)
             #report_element[name] = {'mean':mean, 'std':std}
             #report.update(report_element)
 
             #report_print = "Model: {}, mean: {}, std: {}".format(name,
                     #mean, std)
-            report.append([name, mean, std])
+            report.append([name, round(mean,3), round(std,3)])
             #print(report_print)
 
+        Evaluate.raw_results = sorted(results, key=lambda k: k['mean'], reverse=True)
+        #print(Evaluate.raw_results)
         headers = report.pop(0)
         df_report = pd.DataFrame(report, columns=headers)
         #print(df_report)
@@ -177,7 +191,7 @@ class Evaluate():
         #print(report)
         #self.chooseTopRanked(report)
         self.chooseTopRanked(df_report)
-        self.plotModels(results, names)
+        #self.plotModels(results, names)
 
 
     def chooseTopRanked(self, report):
@@ -186,9 +200,9 @@ class Evaluate():
         #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
         report.sort_values(['Mean'], ascending=[False], inplace=True)
         #Evaluate.bestAlgorithms = sorted_t[-2:]
-        Evaluate.report = report
+        Evaluate.report = report.copy()
 
-        print(Evaluate.report)
+        #print(Evaluate.report)
 
     def setBestPipelines(self):
         alg = list(Evaluate.report.Model)[0:2]
@@ -202,15 +216,86 @@ class Evaluate():
 
         #print(Evaluate.bestPipelines)
 
-    def plotModels(self, results, names):
-        """" Plot the best two algorithms by using box plots"""
+    def plot_to_html(self, fig):
+        plotly_html_div, plotdivid, width, height = _plot_html(
+                figure_or_data=fig, 
+                config="", 
+                validate=True,
+                default_width='75%', 
+                default_height="100%", 
+                global_requirejs=False)
 
-        fig = plt.figure()
-        fig.suptitle("Model Comparison")
-        #ax1 = fig.add_subplot(111)
-        ax = fig.add_subplot(111)
-        ax.set_xticklabels(names)
-        plt.boxplot(results)
+        return plotly_html_div
+
+    def plot_models(self):
+        """" Plot the algorithms by using box plots"""
+        #df = pd.DataFrame.from_dict(Evaluate.raw_results)
+        #print(df)
+
+        results = Evaluate.raw_results
+        data = []
+        N = len(results)
+        c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]
+
+        for i, d in enumerate(results):
+            
+            trace = go.Box(
+                y=d['values'],
+                name=d['name'],
+                marker=dict(
+                    color=c[i],
+                ),
+                boxmean='sd'
+            )
+            data.append(trace)
+
+        text_scatter = go.Scatter(
+                x=[d['name'] for d in results],
+                y=[d['mean'] for d in results],
+                name='score',
+                mode='markers',
+                text=['Explanation' for _ in results]
+        )
+        data.append(text_scatter)
+        layout = go.Layout(
+            #showlegend=False,
+            title='Hover over the bars to see the details',
+            annotations=[
+                dict(
+                    x=results[0]['name'],
+                    y=results[0]['mean'],
+                    xref='x',
+                    yref='y',
+                    text='Best model',
+                    showarrow=True,
+                    arrowhead=7,
+                    ax=0,
+                    ay=-40
+                ),
+                dict(
+                    x=results[-1]['name'],
+                    y=results[-1]['mean'],
+                    xref='x',
+                    yref='y',
+                    text='Worst model',
+                    showarrow=True,
+                    arrowhead=7,
+                    ax=0,
+                    ay=-40
+                )
+            ]
+        )
+
+
+        fig = go.Figure(data=data, layout=layout)
+        return self.plot_to_html(fig)
+
+        #fig = plt.figure()
+        #fig.suptitle("Model Comparison")
+        ##ax1 = fig.add_subplot(111)
+        #ax = fig.add_subplot(111)
+        #ax.set_xticklabels(names)
+        #plt.boxplot(results)
         #ax1.set_xticklabels(names)
         #plt.show()
 
