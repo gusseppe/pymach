@@ -53,3 +53,37 @@ This module provides the logic of the whole project.
     #print()
     #print("Execution time for all the steps: ", end-start)
 
+# TESTING
+# import define
+# import analyze
+# import prepare
+# import feature_selection
+# import evaluate
+
+# import pandas as pd
+# from time import time
+# from collections import OrderedDict
+
+# from sklearn.grid_search import GridSearchCV
+
+# # from sklearn import datasets
+# # from sklearn.preprocessing import MinMaxScaler, Normalizer,\
+# # StandardScaler
+# # from sklearn.pipeline import Pipeline, FeatureUnion
+
+# # iris = datasets.load_iris()
+# # X_iris = iris.data
+# # y_iris = iris.target
+# data_name = "iris.csv"
+# class_name = "class"
+# definer = define.Define(
+        # data_name=data_name,
+        # header=None,
+        # class_name=class_name).pipeline()
+
+# preparer = prepare.Prepare(definer).pipeline()
+# featurer = feature_selection.FeatureSelection(definer).pipeline()
+# evaluator = evaluate.Evaluate(definer, preparer, featurer).buildPipelines()
+# improver = improve.Improve(evaluator).pipeline()
+# print(improver.score_report)
+# print(improver.full_report)

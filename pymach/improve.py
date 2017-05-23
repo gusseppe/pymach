@@ -9,8 +9,11 @@ This module provides ideas for improving some machine learning algorithms.
 """
 from __future__ import print_function
 import warnings
+import pandas as pd
+import plotly.graph_objs as go
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+from collections import OrderedDict
 from time import time
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -28,7 +31,8 @@ class Improve():
         self.evaluator = self.evaluator
         self.pipeline = evaluator.buildPipelines() 
         self.gridsearch = None
-
+        self.score_report = None
+        self.full_report = None
 
     def pipeline(self):
 
@@ -37,7 +41,8 @@ class Improve():
         return self
 
     def gradientboosting_param(self):
-        parameters = { 
+
+        parameters = {
             'featurer__extraTC__n_estimators':  [10, 16, 32],
             'featurer__extraTC__criterion': ['gini','entropy'],
             'featurer__extraTC__n_jobs': [-1],
@@ -46,45 +51,108 @@ class Improve():
             'GradientBoostingClassifier__n_estimators': [100, 150, 200],
             'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]    
         }
-
+    
         return parameters
+    
 
-    def adaboost_param(self):
-        parameters = {
+    def extratrees_param(self):
+        parameters = { 
             'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini', 'entropy'],
+            'featurer__extraTC__criterion': ['gini','entropy'],
             'featurer__extraTC__n_jobs': [-1],
             'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'featurer__pca__whiten': [True],
-            'AdaBoostClassifier__base_estimator__criterion': ['gini', 'entropy'],
-            'AdaBoostClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0],
-            'AdaBoostClassifier__n_estimators': [50, 100, 150, 200]
+            'ExtraTreesClassifier__n_estimators': [100, 150, 200],
+            'ExtraTreesClassifier__criterion': ['gini','entropy']    
         }
-
+        
         return parameters
+
+
+    def randomforest_param(self):
+        parameters = { 
+            'featurer__extraTC__n_estimators':  [10, 16, 32],
+            'featurer__extraTC__criterion': ['gini','entropy'],
+            'featurer__extraTC__n_jobs': [-1],
+            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'featurer__pca__whiten': [True],
+            'RandomForestClassifier__n_estimators': [100, 150, 200],
+            'RandomForestClassifier__criterion': ['gini','entropy']    
+        }
+        return parameters
+
+    def decisiontree_param(self):
+        parameters = { 
+            'featurer__extraTC__n_estimators':  [10, 16, 32],
+            'featurer__extraTC__criterion': ['gini','entropy'],
+            'featurer__extraTC__n_jobs': [-1],
+            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'featurer__pca__whiten': [True],
+            'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
+            'DecisionTreeClassifier__criterion': ['gini','entropy']    
+        }
+        return parameters
+
+    def get_params(self, model):
+        if model == 'GradientBoostingClassifier':
+            return self.gradientboosting_param()
+        elif model == 'ExtraTreesClassifier':
+            return self.extratrees_param()
+        elif model == 'RandomForestClassifier':
+            return self.randomforest_param()
+        elif model == 'DecisionTreeClassifier':
+            return self.decisiontree_param() 
+        
+        return None
 
     def improve_pipelines(self):
         dic_pipeline = dict(self.pipeline)
-        pipeline = dic_pipeline['GradientBoostingClassifier']
-        parameters = self.gradientboosting_param()
+        models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
+                  'RandomForestClassifier', 'DecisionTreeClassifier']
+        report = []
+        for m in models:        
+            pipeline = dic_pipeline[m]
+            parameters = self.get_params(m)
 
-        grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
+            grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
-        print("Performing grid search...")
-        # print("pipeline:", [name for name, _ in pipeline.steps])
-        # print("parameters:")
-        # print(parameters)
-        t0 = time()
-        grid_search.fit(self.evaluator.definer.X, self.evaluator.definer.y)
-        print("done in %0.3fs" % (time() - t0))
-        print()
+            print("Performing grid search...", m)
+            start = time()
+            grid_search.fit(self.evaluator.definer.X, self.evaluator.definer.y)
+            end = time()
+            
+            dict_report = OrderedDict()
+            dict_report['name'] = m
+            dict_report['best_score'] = round(grid_search.best_score_, 3)
+            dict_report['time'] = round((end-start)/60.0, 3)
+            dict_report.update(grid_search.best_params_)
+    #         dict_report['best_params'] = grid_search.best_params_
+                          
+            report.append(dict_report)
+    #         print("done in %0.3fs" % (t)
+    #         print()
 
-        print("Best score: %0.3f" % grid_search.best_score_)
-        print("Best parameters: %0.3f" % grid_search.best_params_)
+            print("Best score: %0.3f" % grid_search.best_score_)
+    #         print("Best parameters: ", grid)
+        
+        score_r, full_r = self.make_report(report)
+        self.score_report = score_r
+        self.full_report = full_r
 
-        self.gridsearch = grid_search
+        # return report
 
-        # return grid_search
+    def make_report(self, report):
+        score_report = [] 
+        full_report = []
+
+        for r in report:
+            full_report.append(pd.DataFrame(list(r.items()), columns=['Topic', "Value"]))
+            score_report.append([r['name'], r['best_score']])
+        
+        score_report = pd.DataFrame(score_report, columns=['Model', "Score"])
+                                 
+
+        return score_report, full_report
 
     def chooseTopRanked(self, report):
         """" Choose the best two algorithms"""
