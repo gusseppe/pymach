@@ -70,7 +70,7 @@ class Evaluate():
     def pipeline(self):
 
         #evaluators = []
-        self.buildPipelines(self.defineAlgorithms())
+        self.buildPipelines()
         self.evaluatePipelines()
         self.setBestPipelines()
 
@@ -91,7 +91,7 @@ class Evaluate():
         #Bagging and Boosting
         #models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
         models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
-        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(max_depth=3))))
+        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
         models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
@@ -119,8 +119,9 @@ class Evaluate():
         #return X_train, X_test, Y_train, Y_test
 
 
-    def buildPipelines(self, models):
+    def buildPipelines(self):
         pipelines = []
+        models = self.defineAlgorithms()
 
         for m in models:
             pipelines.append((m[0],
@@ -134,8 +135,7 @@ class Evaluate():
 
         Evaluate.pipelines = pipelines
 
-        #print(type(Evaluate.pipelines))
-        #return pipelines
+        return pipelines
 
     def evaluatePipelines(self, ax=None):
 
@@ -170,7 +170,7 @@ class Evaluate():
             mean = cv_results.mean()
             std = cv_results.std()
 
-            d = {'name':name, 'values':cv_results, 'mean':round(mean,3), 'std':round(std,3)}
+            d = {'name': name, 'values': cv_results, 'mean': round(mean, 3), 'std': round(std, 3)}
             results.append(d)
             #results['result'] = cv_results
             #names.append(name)
@@ -238,7 +238,6 @@ class Evaluate():
         c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]
 
         for i, d in enumerate(results):
-            
             trace = go.Box(
                 y=d['values'],
                 name=d['name'],
@@ -285,7 +284,6 @@ class Evaluate():
                 )
             ]
         )
-
 
         fig = go.Figure(data=data, layout=layout)
         return self.plot_to_html(fig)

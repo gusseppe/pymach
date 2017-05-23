@@ -8,19 +8,12 @@ This module provides ideas for improving some machine learning algorithms.
 
 """
 from __future__ import print_function
-import numpy as np
-import pandas as pd
-import operator
-#import matplotlib.pyplot as plt
 import warnings
-#sklearn warning
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+from time import time
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold
-from sklearn.model_selection import cross_val_score
 from sklearn.grid_search import GridSearchCV
 
 
@@ -32,17 +25,18 @@ class Improve():
 
 
     def __init__(self, evaluator):
-        self.pipeline = evaluator.pipelines 
+        self.pipeline = evaluator.buildPipelines() 
+        self.gridsearch = None
 
 
     def pipeline(self):
 
-        self.evaluatePipelines()
+        self.improve()
 
         return self
 
-    def gradientBoostingParameters(self):
-        param_GBC = { 
+    def gradientboosting_param(self):
+        parameters = { 
             'featurer__extraTC__n_estimators':  [10, 16, 32],
             'featurer__extraTC__criterion': ['gini','entropy'],
             'featurer__extraTC__n_jobs': [-1],
@@ -52,51 +46,45 @@ class Improve():
             'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]    
         }
 
-        return param_GBC
+        return parameters
 
-    def AdaBoostParameters(self):
-        param_AdaBoost = { 
+    def adaboost_param(self):
+        parameters = {
             'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini','entropy'],
+            'featurer__extraTC__criterion': ['gini', 'entropy'],
             'featurer__extraTC__n_jobs': [-1],
             'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'featurer__pca__whiten': [True],
-            'AdaBoostClassifier__base_estimator__criterion': ['gini','entropy'],
+            'AdaBoostClassifier__base_estimator__criterion': ['gini', 'entropy'],
             'AdaBoostClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0],
             'AdaBoostClassifier__n_estimators': [50, 100, 150, 200]
         }
 
-        return param_AdaBoost
+        return parameters
 
     def improve(self):
-        pipe = self.pipeline
-
-        parameters = {
-            '__max_df': (0.5, 0.75, 1.0),
-            #'vect__max_features': (None, 5000, 10000, 50000),
-            'vect__ngram_range': ((1, 1), (1, 2)),  # unigrams or bigrams
-            #'tfidf__use_idf': (True, False),
-            #'tfidf__norm': ('l1', 'l2'),
-            'clf__alpha': (0.00001, 0.000001),
-            'clf__penalty': ('l2', 'elasticnet'),
-            #'clf__n_iter': (10, 50, 80),
-        }
+        dic_pipeline = dict(self.pipeline)
+        pipeline = dic_pipeline['GradientBoostingClassifier']
+        parameters = self.gradientboosting_param()
 
         grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
         print("Performing grid search...")
-        print("pipeline:", [name for name, _ in pipeline.steps])
-        print("parameters:")
-        pprint(parameters)
+        # print("pipeline:", [name for name, _ in pipeline.steps])
+        # print("parameters:")
+        # print(parameters)
         t0 = time()
-        grid_search.fit(data.data, data.target)
+        grid_search.fit(self.definer.X, self.definer.y)
         print("done in %0.3fs" % (time() - t0))
         print()
 
         print("Best score: %0.3f" % grid_search.best_score_)
+        print("Best parameters: %0.3f" % grid_search.best_params_)
 
+        self.gridsearch = grid_search
 
-        
+        # return grid_search
+
     def chooseTopRanked(self, report):
         """" Choose the best two algorithms"""
 
@@ -107,15 +95,77 @@ class Improve():
 
         print(Evaluate.bestAlgorithms)
 
-    def plotModels(self, results, names):
-        """" Plot the best two algorithms by using box plots"""
+    def plot_to_html(self, fig):
+        plotly_html_div, plotdivid, width, height = _plot_html(
+                figure_or_data=fig, 
+                config="", 
+                validate=True,
+                default_width='75%', 
+                default_height="100%", 
+                global_requirejs=False)
 
-        fig = plt.figure()
-        fig.suptitle("Model Comparison")
-        ax = fig.add_subplot(111) 
-        plt.boxplot(results)
-        ax.set_xticklabels(names)
-        plt.show()
+        return plotly_html_div
+
+    def plot_models(self):
+        """" Plot the algorithms by using box plots"""
+        #df = pd.DataFrame.from_dict(Evaluate.raw_results)
+        #print(df)
+
+        results = Evaluate.raw_results
+        data = []
+        N = len(results)
+        c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]
+
+        for i, d in enumerate(results):
+            trace = go.Box(
+                y=d['values'],
+                name=d['name'],
+                marker=dict(
+                    color=c[i],
+                ),
+                boxmean='sd'
+            )
+            data.append(trace)
+
+        text_scatter = go.Scatter(
+                x=[d['name'] for d in results],
+                y=[d['mean'] for d in results],
+                name='score',
+                mode='markers',
+                text=['Explanation' for _ in results]
+        )
+        data.append(text_scatter)
+        layout = go.Layout(
+            #showlegend=False,
+            title='Hover over the bars to see the details',
+            annotations=[
+                dict(
+                    x=results[0]['name'],
+                    y=results[0]['mean'],
+                    xref='x',
+                    yref='y',
+                    text='Best model',
+                    showarrow=True,
+                    arrowhead=7,
+                    ax=0,
+                    ay=-40
+                ),
+                dict(
+                    x=results[-1]['name'],
+                    y=results[-1]['mean'],
+                    xref='x',
+                    yref='y',
+                    text='Worst model',
+                    showarrow=True,
+                    arrowhead=7,
+                    ax=0,
+                    ay=-40
+                )
+            ]
+        )
+
+        fig = go.Figure(data=data, layout=layout)
+        return self.plot_to_html(fig)
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """
