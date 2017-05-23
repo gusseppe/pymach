@@ -28,7 +28,7 @@ class Improve():
 
 
     def __init__(self, evaluator):
-        self.evaluator = self.evaluator
+        self.evaluator = evaluator
         self.pipeline = evaluator.buildPipelines() 
         self.gridsearch = None
         self.score_report = None
