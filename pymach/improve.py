@@ -25,13 +25,14 @@ class Improve():
 
 
     def __init__(self, evaluator):
+        self.evaluator = self.evaluator
         self.pipeline = evaluator.buildPipelines() 
         self.gridsearch = None
 
 
     def pipeline(self):
 
-        self.improve()
+        self.improve_pipelines()
 
         return self
 
@@ -62,7 +63,7 @@ class Improve():
 
         return parameters
 
-    def improve(self):
+    def improve_pipelines(self):
         dic_pipeline = dict(self.pipeline)
         pipeline = dic_pipeline['GradientBoostingClassifier']
         parameters = self.gradientboosting_param()
@@ -74,7 +75,7 @@ class Improve():
         # print("parameters:")
         # print(parameters)
         t0 = time()
-        grid_search.fit(self.definer.X, self.definer.y)
+        grid_search.fit(self.evaluator.definer.X, self.evaluator.definer.y)
         print("done in %0.3fs" % (time() - t0))
         print()
 
