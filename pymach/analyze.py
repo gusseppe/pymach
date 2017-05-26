@@ -9,12 +9,13 @@ for describing the dataset which is to be studied.
 
 """
 from __future__ import print_function
-#from pandas.tools.plotting import scatter_matrix
-import numpy as np
-#import matplotlib.pyplot as plt
+# from pandas.tools.plotting import scatter_matrix
+# import numpy as np
+import tools
+# import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.plotly as py
-import cufflinks as cf
+# import plotly.plotly as py
+import cufflinks as cf # Needed
 from plotly.offline.offline import _plot_html
 from collections import namedtuple
 
@@ -44,6 +45,7 @@ class Analyze():
         self.class_name = definer.class_name
         self.data_name = definer.data_name
         self.data = definer.data
+        self.plot_html = None
 
     def pipeline(self):
 
@@ -102,7 +104,8 @@ class Analyze():
                 yTitle="Frequency",
                 theme="white")
 
-        return self.plot_to_html(fig)
+        self.plot_html = self.plot_to_html(fig)
+        return self.plot_html
 
     def boxplot(self):
         fig = self.data.iplot(
@@ -115,7 +118,8 @@ class Analyze():
                 text=['Text A', 'Text B', 'Text C'],
                 theme="white")
 
-        return self.plot_to_html(fig)
+        self.plot_html = self.plot_to_html(fig)
+        return self.plot_html
 
     def correlation(self):
         corr_data = self.data.corr()
@@ -126,18 +130,19 @@ class Analyze():
                 yTitle="Features",
                 theme="white")
 
-        return self.plot_to_html(fig)
+        self.plot_html = self.plot_to_html(fig)
+        return self.plot_html
 
     def scatter(self):
         fig = self.data.scatter_matrix(
                 asFigure=True,
-                #title="Correlation Matrix",
+                # title="Correlation Matrix",
                 xTitle="Features",
                 yTitle="Features",
                 theme="white")
 
-        return self.plot_to_html(fig)
-
+        self.plot_html = self.plot_to_html(fig)
+        return self.plot_html
 
     def plot(self, name):
         if name == "histogram":
@@ -149,3 +154,6 @@ class Analyze():
         elif name == "scatter":
             return self.scatter()
 
+    def save_plot(self, name):
+        with open(name, "w") as plot:
+            plot.write(self.plot_html)

@@ -4,13 +4,19 @@ $(function(){
         window.location.replace("/defineData");
     });
     $("#viewAnalyze").on("click", function(){
-        window.location.replace("/analyzeData");
+        window.location.replace("/analyze_base");
     });
     $("#viewModels").on("click", function(){
-        window.location.replace("/models");
+        window.location.replace("/model_base");
     });
-    $("#viewPrediction").on("click", function(){
-        window.location.replace("/prediction");
+    $("#viewImprove").on("click", function(){
+        window.location.replace("/improve_base");
     });
+    // $("#viewPrediction").on("click", function(){
+        // window.location.replace("/prediction");
+    // });
+    $("#viewMarket").on("click", function(){
+        window.location.replace("/market_base");
+    })
     
 });

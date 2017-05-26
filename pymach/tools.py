@@ -1,12 +1,14 @@
 import os
 import re
 import csv
+import errno
 # import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from collections import OrderedDict
+
 
 def sizeof_file(name, suffix='B'):
     num = os.stat(name).st_size
@@ -16,13 +18,20 @@ def sizeof_file(name, suffix='B'):
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
 
+
+def path_exists(path):
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
+
 def localization():
     APP_PATH = os.path.dirname(os.path.abspath(__file__))
-    #APP_PATH = os.getcwd()
     UPLOAD_FOLDER = os.path.join(APP_PATH, 'uploads')
     devices_file = 'devices'
     devices_path = os.path.join(UPLOAD_FOLDER, devices_file)
-        
     files = [f for f in os.listdir(UPLOAD_FOLDER) if re.match(r'p[0-9]+', f)]
     len_files = len(files)
     print(devices_path)

@@ -22,8 +22,8 @@
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
-                        <form  action="/plotData" method="POST"> 
-                            <div><br> csv files already in the system: <br><br></div>
+                        <form  action="/analyze_app" method="POST"> 
+                            <div><br> Datasets already in the system: <br><br></div>
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
@@ -54,11 +54,11 @@
                     </header>
                     <div class="widget-body">
                         <p class="fs-mini text-muted">
-                            What's a {{name}} ?
+                            The {{name}} aims to show the distribution of numerical data.
                         </p>
                         <div class="btn-toolbar">
                                     <button type="button" class="m-t-1 btn btn-info" data-toggle="popover" title="" data-placement="right" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">
-                                        Titled Popover
+                                        Show more info
                                     </button>
                         </div>
                     </div>

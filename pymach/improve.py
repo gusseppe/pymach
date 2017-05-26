@@ -15,6 +15,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from collections import OrderedDict
 from time import time
+from plotly.offline.offline import _plot_html
+
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.grid_search import GridSearchCV

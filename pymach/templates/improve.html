@@ -11,7 +11,7 @@
             <section class="widget">
                 <header>
                     <h3>
-                        <strong>Modeling {{ data_name }}</strong>
+                        <strong>Improving {{ data_name }}</strong>
                     </h3>
                 </header>
                 <div class="widget-body">
@@ -21,8 +21,8 @@
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
-                        <form  action="/model_app" method="POST"> 
-                            <div><br> Datasets already in the system: <br><br></div>
+                        <form  action="/improve_app" method="POST"> 
+                            <div><br> csv files already in the system: <br><br></div>
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
@@ -105,7 +105,7 @@
                     </p>
                     <div class="btn-toolbar">
                                 <button type="button" class="m-t-1 btn btn-info" data-toggle="popover" title="" data-placement="right" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">
-                                    Show more info here
+                                    Titled Popover
                                 </button>
                     </div>
                 </div>

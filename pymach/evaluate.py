@@ -15,9 +15,9 @@ import pickle
 import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
-import plotly.plotly as py
+# import plotly.plotly as py
 import plotly.graph_objs as go
-import cufflinks as cf
+import cufflinks as cf # Needed
 #sklearn warning
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -65,6 +65,7 @@ class Evaluate():
         self.definer = definer
         self.preparer = preparer
         self.featurer = featurer
+        self.plot_html = None
 
 
     def pipeline(self):
@@ -286,16 +287,18 @@ class Evaluate():
         )
 
         fig = go.Figure(data=data, layout=layout)
-        return self.plot_to_html(fig)
 
-        #fig = plt.figure()
-        #fig.suptitle("Model Comparison")
-        ##ax1 = fig.add_subplot(111)
-        #ax = fig.add_subplot(111)
-        #ax.set_xticklabels(names)
-        #plt.boxplot(results)
-        #ax1.set_xticklabels(names)
-        #plt.show()
+        self.plot_html = self.plot_to_html(fig)
+        return self.plot_html
+
+    def save_plot(self, name):
+        with open(name, "w") as plot:
+            plot.write(self.plot_html)
+
+    def save_report(self, name):
+        # with open(name, "w") as plot:
+        Evaluate.report.to_csv(name, index=False)
+        # plot.write(Evaluate.report.to_csv())
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """
