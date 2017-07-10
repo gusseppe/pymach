@@ -10,6 +10,7 @@ This module provides ideas for improving some machine learning algorithms.
 from __future__ import print_function
 import warnings
 import pandas as pd
+import numpy as np
 import plotly.graph_objs as go
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -31,7 +32,7 @@ class Improve():
 
     def __init__(self, evaluator):
         self.evaluator = evaluator
-        self.pipeline = evaluator.buildPipelines() 
+        self.pipeline = evaluator.build_pipelines()
         self.gridsearch = None
         self.score_report = None
         self.full_report = None
@@ -42,77 +43,78 @@ class Improve():
 
         return self
 
+    # @property
     def gradientboosting_param(self):
 
         parameters = {
-            'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini','entropy'],
-            'featurer__extraTC__n_jobs': [-1],
-            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'featurer__pca__whiten': [True],
+            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True],
             'GradientBoostingClassifier__n_estimators': [100, 150, 200],
-            'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]    
+            'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]
         }
-    
+
         return parameters
-    
 
     def extratrees_param(self):
-        parameters = { 
-            'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini','entropy'],
-            'featurer__extraTC__n_jobs': [-1],
-            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'featurer__pca__whiten': [True],
+        parameters = {
+            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True],
             'ExtraTreesClassifier__n_estimators': [100, 150, 200],
-            'ExtraTreesClassifier__criterion': ['gini','entropy']    
+            'ExtraTreesClassifier__criterion': ['gini', 'entropy']
         }
-        
+
         return parameters
 
-
     def randomforest_param(self):
-        parameters = { 
-            'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini','entropy'],
-            'featurer__extraTC__n_jobs': [-1],
-            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'featurer__pca__whiten': [True],
+        parameters = {
+            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True],
             'RandomForestClassifier__n_estimators': [100, 150, 200],
-            'RandomForestClassifier__criterion': ['gini','entropy']    
+            'RandomForestClassifier__criterion': ['gini', 'entropy']
         }
         return parameters
 
     def decisiontree_param(self):
-        parameters = { 
-            'featurer__extraTC__n_estimators':  [10, 16, 32],
-            'featurer__extraTC__criterion': ['gini','entropy'],
-            'featurer__extraTC__n_jobs': [-1],
-            'featurer__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'featurer__pca__whiten': [True],
+        parameters = {
+            'selector__extraTC__n_estimators':  [10, 16, 32],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True],
             'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            'DecisionTreeClassifier__criterion': ['gini','entropy']    
+            'DecisionTreeClassifier__criterion': ['gini','entropy']
         }
         return parameters
 
+
     def get_params(self, model):
         if model == 'GradientBoostingClassifier':
-            return self.gradientboosting_param()
+            return self.gradientboosting_param
         elif model == 'ExtraTreesClassifier':
             return self.extratrees_param()
         elif model == 'RandomForestClassifier':
             return self.randomforest_param()
         elif model == 'DecisionTreeClassifier':
-            return self.decisiontree_param() 
-        
+            return self.decisiontree_param()
+
         return None
 
     def improve_pipelines(self):
         dic_pipeline = dict(self.pipeline)
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier']
+        models = ['ExtraTreesClassifier']
         report = []
-        for m in models:        
+        for m in models:
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m)
 
@@ -122,21 +124,21 @@ class Improve():
             start = time()
             grid_search.fit(self.evaluator.definer.X, self.evaluator.definer.y)
             end = time()
-            
+
             dict_report = OrderedDict()
             dict_report['name'] = m
             dict_report['best_score'] = round(grid_search.best_score_, 3)
             dict_report['time'] = round((end-start)/60.0, 3)
             dict_report.update(grid_search.best_params_)
     #         dict_report['best_params'] = grid_search.best_params_
-                          
+
             report.append(dict_report)
     #         print("done in %0.3fs" % (t)
     #         print()
 
             print("Best score: %0.3f" % grid_search.best_score_)
     #         print("Best parameters: ", grid)
-        
+
         score_r, full_r = self.make_report(report)
         self.score_report = score_r
         self.full_report = full_r
@@ -144,45 +146,45 @@ class Improve():
         # return report
 
     def make_report(self, report):
-        score_report = [] 
+        score_report = []
         full_report = []
 
         for r in report:
             full_report.append(pd.DataFrame(list(r.items()), columns=['Topic', "Value"]))
             score_report.append([r['name'], r['best_score']])
-        
+
         score_report = pd.DataFrame(score_report, columns=['Model', "Score"])
-                                 
+
 
         return score_report, full_report
 
-    def chooseTopRanked(self, report):
-        """" Choose the best two algorithms"""
-
-        #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
-        report.sort_values(['Mean'], ascending=[False], inplace=True)
-        #Evaluate.bestAlgorithms = sorted_t[-2:]
-        Evaluate.bestAlgorithms = report
-
-        print(Evaluate.bestAlgorithms)
+    # def chooseTopRanked(self, report):
+    #     """" Choose the best two algorithms"""
+    #
+    #     #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
+    #     report.sort_values(['Mean'], ascending=[False], inplace=True)
+    #     #self.bestAlgorithms = sorted_t[-2:]
+    #     self.bestAlgorithms = report
+    #
+    #     print(self.bestAlgorithms)
 
     def plot_to_html(self, fig):
         plotly_html_div, plotdivid, width, height = _plot_html(
-                figure_or_data=fig, 
-                config="", 
+                figure_or_data=fig,
+                config="",
                 validate=True,
-                default_width='75%', 
-                default_height="100%", 
+                default_width='75%',
+                default_height="100%",
                 global_requirejs=False)
 
         return plotly_html_div
 
     def plot_models(self):
         """" Plot the algorithms by using box plots"""
-        #df = pd.DataFrame.from_dict(Evaluate.raw_results)
+        #df = pd.DataFrame.from_dict(self.raw_results)
         #print(df)
 
-        results = Evaluate.raw_results
+        results = self.raw_results
         data = []
         N = len(results)
         c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]

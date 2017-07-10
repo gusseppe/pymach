@@ -5,7 +5,7 @@
 # License: BSD 3 clause
 """
 This module will define the dataset. Thoughts:
-    - Type of model: Clasification, Regression, Clustering.
+    - Type of model: Classification, Regression, Clustering.
     - Data: save the dataset.
     - header: the dataset's header.
 and so forth.
@@ -19,7 +19,6 @@ import pandas as pd
 from collections import OrderedDict
 from tools import sizeof_file
 
-
 class Define():
     """Define module.
 
@@ -31,7 +30,7 @@ class Define():
     header : list
     The dataset's header, i.e, the features and the class name.
 
-    class_name : string
+    response : string
     The name of the variable will be used for prediction.
 
     Attributes
@@ -44,25 +43,25 @@ class Define():
 
     """
 
-    problem_type = 'classification'
-    infer_algorithm = 'LogisticR'
-    n_features = None
-    samples = None
-    size = None
-    data = None
-    header = None
-    X = None
-    y = None
 
-    def __init__(self, 
-            data_name, 
-            header=None, 
-            class_name='class',
+    def __init__(self,
+            data_path,
+            header=None,
+            response='class',
             problem_type='classification'):
 
-        self.data_name = data_name
+        self.data_path = data_path
         self.header = header
-        self.class_name = class_name
+        self.response = response
+
+        self.problem_type = 'classification'
+        self.infer_algorithm = 'LogisticR'
+        self.n_features = None
+        self.samples = None
+        self.size = None
+        self.data = None
+        self.X = None
+        self.y = None
 
     def pipeline(self):
 
@@ -82,38 +81,38 @@ class Define():
         out : ndarray
 
         """
-        try: 
-            if self.data_name is not None and self.class_name is not None:
+        try:
+            if self.data_path is not None and self.response is not None:
                 if self.header is not None:
-                    Define.data = pd.read_csv(self.data_name, names=self.header)
-                    Define.header = self.header
-                else:    
-                    Define.data = pd.read_csv(self.data_name)
+                    self.data = pd.read_csv(self.data_path, names=self.header)
+                    self.header = self.header
+                else:
+                    self.data = pd.read_csv(self.data_path)
 
-                Define.data.dropna(inplace=True)
+                self.data.dropna(inplace=True)
 
-                Define.X = Define.data.ix[:, Define.data.columns != self.class_name]
-                Define.y = Define.data[self.class_name]
+                self.X = self.data.loc[:, self.data.columns != self.response]
+                self.y = self.data[self.response]
         except:
             print("Error reading")
-            
+
     def description(self):
-        Define.n_features = len(Define.data.columns)-1
-        Define.samples = len(Define.data)
-        Define.size = sizeof_file(self.data_name)
+        self.n_features = len(self.data.columns)-1
+        self.samples = len(self.data)
+        self.size = sizeof_file(self.data_path)
 
         dict_description = OrderedDict()
-        dict_description["name"] = self.data_name
-        dict_description["n_features"] = Define.n_features
-        dict_description["samples"] = Define.samples
-        dict_description["size"] = Define.size
+        dict_description["name"] = self.data_path
+        dict_description["n_features"] = self.n_features
+        dict_description["samples"] = self.samples
+        dict_description["size"] = self.size
 
         return dict_description
 
 
     def infer(self):
-        """ Infer algorithm considering dataset shape, n_features, etc. 
-        
+        """ Infer algorithm considering dataset shape, n_features, etc.
+
         """
         pass
 

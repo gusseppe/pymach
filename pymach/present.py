@@ -10,7 +10,7 @@ import os
 import define
 import analyze
 import prepare
-import feature_selection
+import fselect
 import evaluate
 import improve
 import tools
@@ -32,9 +32,9 @@ ALLOWED_EXTENSIONS = ['txt', 'csv', 'ml']
 def report_analyze(figures, className, data_path, data_name):
 
     definer = define.Define(
-            data_name=data_path,
+            data_path=data_path,
             header=None,
-            class_name=className).pipeline()
+            response=className).pipeline()
 
     analyzer = analyze.Analyze(definer)
 
@@ -52,13 +52,13 @@ def report_analyze(figures, className, data_path, data_name):
 
 def report_model(class_name, data_path, data_name):
     definer = define.Define(
-            data_name=data_path,
+            data_path=data_path,
             header=None,
-            class_name=class_name).pipeline()
+            response=class_name).pipeline()
 
     preparer = prepare.Prepare(definer).pipeline()
-    featurer = feature_selection.FeatureSelection(definer).pipeline()
-    evaluator = evaluate.Evaluate(definer, preparer, featurer).pipeline()
+    selector = fselect.Select(definer).pipeline()
+    evaluator = evaluate.Evaluate(definer, preparer, selector).pipeline()
 
     plot = evaluator.plot_models()
     table = evaluator.report
@@ -78,13 +78,13 @@ def report_model(class_name, data_path, data_name):
 
 def report_improve(class_name, data_name):
     definer = define.Define(
-            data_name=data_name,
+            data_path=data_name,
             header=None,
-            class_name=class_name).pipeline()
+            response=class_name).pipeline()
 
     preparer = prepare.Prepare(definer).pipeline()
-    featurer = feature_selection.FeatureSelection(definer).pipeline()
-    evaluator = evaluate.Evaluate(definer, preparer, featurer)
+    selector = fselect.Select(definer).pipeline()
+    evaluator = evaluate.Evaluate(definer, preparer, selector)
     improver = improve.Improve(evaluator).pipeline()
 
     plot = improver.plot_models()
@@ -204,7 +204,7 @@ def analyze_app():
 @app.route('/model_base', methods=['GET', 'POST'])
 def model_base():
     dirs = os.listdir(app.config['UPLOAD_DIR'])
-    return render_template('models.html', files=dirs)	
+    return render_template('models.html', files=dirs)
 
 
 @app.route('/model_app', methods=['GET', 'POST'])

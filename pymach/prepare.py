@@ -28,14 +28,14 @@ StandardScaler, RobustScaler, LabelEncoder, FunctionTransformer
 class Prepare():
     """ A class for data preparation """
 
-    data = None
-    categoricalData = False
+    # data = None
 
     def __init__(self, definer):
         self.problem_type = definer.problem_type
         self.infer_algorithm = definer.infer_algorithm
-        #self.className = definer.className
-        self.data_name = definer.data_name
+        self.categoricalData = False
+        # self.className = definer.className
+        # self.data_name = definer.data_name
 
     def pipeline(self):
         """ This function chooses the best way to scale a data"""
@@ -81,7 +81,7 @@ class Prepare():
         def fit_transform(self, X, y=None, **fit_params):
             self.fit(X, y, **fit_params)
             return self.transform(X)
-            
+
         def fit(self, X, y=None, **fit_params):
             return self
 
@@ -96,12 +96,12 @@ class Prepare():
         def categoricalToNumeric(self, df):
             cat_columns = self.categoricalColumns(df)
             if cat_columns:
-                Prepare.categoricalData = True
+                self.categoricalData = True
                 for category in cat_columns:
                     encoder = LabelEncoder()
                     #df.loc[:, category+'_n'] = encoder.fit_transform(df[category])
                     df.loc[:, category] = encoder.fit_transform(df[category])
-                    
+
             #df.drop(cat_columns, axis=1, inplace=True)
             return df
 
@@ -113,7 +113,7 @@ class Prepare():
         def fit_transform(self, X, y=None, **fit_params):
             self.fit(X, y, **fit_params)
             return self.transform(X)
-            
+
         def fit(self, X, y=None, **fit_params):
             return self
 

@@ -27,7 +27,7 @@ class Analyze():
     """ A class for data analysis """
 
     FigureStruct = namedtuple("FigureStruct", "figure explanation")
-    
+
     def __init__(self, definer):
         """The init class.
 
@@ -41,9 +41,9 @@ class Analyze():
 
         """
         self.problem_type = definer.problem_type
-        self.infer_algorithm = definer.infer_algorithm
-        self.class_name = definer.class_name
-        self.data_name = definer.data_name
+        # self.infer_algorithm = definer.infer_algorithm
+        self.response = definer.response
+        # self.data_path = definer.data_path
         self.data = definer.data
         self.plot_html = None
 
@@ -79,19 +79,19 @@ class Analyze():
         Serie showing the count of classes.
 
         """
-        return self.data.groupby(self.class_name).size()
+        return self.data.groupby(self.response).size()
 
     #def init_plot(self):
-        #cf.set_config_file(offline=True, world_readable=True, 
+        #cf.set_config_file(offline=True, world_readable=True,
                 #theme='pearl')
 
     def plot_to_html(self, fig):
         plotly_html_div, plotdivid, width, height = _plot_html(
-                figure_or_data=fig, 
-                config="", 
+                figure_or_data=fig,
+                config="",
                 validate=True,
-                default_width='75%', 
-                default_height="100%", 
+                default_width='75%',
+                default_height="100%",
                 global_requirejs=False)
 
         return plotly_html_div
@@ -110,7 +110,7 @@ class Analyze():
     def boxplot(self):
         fig = self.data.iplot(
                 kind="box",
-                asFigure=True, 
+                asFigure=True,
                 xTitle="Features",
                 yTitle="Values",
                 boxpoints="outliers",

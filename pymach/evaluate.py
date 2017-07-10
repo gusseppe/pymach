@@ -51,37 +51,37 @@ from sklearn.ensemble import VotingClassifier
 class Evaluate():
     """ A class for resampling and evaluation """
 
-    report = None
-    raw_results = None
-    bestPipelines = None
-    pipelines = None
-    X_train = None
-    y_train = None
-    X_test = None
-    y_test = None
 
 
-    def __init__(self, definer, preparer, featurer):
+    def __init__(self, definer, preparer, selector):
         self.definer = definer
         self.preparer = preparer
-        self.featurer = featurer
+        self.selector = selector
         self.plot_html = None
 
+        self.report = None
+        self.raw_report = None
+        self.best_pipelines = None
+        self.pipelines = None
+        self.X_train = None
+        self.y_train = None
+        self.X_test = None
+        self.y_test = None
 
     def pipeline(self):
 
         #evaluators = []
-        self.buildPipelines()
-        self.evaluatePipelines()
-        self.setBestPipelines()
+        self.build_pipelines()
+        self.evaluate_pipelines()
+        self.set_best_pipelines()
 
         #[m() for m in evaluators]
         return self
 
-    def defineAlgorithms(self):
+    def set_models(self):
 
         models = []
-        #LDA : Warning(Variables are collinear)
+        # LDA : Warning(Variables are collinear)
         models.append(('LDA', LinearDiscriminantAnalysis()))
         models.append(('SVC', SVC()))
         models.append(('GaussianNB', GaussianNB()))
@@ -89,15 +89,16 @@ class Evaluate():
         models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
         models.append(('LogisticRegression', LogisticRegression()))
 
-        #Bagging and Boosting
-        #models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
+        # Bagging and Boosting
+        # models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
         models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
         models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        #models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
+        # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
-        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
+        # models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
+        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(max_features='sqrt', loss='deviance', learning_rate=0.1, n_estimators=100)))
 
-        #Voting
+        # Voting
         estimators = []
         estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(n_estimators=150)))
         estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
@@ -106,61 +107,61 @@ class Evaluate():
 
         return models
 
-    def defineTrainingData(self, test_size=0.33, seed=7):
+    def split_data(self, test_size=0.33, seed=7):
         """ Need to fill """
 
         X_train, X_test, y_train, y_test =  train_test_split(
                 self.definer.X, self.definer.y, test_size=test_size, random_state=seed)
 
-        Evaluate.X_train = X_train
-        Evaluate.X_test = X_test
-        Evaluate.y_train = y_train
-        Evaluate.y_test = y_test
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
 
         #return X_train, X_test, Y_train, Y_test
 
 
-    def buildPipelines(self):
+    def build_pipelines(self):
         pipelines = []
-        models = self.defineAlgorithms()
+        models = self.set_models()
 
         for m in models:
             pipelines.append((m[0],
                 Pipeline([
                     #('preparer', FunctionTransformer(self.preparer)),
                     ('preparer', self.preparer),
-                    ('featurer', self.featurer),
+                    ('selector', self.selector),
                     m,
                 ])
             ))
 
-        Evaluate.pipelines = pipelines
+        self.pipelines = pipelines
 
         return pipelines
 
-    def evaluatePipelines(self, ax=None):
+    def evaluate_pipelines(self, ax=None):
 
         test_size = 0.2
         num_folds = 10
         seed = 7
         scoring = 'accuracy'
 
-        #pipelines = self.buildPipelines(self.defineAlgorithms())
-        #pipelines = Evaluate.pipelines
-        self.defineTrainingData(test_size, seed)
+        #pipelines = self.build_pipelines(self.set_models())
+        #pipelines = self.pipelines
+        self.split_data(test_size, seed)
 
 
-        #report = {}
+        #self.report = {}
         #report_element = {}
-        report = [["Model", "Mean", "STD"]]
+        self.report = [["Model", "Mean", "STD"]]
         results = []
         names = []
 
-        for name, model in Evaluate.pipelines:
+        for name, model in self.pipelines:
             kfold = KFold(n_splits=num_folds, random_state=seed)
             #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
                     #scoring=scoring)
-            cv_results = cross_val_score(model, Evaluate.X_train, Evaluate.y_train, cv=kfold, \
+            cv_results = cross_val_score(model, self.X_train, self.y_train, cv=kfold, \
                     scoring=scoring)
 
             # save the model to disk
@@ -176,64 +177,64 @@ class Evaluate():
             #results['result'] = cv_results
             #names.append(name)
             #report_element[name] = {'mean':mean, 'std':std}
-            #report.update(report_element)
+            #self.report.update(report_element)
 
             #report_print = "Model: {}, mean: {}, std: {}".format(name,
                     #mean, std)
-            report.append([name, round(mean,3), round(std,3)])
+            self.report.append([name, round(mean,3), round(std,3)])
             #print(report_print)
 
-        Evaluate.raw_results = sorted(results, key=lambda k: k['mean'], reverse=True)
-        #print(Evaluate.raw_results)
-        headers = report.pop(0)
-        df_report = pd.DataFrame(report, columns=headers)
+        self.raw_report = sorted(results, key=lambda k: k['mean'], reverse=True)
+        #print(self.raw_report)
+        headers = self.report.pop(0)
+        df_report = pd.DataFrame(self.report, columns=headers)
         #print(df_report)
 
-        #print(report)
-        #self.chooseTopRanked(report)
-        self.chooseTopRanked(df_report)
+        #print(self.report)
+        #self.sort_report(self.report)
+        self.sort_report(df_report)
         #self.plotModels(results, names)
 
 
-    def chooseTopRanked(self, report):
+    def sort_report(self, report):
         """" Choose the best two algorithms"""
 
         #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
         report.sort_values(['Mean'], ascending=[False], inplace=True)
-        #Evaluate.bestAlgorithms = sorted_t[-2:]
-        Evaluate.report = report.copy()
+        #self.bestAlgorithms = sorted_t[-2:]
+        self.report = report.copy()
 
-        #print(Evaluate.report)
+        #print(self.report)
 
-    def setBestPipelines(self):
-        alg = list(Evaluate.report.Model)[0:2]
-        bestPipelines = []
+    def set_best_pipelines(self):
+        alg = list(self.report.Model)[0:2]
+        best_pipelines = []
 
-        for p in Evaluate.pipelines:
+        for p in self.pipelines:
             if p[0] in alg:
-                bestPipelines.append(p)
+                best_pipelines.append(p)
 
-        Evaluate.bestPipelines = bestPipelines
+        self.best_pipelines = best_pipelines
 
-        #print(Evaluate.bestPipelines)
+        #print(self.best_pipelines)
 
     def plot_to_html(self, fig):
         plotly_html_div, plotdivid, width, height = _plot_html(
-                figure_or_data=fig, 
-                config="", 
+                figure_or_data=fig,
+                config="",
                 validate=True,
-                default_width='75%', 
-                default_height="100%", 
+                default_width='75%',
+                default_height="100%",
                 global_requirejs=False)
 
         return plotly_html_div
 
     def plot_models(self):
         """" Plot the algorithms by using box plots"""
-        #df = pd.DataFrame.from_dict(Evaluate.raw_results)
+        #df = pd.DataFrame.from_dict(self.raw_report)
         #print(df)
 
-        results = Evaluate.raw_results
+        results = self.raw_report
         data = []
         N = len(results)
         c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]
@@ -297,8 +298,8 @@ class Evaluate():
 
     def save_report(self, name):
         # with open(name, "w") as plot:
-        Evaluate.report.to_csv(name, index=False)
-        # plot.write(Evaluate.report.to_csv())
+        self.report.to_csv(name, index=False)
+        # plot.write(valuate.report.to_csv())
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """
