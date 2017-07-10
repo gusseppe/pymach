@@ -47,7 +47,7 @@ class Improve():
     def gradientboosting_param(self):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__n_estimators': [100, 150, 200],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -60,7 +60,7 @@ class Improve():
 
     def extratrees_param(self):
         parameters = {
-            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__n_estimators': [100, 150, 200],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -73,7 +73,7 @@ class Improve():
 
     def randomforest_param(self):
         parameters = {
-            'selector__extraTC__n_estimators': [10, 16, 32],
+            'selector__extraTC__n_estimators': [100, 150, 200],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -85,7 +85,7 @@ class Improve():
 
     def decisiontree_param(self):
         parameters = {
-            'selector__extraTC__n_estimators':  [10, 16, 32],
+            'selector__extraTC__n_estimators':  [100, 150, 200],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -128,7 +128,7 @@ class Improve():
             dict_report = OrderedDict()
             dict_report['name'] = m
             dict_report['best_score'] = round(grid_search.best_score_, 3)
-            dict_report['time'] = round((end-start)/60.0, 3)
+            dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
             dict_report.update(grid_search.best_params_)
     #         dict_report['best_params'] = grid_search.best_params_
 
