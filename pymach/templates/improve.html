@@ -1,6 +1,6 @@
 {% extends "layouts/base_dashboard.html" %}
 
-{%  block content_dashboard %} 
+{%  block content_dashboard %}
 
 <script src="{{url_for('static', filename = 'js/plotly-latest.min.js')}}"></script>
 
@@ -16,17 +16,17 @@
                 </header>
                 <div class="widget-body">
                     <p class="fs-mini text-muted">
-                        Click to any button to build the models
+                        Click to any button to improve the models
                     </p>
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
-                        <form  action="/improve_app" method="POST"> 
+                        <form  action="/improve_app" method="POST">
                             <div><br> csv files already in the system: <br><br></div>
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
-                                {% endif %}                            
+                                {% endif %}
                             {% endfor %}
                         </form>
                     {% endif %}

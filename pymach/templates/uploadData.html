@@ -1,6 +1,6 @@
 {% extends "layouts/base_dashboard.html" %}
 
-{%  block content_dashboard %} 
+{%  block content_dashboard %}
 
 <!--Upload data-->
 <div class="row">
@@ -13,11 +13,11 @@
             </header>
 
             <!--Store data-->
-            <div class="widget-body">                    
+            <div class="widget-body">
                 <p class="fs-mini text-muted">
-                    This block is used for uploading dataset. Click below.
+                    This block is used for uploading a dataset. Click below.
                 </p>
-                <form class="dropzone" action="/storeData" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">                            
+                <form class="dropzone" action="/storeData" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">
                     <div class="dz-message">
                         <p class="mb-xs fw-normal">Drop your csv files here or click to upload.</p>
                         <p class="text-muted">Files must have the <strong>.csv</strong> extension</p>
@@ -28,7 +28,7 @@
         </section>
     </div>
 <!--End Upload data-->
-                    
+
 <!--Files uploades-->
     <div class="col-lg-6">
             <section class="widget">
@@ -44,12 +44,12 @@
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
-                        <form  action="/chooseData" method="POST"> 
+                        <form  action="/chooseData" method="POST">
                             <!--<div><br> csv files already in the system: <br><br></div>-->
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
-                                {% endif %}                            
+                                {% endif %}
                             {% endfor %}
                         </form>
                     {% endif %}
@@ -58,58 +58,41 @@
             </section>
     </div>
 
+</div>
 <!--End uploades-->
 
 <!--Show Datatable-->
     {% if not dataset %}
         <!--<div><br> Choose a dataset <br></div>-->
     {% else %}
-        <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
                 <section class="widget">
                     <header>
-                        <h3>
-                            <strong>Showing {{ data_name }}</strong>
-                        </h3>
+                        <h5>
+                            {{name}}
+                        </h5>
+                        <div class="widget-controls">
+                            <a href="#" data-widgster="close"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>
                     </header>
                     <div class="widget-body">
                         <p class="fs-mini text-muted">
-                            Use any of the available button classes to quickly create a styled button.
-                            Semantically distinguishable beauty.
+                            The {{name}} aims to show the distribution of numerical data.
                         </p>
-                        {% if not dataset %}
-                            <div><br> Choose a dataset <br></div>
-
-                        {% else %}
-                            <div class="mt">
-                                <table id="datatable-table" class="table table-striped table-hover">
-                                    <thead>
-                                    <tr>
-                                        {% for item in dataset[0].split(',') %}
-                                            <th><input type="radio" name="class" value={{ item }} > {{ item }}</th>
-                                        {% endfor %}
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for line in dataset[1:] %}
-                                        <tr>
-                                            {% for item in line.split(',') %}
-                                                <td>{{ item }}</td>
-                                            {% endfor %}
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        {% endif %}
-
+                        <div class="btn-toolbar">
+                            <button type="button" class="m-t-1 btn btn-info" data-toggle="popover" title="" data-placement="right" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">
+                                Show more info
+                            </button>
+                        </div>
                     </div>
+                    {{ dataset |safe }}
                 </section>
+            </div>
         </div>
     {% endif %}
 
 
-</div>
 {% endblock %}
 
 {% block specific_libraries %}

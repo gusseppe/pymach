@@ -1,6 +1,6 @@
 {% extends "layouts/base_dashboard.html" %}
 
-{%  block content_dashboard %} 
+{%  block content_dashboard %}
 
 <script src="{{url_for('static', filename = 'js/plotly-latest.min.js')}}"></script>
 
@@ -11,7 +11,7 @@
             <section class="widget">
                 <header>
                     <h3>
-                        <strong>Modeling {{ data_name }}</strong>
+                        <strong>Improving {{ data_name }}</strong>
                     </h3>
                 </header>
                 <div class="widget-body">
@@ -21,12 +21,12 @@
                     {% if not files %}
                         <div><br> There are not files in the system yet <br></div>
                     {% else %}
-                        <form  action="/model_app" method="POST"> 
+                        <form  action="/model_app" method="POST">
                             <div><br> Datasets already in the system: <br><br></div>
                             {% for file in files %}
                                 {% if file.endswith(".csv") or  file.endswith(".txt")%}
                                     <button class="btn btn-secondary btn-block" value="{{file}}" name="submit" type="submit" >{{ file }}</button>
-                                {% endif %}                            
+                                {% endif %}
                             {% endfor %}
                         </form>
                     {% endif %}
@@ -57,7 +57,7 @@
                                 <thead>
                                 <tr>
                                     {% for item in report["table"].columns.values %}
-                                    <th><strong><label name="class" value={{ item }} > {{ item }}</strong></th>
+                                    <th><strong><label name="class" value={{ item }} > {{ item }} </label></strong></th>
                                     {% endfor %}
                                 </tr>
                                 </thead>

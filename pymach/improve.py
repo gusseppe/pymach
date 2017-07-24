@@ -32,8 +32,8 @@ class Improve():
 
     def __init__(self, evaluator):
         self.evaluator = evaluator
-        self.pipeline = evaluator.build_pipelines()
-        self.gridsearch = None
+        self.pipelines = evaluator.build_pipelines()
+        self.grid_search = None
         self.score_report = None
         self.full_report = None
 
@@ -47,11 +47,11 @@ class Improve():
     def gradientboosting_param(self):
 
         parameters = {
-            'selector__extraTC__n_estimators': [100, 150, 200],
+            'selector__extraTC__n_estimators': [100, 150, 200, 250],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'GradientBoostingClassifier__n_estimators': [100, 150, 200],
             'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]
         }
@@ -60,38 +60,95 @@ class Improve():
 
     def extratrees_param(self):
         parameters = {
-            'selector__extraTC__n_estimators': [100, 150, 200],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
-            'ExtraTreesClassifier__n_estimators': [100, 150, 200],
-            'ExtraTreesClassifier__criterion': ['gini', 'entropy']
+            'selector__pca__whiten': [True,False],
+            'ExtraTreesClassifier__n_estimators': [10, 15, 20],
+            'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
+            'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5]
         }
 
         return parameters
 
     def randomforest_param(self):
         parameters = {
-            'selector__extraTC__n_estimators': [100, 150, 200],
+            'selector__extraTC__n_estimators': [100, 150, 200, 250],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'RandomForestClassifier__n_estimators': [100, 150, 200],
-            'RandomForestClassifier__criterion': ['gini', 'entropy']
+            'RandomForestClassifier__criterion': ['gini', 'entropy'],
+            'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
+            'RandomForestClassifier__warm_start': [True,False]
         }
         return parameters
 
     def decisiontree_param(self):
         parameters = {
-            'selector__extraTC__n_estimators':  [100, 150, 200],
+            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            'DecisionTreeClassifier__criterion': ['gini','entropy']
+            'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5]
+
+        }
+        return parameters
+
+    def lda_param(self):
+        parameters = {
+            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True,False],
+            'LinearDiscriminantAnalysis__solver': ['svd','lsqr', 'eigen']
+
+        }
+        return parameters
+
+    def svc_param(self):
+        parameters = {
+            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True,False],
+            'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
+            'SVC__decision_function_shape': ['ovo','ovr']
+
+        }
+        return parameters
+
+    def knn_param(self):
+        parameters = {
+            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True,False],
+            'KNeighborsClassifier__n_neighbors': [5,6,7,8,9,10],
+            'KNeighborsClassifier__weights': ['uniform','distance'],
+            'KNeighborsClassifier__algorithm': ['auto','ball_tree','kd_tree','brute']
+
+        }
+        return parameters
+
+    def logistic_param(self):
+        parameters = {
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True,False],
+            'LogisticRegression__penalty': ['l1','l2'],
+            'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
+            'LogisticRegression__warm_start': [True,False]
+
         }
         return parameters
 
@@ -105,45 +162,61 @@ class Improve():
             return self.randomforest_param()
         elif model == 'DecisionTreeClassifier':
             return self.decisiontree_param()
-
+        elif model == 'LinearDiscriminantAnalysis':
+            return self.lda_param()
+        elif model == 'SVC':
+            return self.svc_param()
+        elif model == 'KNeighborsClassifier':
+            return self.knn_param()
+        elif model == 'LogisticRegression':
+            return self.logistic_param()
         return None
 
     def improve_pipelines(self):
-        dic_pipeline = dict(self.pipeline)
+        dic_pipeline = dict(self.pipelines)
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
-                  'RandomForestClassifier', 'DecisionTreeClassifier']
-        models = ['ExtraTreesClassifier']
+                  'RandomForestClassifier', 'DecisionTreeClassifier',
+                  'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
+                  'LogisticRegression']
+
+        models = ['ExtraTreesClassifier', 'LogisticRegression']
         report = []
+        grid_search = []
         for m in models:
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m)
 
-            grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
+            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
             print("Performing grid search...", m)
-            start = time()
-            grid_search.fit(self.evaluator.definer.X, self.evaluator.definer.y)
-            end = time()
+            try:
+                start = time()
+                grid_search_t.fit(self.evaluator.definer.X, self.evaluator.definer.y)
+                end = time()
 
-            dict_report = OrderedDict()
-            dict_report['name'] = m
-            dict_report['best_score'] = round(grid_search.best_score_, 3)
-            dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
-            dict_report.update(grid_search.best_params_)
-    #         dict_report['best_params'] = grid_search.best_params_
+                dict_report = OrderedDict()
+                dict_report['name'] = m
+                dict_report['best_score'] = round(grid_search_t.best_score_, 3)
+                dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
+                dict_report.update(grid_search_t.best_params_)
+        #         dict_report['best_params'] = grid_search.best_params_
 
-            report.append(dict_report)
-    #         print("done in %0.3fs" % (t)
-    #         print()
+                report.append(dict_report)
+                grid_search.append(grid_search_t)
+        #         print("done in %0.3fs" % (t)
+        #         print()
 
-            print("Best score: %0.3f" % grid_search.best_score_)
-    #         print("Best parameters: ", grid)
+                print("Best score: %0.3f" % grid_search_t.best_score_)
+        #         print("Best parameters: ", grid)
+            except:
+                pass
+
 
         score_r, full_r = self.make_report(report)
         self.score_report = score_r
         self.full_report = full_r
+        self.grid_search = grid_search
 
-        # return report
 
     def make_report(self, report):
         score_report = []
@@ -154,9 +227,18 @@ class Improve():
             score_report.append([r['name'], r['best_score']])
 
         score_report = pd.DataFrame(score_report, columns=['Model', "Score"])
+        score_report = self.sort_report(score_report)
 
 
         return score_report, full_report
+
+    def sort_report(self, report):
+        """" Choose the best two algorithms"""
+
+        #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
+        report.sort_values(['Score'], ascending=[False], inplace=True)
+        #self.bestAlgorithms = sorted_t[-2:]
+        self.report = report.copy()
 
     # def chooseTopRanked(self, report):
     #     """" Choose the best two algorithms"""
@@ -173,7 +255,7 @@ class Improve():
                 figure_or_data=fig,
                 config="",
                 validate=True,
-                default_width='75%',
+                default_width='90%',
                 default_height="100%",
                 global_requirejs=False)
 
@@ -184,7 +266,7 @@ class Improve():
         #df = pd.DataFrame.from_dict(self.raw_results)
         #print(df)
 
-        results = self.raw_results
+        results = self.score_report
         data = []
         N = len(results)
         c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 270, N)]
@@ -192,7 +274,7 @@ class Improve():
         for i, d in enumerate(results):
             trace = go.Box(
                 y=d['values'],
-                name=d['name'],
+                name=d['Model'],
                 marker=dict(
                     color=c[i],
                 ),
@@ -201,8 +283,8 @@ class Improve():
             data.append(trace)
 
         text_scatter = go.Scatter(
-                x=[d['name'] for d in results],
-                y=[d['mean'] for d in results],
+                x=[d['Model'] for d in results],
+                y=[d['Score'] for d in results],
                 name='score',
                 mode='markers',
                 text=['Explanation' for _ in results]
@@ -213,8 +295,8 @@ class Improve():
             title='Hover over the bars to see the details',
             annotations=[
                 dict(
-                    x=results[0]['name'],
-                    y=results[0]['mean'],
+                    x=results[0]['Model'],
+                    y=results[0]['Score'],
                     xref='x',
                     yref='y',
                     text='Best model',
@@ -224,8 +306,8 @@ class Improve():
                     ay=-40
                 ),
                 dict(
-                    x=results[-1]['name'],
-                    y=results[-1]['mean'],
+                    x=results[-1]['Model'],
+                    y=results[-1]['Score'],
                     xref='x',
                     yref='y',
                     text='Worst model',
@@ -239,6 +321,15 @@ class Improve():
 
         fig = go.Figure(data=data, layout=layout)
         return self.plot_to_html(fig)
+
+    def save_plot(self, path):
+        with open(path, "w") as plot:
+            plot.write(self.plot_html)
+
+    def save_report(self, path):
+        # with open(path, "w") as plot:
+        self.full_report.to_csv(path, index=False)
+        # plot.write(valuate.report.to_csv())
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """

@@ -90,7 +90,7 @@ class Analyze():
                 figure_or_data=fig,
                 config="",
                 validate=True,
-                default_width='75%',
+                default_width='90%',
                 default_height="100%",
                 global_requirejs=False)
 

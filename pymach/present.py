@@ -1,5 +1,6 @@
 # Standard Libraries
 import os
+import subprocess
 # import datetime
 
 # Third Libraries
@@ -15,9 +16,13 @@ import evaluate
 import improve
 import tools
 
+import pandas as pd
+
 from flask import Flask, render_template, \
-        redirect, request, url_for, jsonify
+        redirect, request, url_for, jsonify, flash
+from werkzeug.utils import secure_filename
 from collections import OrderedDict
+
 
 
 app = Flask(__name__)
@@ -26,15 +31,15 @@ APP_PATH = os.path.dirname(os.path.abspath(__file__))
 app.config['UPLOAD_DIR'] = os.path.join(APP_PATH, 'uploads')
 app.config['MODELS_DIR'] = os.path.join(APP_PATH, 'models')
 app.config['MARKET_DIR'] = os.path.join(APP_PATH, 'market')
-ALLOWED_EXTENSIONS = ['txt', 'csv', 'ml']
+ALLOWED_EXTENSIONS = ['txt', 'csv', 'ml', 'html']
 
 
-def report_analyze(figures, className, data_path, data_name):
+def report_analyze(figures, response, data_path, data_name):
 
     definer = define.Define(
             data_path=data_path,
             header=None,
-            response=className).pipeline()
+            response=response).pipeline()
 
     analyzer = analyze.Analyze(definer)
 
@@ -50,11 +55,11 @@ def report_analyze(figures, className, data_path, data_name):
     return dict_figures
 
 
-def report_model(class_name, data_path, data_name):
+def report_model(response, data_path, data_name):
     definer = define.Define(
             data_path=data_path,
             header=None,
-            response=class_name).pipeline()
+            response=response).pipeline()
 
     preparer = prepare.Prepare(definer).pipeline()
     selector = fselect.Select(definer).pipeline()
@@ -76,11 +81,11 @@ def report_model(class_name, data_path, data_name):
     return dict_report
 
 
-def report_improve(class_name, data_name):
+def report_improve(response, data_name):
     definer = define.Define(
             data_path=data_name,
             header=None,
-            response=class_name).pipeline()
+            response=response).pipeline()
 
     preparer = prepare.Prepare(definer).pipeline()
     selector = fselect.Select(definer).pipeline()
@@ -95,27 +100,45 @@ def report_improve(class_name, data_name):
 
 def report_market(data_name):
 
-    analyze_report = OrderedDict()
-    model_report = OrderedDict()
+    # analyze_report = OrderedDict()
+    # model_report = OrderedDict()
 
     data_name = data_name.replace(".csv", "")
-    app_dirs = os.listdir(app.config['MARKET_DIR'], data_name)
+    app_path = os.path.join(app.config['MARKET_DIR'], data_name)
+    # app_dirs = os.listdir(app_path)
 
-    for market_app in market_apps:
-        plot_path = os.path.join(app.config['MARKET_DIR'], data_name, 'model')
-        tools.path_exists(plot_path)
-        plot_path = os.path.join(plot_path, fig+'.html')
-        dict_figures[fig] = analyzer.plot(fig)
-        analyzer.save_plot(plot_path)
+    # Show Model info
+    try:
+        model_path = os.path.join(app_path, 'model')
+        plot_model = ''
+        with open(os.path.join(model_path, 'boxplot.html')) as f:
+            plot_model = f.read()
 
-    plot = improver.plot_models()
-    table = improver.report
-    dict_report = {'plot': plot, 'table': table}
+        table_model = pd.read_csv(os.path.join(model_path, 'report.csv'))
+        dict_report_model = {'plot':plot_model, 'table':table_model}  # return 1
+    except:
+        dict_report_model = {'plot':None, 'table':None}  # return 1
 
-    return dict_report
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    # Show Analyze info
+    try:
+        analyze_path = os.path.join(app_path, 'analyze')
+        plot_analyze = OrderedDict()
+        for plot in os.listdir(analyze_path):
+            with open(os.path.join(analyze_path, plot)) as f:
+               fig = plot.replace('.html', '')
+               plot_analyze[fig] = f.read()
+
+        # Join full report: model and analyze
+        dicts_market = {'model':dict_report_model, 'analyze':plot_analyze}
+    except:
+        dicts_market = {'model':dict_report_model, 'analyze':None}  # return 2
+
+
+    return dicts_market
+
+def allowed_file(file_name):
+    return '.' in file_name and file_name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 #@app.route('/')
 #def home():
@@ -133,15 +156,36 @@ def defineData():
 @app.route('/storeData', methods=['GET', 'POST'])
 def storedata():
     """  Upload a new file """
+
     if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
         file = request.files['file']
-        #if file and allowed_file(file.filename):
-        if file:
-            # now = datetime.now()
-            filename = os.path.join(app.config['UPLOAD_DIR'], "%s" % (file.filename))
-            file.save(filename)
+        #if file and allowed_file(file.file_name):
+        file_name = ''
+        data_name = ''
+
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+        # if file:
+            file_name = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_DIR'], file_name)
+            file.save(file_path)
+            # file_name = str(file.filename)
+            # data_name = file_name.replace(".csv", "")
+            # print(data_name)
+            # command = 'csvtotable -c "Iris dataset" iris.csv iris.html'
             return jsonify({"success":True})
 
+            # result = subprocess.run(['csvtotable', '-c',
+            #                          data_name, file_name, data_name+'.html'],
+            #                         stdout=subprocess.PIPE)
+
+        # return redirect(url_for('showData', filename=file_name))
         return redirect(url_for('defineData'))
     else:
         return redirect(url_for('defineData'))
@@ -153,17 +197,29 @@ def chooseData():
     from itertools import islice
     # tools.localization()
 
+    file_name = ''
     data_name = ''
     data_path = ''
     dirs = os.listdir(app.config['UPLOAD_DIR'])
     if request.method == 'POST':
-        data_name = request.form['submit']
-        data_path = os.path.join(app.config['UPLOAD_DIR'], data_name)
+        file_name = request.form['submit']
+        data_name = file_name.replace(".csv", "")
+        data_path = os.path.join(app.config['UPLOAD_DIR'], data_name+'.html')
 
-    dataset = []
-    with open(data_path) as myfile:
-        dataset = list(islice(myfile, 20))
-        dataset = [line[:-1] for line in dataset]
+    # result = subprocess.run(['csvtotable', '-c', '--display-length','50',
+    #                          data_name, data_name+'.csv', data_name+'.html'],
+    #                         stdout=subprocess.PIPE)
+
+    try:
+        dataset = None
+        with open(data_path) as f:
+            dataset = f.read()
+
+    except:
+        data_path = os.path.join(app.config['UPLOAD_DIR'], file_name)
+        with open(data_path) as myfile:
+            dataset = list(islice(myfile, 40))
+            dataset = [line[:-1] for line in dataset]
 
     return render_template(
             'uploadData.html',
@@ -174,7 +230,47 @@ def chooseData():
 
 ########################### End Upload Button ##################################
 
-########################### Start Analyze Button ##################################
+# Convert the uploaded csv file into a responsive table.
+# ########################## Start Convert table ##################################
+# @app.route('/chooseData/<filename>')
+# def showData(filename):
+#     """  choose a file and show its content """
+#     from itertools import islice
+#
+#     data_name = filename.replace(".csv", "")
+#     dirs = os.listdir(app.config['UPLOAD_DIR'])
+#     # result = subprocess.run(['csvtotable', '-c',
+#     #                          data_name, filename, data_name+'.html'],
+#     #                         stdout=subprocess.PIPE)
+#
+#     dataset = 'asdasd'
+#     print(filename + 'start')
+#     data_path = os.path.join(app.config['UPLOAD_DIR'], filename)
+#     comm = 'csvtotable -c' + " Iris " + filename + ' ' + data_name+'.html'
+#     os.system(comm)
+#     # with open(data_path) as f:
+#     #     dataset = f.read()
+#     #     print(dataset[0])
+#     print(filename + 'end')
+#     # data_path = os.path.join(app.config['UPLOAD_DIR'], data_name+'.html')
+#     #
+#     # dataset = None
+#     # with open(data_path) as f:
+#     #     dataset = f.read()
+#
+#     # with open(data_path) as myfile:
+#     #     dataset = list(islice(myfile, 40))
+#     #     dataset = [line[:-1] for line in dataset]
+#
+#     return render_template(
+#         'uploadData.html',
+#         files=dirs,
+#         dataset=dataset,
+#         data_name=data_name)
+
+# ########################## End Convert table ##################################
+
+# ########################## Start Analyze Button ##################################
 @app.route('/analyze_base', methods=['GET', 'POST'])
 def analyze_base():
     dirs = os.listdir(app.config['UPLOAD_DIR'])
@@ -184,7 +280,7 @@ def analyze_base():
 @app.route('/analyze_app', methods=['GET', 'POST'])
 def analyze_app():
     figures = ['histogram', 'box', 'corr']
-    classname = "class"
+    response = "class"
     data_name = ''
     data_path = ''
     dirs = os.listdir(app.config['UPLOAD_DIR'])
@@ -195,7 +291,7 @@ def analyze_app():
     return render_template(
             'analyzeData.html',
             files=dirs,
-            figures=report_analyze(figures, classname, data_path, data_name),
+            figures=report_analyze(figures, response, data_path, data_name),
             data_name=data_name)
 
 ########################### End Analyze Button ##################################
@@ -209,7 +305,7 @@ def model_base():
 
 @app.route('/model_app', methods=['GET', 'POST'])
 def model_app():
-    classname = "class"
+    response = "class"
     data_name = ''
     data_path = ''
     dirs = os.listdir(app.config['UPLOAD_DIR'])
@@ -220,7 +316,7 @@ def model_app():
     return render_template(
             'models.html',
             files=dirs,
-            report=report_model(classname, data_path, data_name),
+            report=report_model(response, data_path, data_name),
             data_name=data_name)
 
 ########################### End Model Button ##################################
@@ -233,7 +329,7 @@ def improve_base():
 
 @app.route('/improve_app', methods=['GET', 'POST'])
 def improve_app():
-    classname = "class"
+    response = "class"
     data_name = ''
     data_path = ''
     dirs = os.listdir(app.config['UPLOAD_DIR'])
@@ -244,7 +340,7 @@ def improve_app():
     return render_template(
             'improve.html',
             files=dirs,
-            report=report_model(classname, data_path, data_name),
+            report=report_improve(response, data_path, data_name),
             data_name=data_name)
 
 ########################### End Improve Button ##################################
@@ -252,23 +348,23 @@ def improve_app():
 ########################### Start Model Button ##################################
 @app.route('/market_base', methods=['GET', 'POST'])
 def market_base():
-    dirs = os.listdir(app.config['UPLOAD_DIR'])
+    dirs = os.listdir(app.config['MARKET_DIR'])
     return render_template('market.html', files=dirs)
 
 
 @app.route('/market_app', methods=['GET', 'POST'])
 def market_app():
-    classname = "class"
+    response = "class"
     data_name = ''
     data_path = ''
     dirs = os.listdir(app.config['MARKET_DIR'])
     if request.method == 'POST':
         data_name = request.form['submit']
-        data_path = os.path.join(app.config['MARKET_DIR'], data_name)
+        # data_path = os.path.join(app.config['MARKET_DIR'], data_name)
     return render_template(
             'market.html',
             files=dirs,
-            report=report_model(classname, data_path, data_name),
+            report=report_market(data_name),
             data_name=data_name)
 
 ########################### End Market Button ##################################
@@ -278,8 +374,8 @@ def market_app():
     # attributes = []
     # dirs = os.listdir(app.config['UPLOAD_DIR'])
     # data_class = 'class'
-    # filename = 'iris.csv'
-    # filepath = os.path.join(app.config['UPLOAD_DIR'], filename)
+    # file_name = 'iris.csv'
+    # filepath = os.path.join(app.config['UPLOAD_DIR'], file_name)
     # model = 'Naive Bayes'
     # f = open(filepath, 'r')
     # g = open(filepath, 'r')

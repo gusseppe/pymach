@@ -54,24 +54,24 @@ This module provides the logic of the whole project.
     #print("Execution time for all the steps: ", end-start)
 
 # TESTING
-# import define
-# import analyze
-# import prepare
-# import fselect
-# import evaluate
-# import improve
-#
-# data_name = "iris.csv"
-# class_name = "class"
-# definer = define.Define(
-#         data_path=data_name,
-#         header=None,
-#         response=class_name).pipeline()
-#
-# preparer = prepare.Prepare(definer).pipeline()
-# selector = fselect.Select(definer).pipeline()
-# evaluator = evaluate.Evaluate(definer, preparer, selector)
-# improver = improve.Improve(evaluator)
+import define
+import analyze
+import prepare
+import fselect
+import evaluate
+import improve
+
+data_name = "iris.csv"
+class_name = "class"
+definer = define.Define(
+        data_path=data_name,
+        header=None,
+        response=class_name).pipeline()
+
+preparer = prepare.Prepare(definer).pipeline()
+selector = fselect.Select(definer).pipeline()
+evaluator = evaluate.Evaluate(definer, preparer, selector)
+improver = improve.Improve(evaluator).pipeline()
 # improver.improve_pipelines()
-# print(improver.score_report)
-# print(improver.full_report)
+print(improver.score_report)
+print(improver.full_report)

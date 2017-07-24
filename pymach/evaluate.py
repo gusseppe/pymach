@@ -68,10 +68,15 @@ class Evaluate():
         self.X_test = None
         self.y_test = None
 
+        self.test_size = 0.2
+        self.num_folds = 10
+        self.seed = 7
+
     def pipeline(self):
 
         #evaluators = []
         self.build_pipelines()
+        self.split_data(self.test_size, self.seed)
         self.evaluate_pipelines()
         self.set_best_pipelines()
 
@@ -141,14 +146,13 @@ class Evaluate():
 
     def evaluate_pipelines(self, ax=None):
 
-        test_size = 0.2
-        num_folds = 10
-        seed = 7
+        test_size = self.test_size
+        num_folds = self.num_folds
+        seed = self.seed
         scoring = 'accuracy'
 
         #pipelines = self.build_pipelines(self.set_models())
         #pipelines = self.pipelines
-        self.split_data(test_size, seed)
 
 
         #self.report = {}
@@ -223,7 +227,7 @@ class Evaluate():
                 figure_or_data=fig,
                 config="",
                 validate=True,
-                default_width='75%',
+                default_width='90%',
                 default_height="100%",
                 global_requirejs=False)
 
@@ -292,13 +296,13 @@ class Evaluate():
         self.plot_html = self.plot_to_html(fig)
         return self.plot_html
 
-    def save_plot(self, name):
-        with open(name, "w") as plot:
+    def save_plot(self, path):
+        with open(path, "w") as plot:
             plot.write(self.plot_html)
 
-    def save_report(self, name):
-        # with open(name, "w") as plot:
-        self.report.to_csv(name, index=False)
+    def save_report(self, path):
+        # with open(path, "w") as plot:
+        self.report.to_csv(path, index=False)
         # plot.write(valuate.report.to_csv())
 
     class CustomFeature(TransformerMixin):
