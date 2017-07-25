@@ -26,7 +26,8 @@ def path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
-def mean_error_localization(y_real, y_test):
+
+def mean_error_localization(y_pred, y_real):
     pos = {}
     # pos['1'] = (0,0)
     # pos['2'] = (1.5,0)
@@ -43,7 +44,7 @@ def mean_error_localization(y_real, y_test):
         pos[str(e)] = (((e-1)%3)*1.5, y)
 
     error = []
-    for a,b in zip(y_real, y_test):
+    for a,b in zip(y_pred, y_real):
         error.append(np.linalg.norm(np.array(pos[str(a)]) - np.array(pos[str(b)])))
 
     return np.mean(np.array(error))

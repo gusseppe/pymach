@@ -8,6 +8,8 @@ This module provides ideas for improving some machine learning algorithms.
 
 """
 from __future__ import print_function
+import tools
+
 import warnings
 import pandas as pd
 import numpy as np
@@ -243,6 +245,14 @@ class Improve():
                 dict_report = OrderedDict()
                 dict_report['name'] = m
                 dict_report['best_score'] = round(grid_search_t.best_score_, 3)
+
+
+                model_t = grid_search_t.best_estimator_
+                y_pred = model_t.predict(self.evaluator.X_test)
+                y_real = self.evaluator.y_test.values
+                dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
+
+
                 dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
                 dict_report.update(grid_search_t.best_params_)
         #         dict_report['best_params'] = grid_search.best_params_
@@ -294,6 +304,14 @@ class Improve():
                 dict_report = OrderedDict()
                 dict_report['name'] = m
                 dict_report['best_score'] = round(random_search_t.best_score_, 3)
+
+
+                model_t = random_search_t.best_estimator_
+                y_pred = model_t.predict(self.evaluator.X_test)
+                y_real = self.evaluator.y_test.values
+                dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
+
+
                 dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
                 dict_report.update(random_search_t.best_params_)
                 #         dict_report['best_params'] = random_search.best_params_
@@ -426,10 +444,14 @@ class Improve():
         with open(path, "w") as plot:
             plot.write(self.plot_html)
 
-    def save_report(self, path):
-        # with open(path, "w") as plot:
+    def save_full_report(self, path):
+
         self.full_report.to_csv(path, index=False)
-        # plot.write(valuate.report.to_csv())
+
+
+    def save_score_report(self, path):
+
+        self.score_report.to_csv(path, index=False)
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """
