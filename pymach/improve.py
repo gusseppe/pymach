@@ -76,15 +76,16 @@ class Improve():
             'selector__pca__whiten': [True,False],
             'ExtraTreesClassifier__n_estimators': [10, 15, 20, 25],
             'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
-            'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5],
-            'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
-            'ExtraTreesClassifier__max_depth': [2,3,4,5],
+            # 'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5],
+            # 'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
+            # 'ExtraTreesClassifier__max_depth': [2,3,4,5],
         }
 
         if method == 'random':
-            parameters['ExtraTreesClassifier__min_samples_leaf'] = randint(1,20)
-            parameters['ExtraTreesClassifier__max_leaf_nodes'] = randint(2,20)
-            parameters['ExtraTreesClassifier__max_depth'] = randint(1,20)
+            # parameters['ExtraTreesClassifier__min_samples_leaf'] = randint(1,20)
+            # parameters['ExtraTreesClassifier__max_leaf_nodes'] = randint(2,20)
+            # parameters['ExtraTreesClassifier__max_depth'] = randint(1,20)
+            pass
 
         return parameters
 
