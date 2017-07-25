@@ -145,7 +145,7 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
-            'LogisticRegression__penalty': ['l1','l2'],
+            # 'LogisticRegression__penalty': ['l2'],
             'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
             'LogisticRegression__warm_start': [True,False]
 
