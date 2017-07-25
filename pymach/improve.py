@@ -209,7 +209,7 @@ class Improve():
                 print("Best score: %0.3f" % grid_search_t.best_score_)
         #         print("Best parameters: ", grid)
             except:
-                pass
+                continue
 
 
         score_r, full_r = self.make_report(report)
