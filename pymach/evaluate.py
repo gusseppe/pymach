@@ -123,7 +123,7 @@ class Evaluate():
         self.y_train = y_train
         self.y_test = y_test
 
-        #return X_train, X_test, Y_train, Y_test
+        # return X_train, X_test, y_train, y_test
 
 
     def build_pipelines(self):

@@ -17,10 +17,12 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from collections import OrderedDict
 from time import time
 from plotly.offline.offline import _plot_html
+from scipy.stats import randint
+from scipy.stats import expon
 
-from sklearn.pipeline import Pipeline, FeatureUnion
+# from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 
 
@@ -39,15 +41,15 @@ class Improve():
 
     def pipeline(self):
 
-        self.improve_pipelines()
+        self.improver_grid_search()
 
         return self
 
     # @property
-    def gradientboosting_param(self):
+    def gradientboosting_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [100, 150, 200, 250],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -56,52 +58,76 @@ class Improve():
             'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]
         }
 
+        if method == 'random':
+            parameters['GradientBoostingClassifier__learning_rate'] = expon(0,1)
+
         return parameters
 
-    def extratrees_param(self):
+    def extratrees_param(self, method='grid'):
         parameters = {
             'selector__extraTC__n_estimators': [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
-            'ExtraTreesClassifier__n_estimators': [10, 15, 20],
+            'ExtraTreesClassifier__n_estimators': [10, 15, 20, 25],
             'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
-            'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5]
+            'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5],
+            'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
+            'ExtraTreesClassifier__max_depth': [2,3,4,5],
         }
+
+        if method == 'random':
+            parameters['ExtraTreesClassifier__min_samples_leaf'] = randint(1,20)
+            parameters['ExtraTreesClassifier__max_leaf_nodes'] = randint(2,20)
+            parameters['ExtraTreesClassifier__max_depth'] = randint(1,20)
 
         return parameters
 
-    def randomforest_param(self):
+    def randomforest_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators': [100, 150, 200, 250],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
-            'RandomForestClassifier__n_estimators': [100, 150, 200],
+            'RandomForestClassifier__n_estimators': [10, 15, 20, 25],
             'RandomForestClassifier__criterion': ['gini', 'entropy'],
             'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
+            'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
+            'RandomForestClassifier__max_depth': [2,3,4,5],
             'RandomForestClassifier__warm_start': [True,False]
         }
+        if method == 'random':
+            parameters['RandomForestClassifier__min_samples_leaf'] = randint(1,20)
+            parameters['RandomForestClassifier__max_leaf_nodes'] = randint(2,20)
+            parameters['RandomForestClassifier__max_depth'] = randint(1,20)
+
         return parameters
 
-    def decisiontree_param(self):
+    def decisiontree_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
             'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5]
+            'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
+            'DecisionTreeClassifier__max_depth': [2,3,4,5],
+            'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5,10,15,20]
 
         }
+        if method == 'random':
+            parameters['DecisionTreeClassifier__min_samples_leaf'] = randint(1,20)
+            parameters['DecisionTreeClassifier__max_leaf_nodes'] = randint(2,20)
+            parameters['DecisionTreeClassifier__max_depth'] = randint(1,20)
+
         return parameters
 
-    def lda_param(self):
+    def lda_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -109,11 +135,14 @@ class Improve():
             'LinearDiscriminantAnalysis__solver': ['svd','lsqr', 'eigen']
 
         }
+        if method == 'random':
+            pass
+
         return parameters
 
-    def svc_param(self):
+    def svc_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -122,11 +151,16 @@ class Improve():
             'SVC__decision_function_shape': ['ovo','ovr']
 
         }
+
+        if method == 'random':
+            pass
+
         return parameters
 
-    def knn_param(self):
+    def knn_param(self, method='grid'):
+
         parameters = {
-            'selector__extraTC__n_estimators':  [100, 150, 200, 250],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
@@ -136,9 +170,14 @@ class Improve():
             'KNeighborsClassifier__algorithm': ['auto','ball_tree','kd_tree','brute']
 
         }
+
+        if method == 'random':
+            parameters['KNeighborsClassifier__n_neighbors'] = randint(5,10)
+
         return parameters
 
-    def logistic_param(self):
+    def logistic_param(self, method='grid'):
+
         parameters = {
             'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
@@ -148,31 +187,34 @@ class Improve():
             # 'LogisticRegression__penalty': ['l2'],
             'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
             'LogisticRegression__warm_start': [True,False]
-
         }
+        if method == 'random':
+            pass
+
+
         return parameters
 
 
-    def get_params(self, model):
+    def get_params(self, model, method):
         if model == 'GradientBoostingClassifier':
-            return self.gradientboosting_param
+            return self.gradientboosting_param(method)
         elif model == 'ExtraTreesClassifier':
-            return self.extratrees_param()
+            return self.extratrees_param(method)
         elif model == 'RandomForestClassifier':
-            return self.randomforest_param()
+            return self.randomforest_param(method)
         elif model == 'DecisionTreeClassifier':
-            return self.decisiontree_param()
+            return self.decisiontree_param(method)
         elif model == 'LinearDiscriminantAnalysis':
-            return self.lda_param()
+            return self.lda_param(method)
         elif model == 'SVC':
-            return self.svc_param()
+            return self.svc_param(method)
         elif model == 'KNeighborsClassifier':
-            return self.knn_param()
+            return self.knn_param(method)
         elif model == 'LogisticRegression':
-            return self.logistic_param()
+            return self.logistic_param(method)
         return None
 
-    def improve_pipelines(self):
+    def improver_grid_search(self):
         dic_pipeline = dict(self.pipelines)
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier',
@@ -182,16 +224,18 @@ class Improve():
         models = ['ExtraTreesClassifier', 'LogisticRegression']
         report = []
         grid_search = []
+
+        self.evaluator.split_data()
         for m in models:
             pipeline = dic_pipeline[m]
-            parameters = self.get_params(m)
+            parameters = self.get_params(m, 'grid')
 
             grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
             print("Performing grid search...", m)
             try:
                 start = time()
-                grid_search_t.fit(self.evaluator.definer.X, self.evaluator.definer.y)
+                grid_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
                 end = time()
 
                 dict_report = OrderedDict()
@@ -217,6 +261,53 @@ class Improve():
         self.full_report = full_r
         self.grid_search = grid_search
 
+
+    def improve_random_search(self):
+        dic_pipeline = dict(self.pipelines)
+        models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
+                  'RandomForestClassifier', 'DecisionTreeClassifier',
+                  'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
+                  'LogisticRegression']
+
+        models = ['ExtraTreesClassifier', 'LogisticRegression']
+        report = []
+        grid_search = []
+
+        self.evaluator.split_data()
+        for m in models:
+            pipeline = dic_pipeline[m]
+            parameters = self.get_params(m, 'random')
+
+            grid_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=1000, n_jobs=-1, verbose=1)
+
+            print("Performing grid search...", m)
+            try:
+                start = time()
+                grid_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
+                end = time()
+
+                dict_report = OrderedDict()
+                dict_report['name'] = m
+                dict_report['best_score'] = round(grid_search_t.best_score_, 3)
+                dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
+                dict_report.update(grid_search_t.best_params_)
+                #         dict_report['best_params'] = grid_search.best_params_
+
+                report.append(dict_report)
+                grid_search.append(grid_search_t)
+                #         print("done in %0.3fs" % (t)
+                #         print()
+
+                print("Best score: %0.3f" % grid_search_t.best_score_)
+                #         print("Best parameters: ", grid)
+            except:
+                continue
+
+
+        score_r, full_r = self.make_report(report)
+        self.score_report = score_r
+        self.full_report = full_r
+        self.grid_search = grid_search
 
     def make_report(self, report):
         score_report = []
