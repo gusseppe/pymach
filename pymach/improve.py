@@ -329,7 +329,8 @@ class Improve():
         #sorted_t = sorted(report.items(), key=operator.itemgetter(1))
         report.sort_values(['Score'], ascending=[False], inplace=True)
         #self.bestAlgorithms = sorted_t[-2:]
-        self.report = report.copy()
+        # self.report = report.copy()
+        return report
 
     # def chooseTopRanked(self, report):
     #     """" Choose the best two algorithms"""
