@@ -231,7 +231,7 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression']
 
-        models = ['ExtraTreesClassifier', 'LogisticRegression']
+        models = ['GradientBoostingClassifier']
         report = []
         grid_search = {}
 
