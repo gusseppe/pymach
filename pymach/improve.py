@@ -153,8 +153,10 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
-            'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
-            'SVC__decision_function_shape': ['ovo','ovr']
+            # 'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
+            'SVC__kernel': ['poly', 'rbf','sigmoid','precomputed'],
+            # 'SVC__decision_function_shape': ['ovo','ovr']
+            'SVC__decision_function_shape': ['ovr']
 
         }
 
@@ -173,7 +175,8 @@ class Improve():
             'selector__pca__whiten': [True,False],
             'KNeighborsClassifier__n_neighbors': [5,6,7,8,9,10],
             'KNeighborsClassifier__weights': ['uniform','distance'],
-            'KNeighborsClassifier__algorithm': ['auto','ball_tree','kd_tree','brute']
+            # 'KNeighborsClassifier__algorithm': ['auto','ball_tree','kd_tree','brute']
+            'KNeighborsClassifier__algorithm': ['auto']
 
         }
 
@@ -191,7 +194,8 @@ class Improve():
             'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
             # 'LogisticRegression__penalty': ['l2'],
-            'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
+            # 'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
+            'LogisticRegression__solver': ['newton-cg','lbfgs'],
             'LogisticRegression__warm_start': [True,False]
         }
         if method == 'random':
