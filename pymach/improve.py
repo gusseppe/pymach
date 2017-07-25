@@ -299,7 +299,8 @@ class Improve():
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m, 'random')
 
-            random_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=1000, n_jobs=-1, verbose=1)
+            # random_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=1000, n_jobs=-1, verbose=1)
+            random_search_t = RandomizedSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 
             print("Performing grid search...", m)
             # try:
