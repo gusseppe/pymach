@@ -11,6 +11,7 @@ from __future__ import print_function
 import tools
 
 import warnings
+import sys
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
@@ -266,7 +267,7 @@ class Improve():
                 print("Best score: %0.3f" % grid_search_t.best_score_)
         #         print("Best parameters: ", grid)
             except:
-                continue
+                print("Unexpected error:", sys.exc_info()[0])
 
 
         score_r, full_r = self.make_report(report)
@@ -325,6 +326,7 @@ class Improve():
                 print("Best score: %0.3f" % random_search_t.best_score_)
                 #         print("Best parameters: ", grid)
             except:
+                print("Unexpected error:", sys.exc_info()[0])
                 continue
 
 
