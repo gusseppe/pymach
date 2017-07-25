@@ -35,7 +35,7 @@ class Improve():
     def __init__(self, evaluator):
         self.evaluator = evaluator
         self.pipelines = evaluator.build_pipelines()
-        self.grid_search = None
+        self.search = None
         self.score_report = None
         self.full_report = None
 
@@ -223,7 +223,7 @@ class Improve():
 
         models = ['ExtraTreesClassifier', 'LogisticRegression']
         report = []
-        grid_search = []
+        grid_search = {}
 
         self.evaluator.split_data()
         for m in models:
@@ -246,7 +246,7 @@ class Improve():
         #         dict_report['best_params'] = grid_search.best_params_
 
                 report.append(dict_report)
-                grid_search.append(grid_search_t)
+                grid_search[m] = grid_search_t
         #         print("done in %0.3fs" % (t)
         #         print()
 
@@ -259,7 +259,7 @@ class Improve():
         score_r, full_r = self.make_report(report)
         self.score_report = score_r
         self.full_report = full_r
-        self.grid_search = grid_search
+        self.search = grid_search
 
 
     def improve_random_search(self):
@@ -271,34 +271,34 @@ class Improve():
 
         models = ['ExtraTreesClassifier', 'LogisticRegression']
         report = []
-        grid_search = []
+        random_search = {}
 
         self.evaluator.split_data()
         for m in models:
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m, 'random')
 
-            grid_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=100, n_jobs=-1, verbose=1)
+            random_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=100, n_jobs=-1, verbose=1)
 
             print("Performing grid search...", m)
             try:
                 start = time()
-                grid_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
+                random_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
                 end = time()
 
                 dict_report = OrderedDict()
                 dict_report['name'] = m
-                dict_report['best_score'] = round(grid_search_t.best_score_, 3)
+                dict_report['best_score'] = round(random_search_t.best_score_, 3)
                 dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
-                dict_report.update(grid_search_t.best_params_)
-                #         dict_report['best_params'] = grid_search.best_params_
+                dict_report.update(random_search_t.best_params_)
+                #         dict_report['best_params'] = random_search.best_params_
 
                 report.append(dict_report)
-                grid_search.append(grid_search_t)
+                random_search[m] = random_search_t
                 #         print("done in %0.3fs" % (t)
                 #         print()
 
-                print("Best score: %0.3f" % grid_search_t.best_score_)
+                print("Best score: %0.3f" % random_search_t.best_score_)
                 #         print("Best parameters: ", grid)
             except:
                 continue
@@ -307,7 +307,7 @@ class Improve():
         score_r, full_r = self.make_report(report)
         self.score_report = score_r
         self.full_report = full_r
-        self.grid_search = grid_search
+        self.search = random_search
 
     def make_report(self, report):
         score_report = []
