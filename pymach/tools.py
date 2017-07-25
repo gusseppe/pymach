@@ -26,6 +26,27 @@ def path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
+def mean_error_localization(y_real, y_test):
+    pos = {}
+    # pos['1'] = (0,0)
+    # pos['2'] = (1.5,0)
+    # pos['3'] = (3,0)
+    # pos['4'] = (0,1.5)
+    # pos['5'] = (1.5,1.5)
+    # pos['6'] = (3,1.5)
+
+    y = -1.5
+    for e in range(1,16):
+        if (e % 3) == 1:
+            y += 1.5
+
+        pos[str(e)] = (((e-1)%3)*1.5, y)
+
+    error = []
+    for a,b in zip(y_real, y_test):
+        error.append(np.linalg.norm(np.array(pos[str(a)]) - np.array(pos[str(b)])))
+
+    return np.mean(np.array(error))
 
 def localization():
     APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -51,22 +72,22 @@ def localization():
                     writer = csv.writer(out_file)
                     writer.writerow(('Beacon', 'RSSI'))
                     writer.writerows(grouped)
-                    
+
             df = pd.read_csv(path_file+'.csv')
             os.remove(path_file+'.csv')
             condition = ''
 
             with open(devices_path, 'r') as inFile:
                 stripped = (line.strip() for line in inFile)
-                
+
                 for x in stripped:
                     condition += '(Beacon == "' + str(x) + '")' + ' | '
                 condition = condition[:-3]
             df = df.query(condition)
-            
+
             encoder = LabelEncoder()
             df['Beacon'] = encoder.fit_transform(df['Beacon'])
-            
+
             mapped_df = {}
             for b, data in df.groupby('Beacon'):
                 mapped_df[b] = data
@@ -74,7 +95,7 @@ def localization():
             dict_to_df = OrderedDict()
             for index in range(len(mapped_df)):
                 dict_to_df[index] = mapped_df[index]['RSSI']
-                
+
             df_outliers = pd.DataFrame(dict_to_df)
 
             #Dealing with nan and duplicates
@@ -86,7 +107,7 @@ def localization():
             scaler = StandardScaler()
             df_outliers_t = scaler.fit_transform(df_outliers.ix[:, 0:len(df_outliers.columns)-1])
             df_outliers_t = pd.DataFrame(df_outliers_t)
-            
+
             #Removing outliers aplying the mean
             df_no_outliers = df_outliers_t[df_outliers_t.apply(lambda x: np.abs(x - x.median()) / x.std() < 3).all(axis=1)]
             df_no_outliers = scaler.inverse_transform(df_no_outliers)
@@ -95,7 +116,7 @@ def localization():
             vector_out = NUMBER*np.ones((len(df_outliers),), dtype=np.int)
             df_no_outliers = df_no_outliers.assign(position=pd.Series(vector_no_out).values)
             df_outliers = df_outliers.assign(position=pd.Series(vector_out).values)
-                
+
             #Saving files with outliers and without it.
             df_outliers.to_csv(os.path.join(UPLOAD_FOLDER, name_file+'_outliers'+'.csv'), index=False)
             df_no_outliers.to_csv(os.path.join(UPLOAD_FOLDER, name_file+'_no_outliers'+'.csv'), index=False)
