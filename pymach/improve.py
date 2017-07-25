@@ -38,6 +38,8 @@ class Improve():
         self.search = None
         self.score_report = None
         self.full_report = None
+        self.best_search = None
+        self.best_model = None
 
     def pipeline(self):
 
@@ -260,6 +262,9 @@ class Improve():
         self.score_report = score_r
         self.full_report = full_r
         self.search = grid_search
+        best_model = self.score_report['Model'].head(1).values[0]
+        self.best_search = self.search[best_model]
+        self.best_model = self.best_search.best_estimator_
 
 
     def improve_random_search(self):
@@ -308,6 +313,9 @@ class Improve():
         self.score_report = score_r
         self.full_report = full_r
         self.search = random_search
+        best_model = self.score_report['Model'].head(1).values[0]
+        self.best_search = self.search[best_model]
+        self.best_model = self.best_search.best_estimator_
 
     def make_report(self, report):
         score_report = []
