@@ -298,36 +298,36 @@ class Improve():
             random_search_t = RandomizedSearchCV(pipeline, parameters, n_iter=1000, n_jobs=-1, verbose=1)
 
             print("Performing grid search...", m)
-            try:
-                start = time()
-                random_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
-                end = time()
+            # try:
+            start = time()
+            random_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
+            end = time()
 
-                dict_report = OrderedDict()
-                dict_report['name'] = m
-                dict_report['best_score'] = round(random_search_t.best_score_, 3)
-
-
-                model_t = random_search_t.best_estimator_
-                y_pred = model_t.predict(self.evaluator.X_test)
-                y_real = self.evaluator.y_test.values
-                dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
+            dict_report = OrderedDict()
+            dict_report['name'] = m
+            dict_report['best_score'] = round(random_search_t.best_score_, 3)
 
 
-                dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
-                dict_report.update(random_search_t.best_params_)
-                #         dict_report['best_params'] = random_search.best_params_
+            model_t = random_search_t.best_estimator_
+            y_pred = model_t.predict(self.evaluator.X_test)
+            y_real = self.evaluator.y_test.values
+            dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
 
-                report.append(dict_report)
-                random_search[m] = random_search_t
-                #         print("done in %0.3fs" % (t)
-                #         print()
 
-                print("Best score: %0.3f" % random_search_t.best_score_)
-                #         print("Best parameters: ", grid)
-            except:
-                print("Unexpected error:", sys.exc_info()[0])
-                continue
+            dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
+            dict_report.update(random_search_t.best_params_)
+            #         dict_report['best_params'] = random_search.best_params_
+
+            report.append(dict_report)
+            random_search[m] = random_search_t
+            #         print("done in %0.3fs" % (t)
+            #         print()
+
+            print("Best score: %0.3f" % random_search_t.best_score_)
+            #         print("Best parameters: ", grid)
+            # except:
+            #     print("Unexpected error:", sys.exc_info()[0])
+            #     continue
 
 
         score_r, full_r = self.make_report(report)
@@ -441,6 +441,7 @@ class Improve():
         )
 
         fig = go.Figure(data=data, layout=layout)
+
         return self.plot_to_html(fig)
 
     def save_plot(self, path):
