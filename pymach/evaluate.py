@@ -162,6 +162,8 @@ class Evaluate():
         names = []
 
         for name, model in self.pipelines:
+            print("Performing grid search...", name)
+
             kfold = KFold(n_splits=num_folds, random_state=seed)
             #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
                     #scoring=scoring)
