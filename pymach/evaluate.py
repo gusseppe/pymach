@@ -112,7 +112,7 @@ class Evaluate():
 
         return models
 
-    def split_data(self, test_size=0.33, seed=7):
+    def split_data(self, test_size=0.20, seed=7):
         """ Need to fill """
 
         X_train, X_test, y_train, y_test =  train_test_split(
