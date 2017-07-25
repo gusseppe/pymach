@@ -290,7 +290,7 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression']
 
-        models = ['ExtraTreesClassifier', 'LogisticRegression']
+        models = ['GradientBoostingClassifier', 'SVC']
         report = []
         random_search = {}
 
