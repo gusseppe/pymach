@@ -88,26 +88,27 @@ class Evaluate():
         models = []
         # LDA : Warning(Variables are collinear)
         models.append(('LinearDiscriminantAnalysis', LinearDiscriminantAnalysis()))
-        models.append(('SVC', SVC()))
+        models.append(('SVC', SVC(random_state=0)))
         models.append(('GaussianNB', GaussianNB()))
         models.append(('KNeighborsClassifier', KNeighborsClassifier()))
-        models.append(('DecisionTreeClassifier', DecisionTreeClassifier()))
+        models.append(('DecisionTreeClassifier', DecisionTreeClassifier(random_state=0)))
         models.append(('LogisticRegression', LogisticRegression()))
 
         # Bagging and Boosting
         # models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
-        models.append(('ExtraTreesClassifier', ExtraTreesClassifier()))
-        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
+        models.append(('ExtraTreesClassifier', ExtraTreesClassifier(random_state=0)))
+        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(random_state=0),
+                                                                random_state=0)))
         # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        models.append(('RandomForestClassifier', RandomForestClassifier()))
+        models.append(('RandomForestClassifier', RandomForestClassifier(random_state=0)))
         models.append(('GradientBoostingClassifier',
-                       GradientBoostingClassifier(n_estimators=200, learning_rate=0.2)))
+                       GradientBoostingClassifier(n_estimators=200, learning_rate=0.2, random_state=0)))
         # models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
 
         # Voting
         estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
-        estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
+        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(random_state=0)))
+        estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier(random_state=0)))
         voting = VotingClassifier(estimators)
         models.append(('VotingClassifier', voting))
 
