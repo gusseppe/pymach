@@ -110,7 +110,7 @@ class Improve():
             'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
             # 'GradientBoostingClassifier__n_estimators': [200],
-            'GradientBoostingClassifier__max_depth': [3,6,9],
+            'GradientBoostingClassifier__max_depth': [3,6,9]
             # 'GradientBoostingClassifier__learning_rate': [0.2]
         }
 
@@ -131,7 +131,7 @@ class Improve():
             'selector__pca__whiten': [True],
             # 'selector__pca__whiten': [True,False],
             'ExtraTreesClassifier__n_estimators': [10, 15, 20, 25],
-            'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
+            'ExtraTreesClassifier__criterion': ['gini', 'entropy']
             # 'ExtraTreesClassifier__min_samples_leaf': range(200,1001,200),
             # 'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
             # 'ExtraTreesClassifier__max_depth': [2,3,4,5],
