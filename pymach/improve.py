@@ -76,8 +76,8 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
-            'AdaBoostClassifier__n_estimators': [50, 100],
-            'AdaBoostClassifier__learning_rate': [1.0, 2.0]
+            'AdaBoostClassifier__n_estimators': [50, 100, 150],
+            'AdaBoostClassifier__learning_rate': [1.0, 2.0, 3.0]
         }
 
         if method == 'random':
