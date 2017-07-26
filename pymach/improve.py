@@ -242,7 +242,7 @@ class Improve():
             return self.logistic_param(method)
         return None
 
-    def improver_grid_search(self):
+    def improve_grid_search(self):
         dic_pipeline = dict(self.pipelines)
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier',
