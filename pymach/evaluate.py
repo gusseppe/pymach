@@ -101,11 +101,11 @@ class Evaluate():
         # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
         # models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
-        models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
+        models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
 
         # Voting
         estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(n_estimators=150)))
+        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
         estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
         voting = VotingClassifier(estimators)
         models.append(('Voting(GBC-ET)', voting))
