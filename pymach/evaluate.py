@@ -87,7 +87,7 @@ class Evaluate():
 
         models = []
         # LDA : Warning(Variables are collinear)
-        models.append(('LDA', LinearDiscriminantAnalysis()))
+        models.append(('LinearDiscriminantAnalysis', LinearDiscriminantAnalysis()))
         models.append(('SVC', SVC()))
         models.append(('GaussianNB', GaussianNB()))
         models.append(('KNeighborsClassifier', KNeighborsClassifier()))
@@ -100,15 +100,16 @@ class Evaluate():
         models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier()))
-        # models.append(('GradientBoostingClassifier', GradientBoostingClassifier(n_estimators=150)))
-        models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
+        models.append(('GradientBoostingClassifier',
+                       GradientBoostingClassifier(n_estimators=150, learning_rate=0.2)))
+        # models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
 
         # Voting
         estimators = []
         estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
         estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
         voting = VotingClassifier(estimators)
-        models.append(('Voting(GBC-ET)', voting))
+        models.append(('VotingClassifier', voting))
 
         return models
 

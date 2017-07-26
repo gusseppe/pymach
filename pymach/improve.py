@@ -68,6 +68,39 @@ class Improve():
     #
     #     return parameters
 
+    def adaboost_param(self, method='grid'):
+
+        parameters = {
+            'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__whiten': [True],
+            'AdaBoostClassifier__n_estimators': [50, 100],
+            'AdaBoostClassifier__learning_rate': [1.0, 2.0]
+        }
+
+        if method == 'random':
+            pass
+
+        return parameters
+
+    def voting_param(self, method='grid'):
+
+        parameters = {
+            'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__whiten': [True],
+            'VotingClassifier__voting': ['hard', 'soft']
+        }
+
+        if method == 'random':
+            pass
+
+        return parameters
+
     def gradientboosting_param(self, method='grid'):
 
         parameters = {
@@ -76,9 +109,9 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
-            'GradientBoostingClassifier__n_estimators': [200],
-            # 'GradientBoostingClassifier__max_depth': [3,6,9],
-            'GradientBoostingClassifier__learning_rate': [0.2]
+            # 'GradientBoostingClassifier__n_estimators': [200],
+            'GradientBoostingClassifier__max_depth': [3,6,9],
+            # 'GradientBoostingClassifier__learning_rate': [0.2]
         }
 
         if method == 'random':
@@ -249,7 +282,11 @@ class Improve():
 
 
     def get_params(self, model, method):
-        if model == 'GradientBoostingClassifier':
+        if model == 'AdaBoostClassifier':
+            return self.adaboost_param(method)
+        elif model == 'VotingClassifier':
+            return self.voting_param(method)
+        elif model == 'GradientBoostingClassifier':
             return self.gradientboosting_param(method)
         elif model == 'ExtraTreesClassifier':
             return self.extratrees_param(method)
@@ -274,7 +311,7 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression']
 
-        # models = ['GradientBoostingClassifier']
+        models = ['GradientBoostingClassifier']
         report = []
         grid_search = {}
 
@@ -283,7 +320,7 @@ class Improve():
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m, 'grid')
 
-            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
+            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=5, scoring='roc_auc')
 
             print("Performing grid search...", m)
             try:
