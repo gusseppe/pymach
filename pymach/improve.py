@@ -51,16 +51,33 @@ class Improve():
         return self
 
     # @property
+    # def gradientboosting_param(self, method='grid'):
+    #
+    #     parameters = {
+    #         'selector__extraTC__n_estimators': [10, 15, 20, 25],
+    #         'selector__extraTC__criterion': ['gini', 'entropy'],
+    #         'selector__extraTC__n_jobs': [-1],
+    #         'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+    #         'selector__pca__whiten': [True,False],
+    #         'GradientBoostingClassifier__n_estimators': [100, 150, 200],
+    #         'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]
+    #     }
+    #
+    #     if method == 'random':
+    #         parameters['GradientBoostingClassifier__learning_rate'] = expon(0,1)
+    #
+    #     return parameters
+
     def gradientboosting_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10, 15, 20, 25],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
+            'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__criterion': ['entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True,False],
-            'GradientBoostingClassifier__n_estimators': [100, 150, 200],
-            'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.4, 0.8, 1.0]
+            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__whiten': [True],
+            'GradientBoostingClassifier__n_estimators': [200, 250, 300],
+            'GradientBoostingClassifier__learning_rate': [0.2]
         }
 
         if method == 'random':
@@ -455,7 +472,8 @@ class Improve():
 
     def save_full_report(self, path):
 
-        self.full_report.to_csv(path, index=False)
+        for index, elem in enumerate(self.full_report):
+            self.elem.to_csv(path+str(index), index=False)
 
 
     def save_score_report(self, path):
