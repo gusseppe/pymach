@@ -48,10 +48,10 @@ class Select():
         #kbest = SelectKBest(score_func=chi2, k=n_features)
         #transformers.append(('kbest', kbest))
 
-        pca = PCA(n_components=n_features)
+        pca = PCA(n_components=n_features, svd_solver='randomized', whiten=True)
         transformers.append(('pca', pca))
 
-        extraTC = ExtraTreesClassifier()
+        extraTC = ExtraTreesClassifier(criterion='entropy')
         transformers.append(('extraTC', extraTC))
 
         #scaler = StandardScaler()
