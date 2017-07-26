@@ -106,7 +106,8 @@ class Evaluate():
 
         # Voting
         estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier()))
+        estimators.append(("Voting_GradientBoostingClassifier",
+                           GradientBoostingClassifier(n_estimators=200, learning_rate=0.2)))
         estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier()))
         voting = VotingClassifier(estimators)
         models.append(('VotingClassifier', voting))
