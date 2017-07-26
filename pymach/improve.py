@@ -320,7 +320,7 @@ class Improve():
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m, 'grid')
 
-            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=5, scoring='roc_auc')
+            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='roc_auc')
 
             print("Performing grid search...", m)
             try:
