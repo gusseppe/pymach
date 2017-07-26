@@ -533,10 +533,10 @@ class Improve():
         with open(path, "w") as plot:
             plot.write(self.plot_html)
 
-    def save_full_report(self):
+    def save_full_report(self, path):
 
         for index, elem in enumerate(self.full_report):
-            elem.to_csv('full_report_'+str(index)+'.csv', index=False)
+            elem.to_csv(path+str(index)+'.csv', index=False)
 
 
     def save_score_report(self, path):
