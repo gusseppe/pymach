@@ -309,9 +309,9 @@ class Improve():
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier',
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
-                  'LogisticRegression']
+                  'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier']
 
-        # models = ['GradientBoostingClassifier']
+        models = ['AdaBoostClassifier', 'VotingClassifier']
         report = []
         grid_search = {}
 
@@ -368,7 +368,7 @@ class Improve():
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier',
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
-                  'LogisticRegression']
+                  'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier']
 
         models = ['GradientBoostingClassifier', 'SVC']
         report = []
