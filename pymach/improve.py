@@ -311,7 +311,7 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier']
 
-        models = ['AdaBoostClassifier', 'VotingClassifier']
+        # models = ['AdaBoostClassifier', 'VotingClassifier']
         report = []
         grid_search = {}
 
