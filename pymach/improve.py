@@ -104,11 +104,11 @@ class Improve():
     def gradientboosting_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
+            # 'selector__extraTC__n_estimators': [10],
+            # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
+            # 'selector__pca__svd_solver': ['randomized'],
+            # 'selector__pca__whiten': [True],
             # 'GradientBoostingClassifier__n_estimators': [200],
             'GradientBoostingClassifier__max_depth': [3,6,9]
             # 'GradientBoostingClassifier__learning_rate': [0.2]
