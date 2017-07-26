@@ -311,7 +311,7 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression']
 
-        models = ['GradientBoostingClassifier']
+        # models = ['GradientBoostingClassifier']
         report = []
         grid_search = {}
 
