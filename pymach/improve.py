@@ -46,7 +46,7 @@ class Improve():
 
     def pipeline(self):
 
-        self.improver_grid_search()
+        self.improve_grid_search()
 
         return self
 
@@ -77,7 +77,7 @@ class Improve():
             'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
             'GradientBoostingClassifier__n_estimators': [200, 250, 300],
-            'GradientBoostingClassifier__max_depth': [3,6,9],
+            # 'GradientBoostingClassifier__max_depth': [3,6,9],
             'GradientBoostingClassifier__learning_rate': [0.2]
         }
 
