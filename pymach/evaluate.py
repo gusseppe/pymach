@@ -163,7 +163,7 @@ class Evaluate():
         names = []
 
         for name, model in self.pipelines:
-            print("Performing grid search...", name)
+            print("Modeling...", name)
 
             kfold = KFold(n_splits=num_folds, random_state=seed)
             #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
@@ -189,6 +189,8 @@ class Evaluate():
             #report_print = "Model: {}, mean: {}, std: {}".format(name,
                     #mean, std)
             self.report.append([name, round(mean,3), round(std,3)])
+            print("Score ", mean)
+            print("---------------------")
             #print(report_print)
 
         self.raw_report = sorted(results, key=lambda k: k['mean'], reverse=True)
