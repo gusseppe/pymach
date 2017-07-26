@@ -158,9 +158,9 @@ class Improve():
             # 'selector__pca__whiten': [True,False],
             'RandomForestClassifier__n_estimators': [10, 15, 20, 25],
             'RandomForestClassifier__criterion': ['gini', 'entropy'],
-            'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
-            'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
-            'RandomForestClassifier__max_depth': [2,3,4,5],
+            # 'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
+            # 'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
+            # 'RandomForestClassifier__max_depth': [2,3,4,5],
             'RandomForestClassifier__warm_start': [True,False]
         }
         if method == 'random':
@@ -182,9 +182,9 @@ class Improve():
             'selector__pca__whiten': [True],
             # 'selector__pca__whiten': [True,False],
             'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
-            'DecisionTreeClassifier__max_depth': [2,3,4,5],
-            'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5,10,15,20]
+            # 'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
+            # 'DecisionTreeClassifier__max_depth': [2,3,4,5],
+            # 'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5,10,15,20]
 
         }
         if method == 'random':
