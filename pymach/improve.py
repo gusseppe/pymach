@@ -536,7 +536,7 @@ class Improve():
     def save_full_report(self):
 
         for index, elem in enumerate(self.full_report):
-            self.elem.to_csv('full_report_'+str(index)+'.csv', index=False)
+            elem.to_csv('full_report_'+str(index)+'.csv', index=False)
 
 
     def save_score_report(self, path):
