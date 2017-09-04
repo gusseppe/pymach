@@ -14,6 +14,8 @@ import warnings
 import sys
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 import plotly.graph_objs as go
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -43,6 +45,7 @@ class Improve():
         self.full_report = None
         self.best_search = None
         self.best_model = None
+        self.cv = 5
 
     def pipeline(self):
 
@@ -104,11 +107,11 @@ class Improve():
     def gradientboosting_param(self, method='grid'):
 
         parameters = {
-            # 'selector__extraTC__n_estimators': [10],
-            # 'selector__extraTC__criterion': ['entropy'],
-            # 'selector__extraTC__n_jobs': [-1],
-            # 'selector__pca__svd_solver': ['randomized'],
-            # 'selector__pca__whiten': [True],
+            'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__whiten': [True],
             # 'GradientBoostingClassifier__n_estimators': [200],
             'GradientBoostingClassifier__max_depth': [3,6,9]
             # 'GradientBoostingClassifier__learning_rate': [0.2]
@@ -244,7 +247,7 @@ class Improve():
             'selector__extraTC__n_estimators':  [10],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
             # 'selector__pca__whiten': [True,False],
             'KNeighborsClassifier__n_neighbors': [5,6,7,8,9,10],
@@ -266,7 +269,7 @@ class Improve():
             # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
+            'selector__pca__svd_solver': ['randomized'],
             'selector__pca__whiten': [True],
             # 'selector__pca__whiten': [True,False],
             # 'LogisticRegression__penalty': ['l2'],
@@ -277,9 +280,40 @@ class Improve():
         if method == 'random':
             pass
 
+        return parameters
+
+    def naivebayes_param(self, method='grid'):
+
+        parameters = {
+            'selector__extraTC__n_estimators':  [10],
+            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            'selector__pca__whiten': [True],
+            'GaussianNB__priors': [None]
+        }
+        if method == 'random':
+            pass
 
         return parameters
 
+    def mlperceptron_param(self, method='grid'):
+
+        parameters = {
+            'selector__extraTC__n_estimators':  [10],
+            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            'selector__extraTC__criterion': ['gini','entropy'],
+            'selector__extraTC__n_jobs': [-1],
+            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__whiten': [True],
+            'MLPClassifier__hidden_layer_sizes': [100]
+            # 'MLPClassifier__activation': ['identity', 'logistic', 'tanh', 'relu']
+        }
+        if method == 'random':
+            pass
+
+        return parameters
 
     def get_params(self, model, method):
         if model == 'AdaBoostClassifier':
@@ -302,56 +336,71 @@ class Improve():
             return self.knn_param(method)
         elif model == 'LogisticRegression':
             return self.logistic_param(method)
+        elif model == 'GaussianNB':
+            return self.naivebayes_param(method)
+        elif model == 'MLPClassifier':
+            return self.mlperceptron_param(method)
         return None
 
     def improve_grid_search(self):
         dic_pipeline = dict(self.pipelines)
         models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
                   'RandomForestClassifier', 'DecisionTreeClassifier',
-                  'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
-                  'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier']
+                  'SVC', 'KNeighborsClassifier',
+                  'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier',
+                  'GaussianNB', 'MLPClassifier']
 
-        # models = ['AdaBoostClassifier', 'VotingClassifier']
+        # models = ['GaussianNB', 'DecisionTreeClassifier']
         report = []
-        grid_search = {}
+        grid_search = OrderedDict()
+        boxplot_error_loc = []
+        boxplot_score_grid = []
 
         self.evaluator.split_data()
         for m in models:
             pipeline = dic_pipeline[m]
             parameters = self.get_params(m, 'grid')
 
-            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=5)
+            grid_search_t = GridSearchCV(pipeline, parameters, n_jobs=-1,
+                                         verbose=1, cv=self.cv)
 
             print("Performing grid search...", m)
-            try:
-                start = time()
-                grid_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
-                end = time()
+            # try:
+            start = time()
+            grid_search_t.fit(self.evaluator.X_train, self.evaluator.y_train)
+            end = time()
 
-                dict_report = OrderedDict()
-                dict_report['name'] = m
-                dict_report['best_score'] = round(grid_search_t.best_score_, 3)
-
-
-                model_t = grid_search_t.best_estimator_
-                y_pred = model_t.predict(self.evaluator.X_test)
-                y_real = self.evaluator.y_test.values
-                dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
+            dict_report = OrderedDict()
+            dict_report['name'] = m
+            dict_report['best_score'] = round(grid_search_t.best_score_, 3)
 
 
-                dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
-                dict_report.update(grid_search_t.best_params_)
-        #         dict_report['best_params'] = grid_search.best_params_
+        # Calculating the localization error
+            model_t = grid_search_t.best_estimator_
+            y_pred = model_t.predict(self.evaluator.X_test)
+            y_real = self.evaluator.y_test.values
+            error_loc, mean_loc = tools.mean_error_localization(y_pred, y_real)
+            bp_error_loc = {}
+            bp_error_loc['model'] = [tools.model_map_name(m)]*len(error_loc)
+            bp_error_loc['values'] = error_loc
+            boxplot_error_loc.append(bp_error_loc)
+            dict_report['mean_error'] = str(round(mean_loc, 3))+'m'
 
-                report.append(dict_report)
-                grid_search[m] = grid_search_t
-        #         print("done in %0.3fs" % (t)
-        #         print()
 
-                print("Best score: %0.3f" % grid_search_t.best_score_)
-        #         print("Best parameters: ", grid)
-            except:
-                print("Unexpected error:", sys.exc_info()[0])
+            dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
+            dict_report['fits'] = len(grid_search_t.grid_scores_)*self.cv
+            dict_report.update(grid_search_t.best_params_)
+    #         dict_report['best_params'] = grid_search.best_params_
+
+            report.append(dict_report)
+            grid_search[m] = grid_search_t
+    #         print("done in %0.3fs" % (t)
+    #         print()
+
+            print("Best score: %0.3f" % grid_search_t.best_score_)
+    #         print("Best parameters: ", grid)
+        #     except:
+        #         print("Unexpected error:", sys.exc_info()[0])
 
 
         score_r, full_r = self.make_report(report)
@@ -362,6 +411,9 @@ class Improve():
         self.best_search = self.search[best_model]
         self.best_model = self.best_search.best_estimator_
 
+        # Save plots
+        tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
+        self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
 
     def improve_random_search(self):
         dic_pipeline = dict(self.pipelines)
@@ -370,9 +422,10 @@ class Improve():
                   'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
                   'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier']
 
-        models = ['GradientBoostingClassifier', 'SVC']
+        # models = ['GradientBoostingClassifier', 'SVC']
         report = []
         random_search = {}
+        error_loc = []
 
         self.evaluator.split_data()
         for m in models:
@@ -392,11 +445,12 @@ class Improve():
             dict_report['name'] = m
             dict_report['best_score'] = round(random_search_t.best_score_, 3)
 
-
+            # Calculating the localization error
             model_t = random_search_t.best_estimator_
             y_pred = model_t.predict(self.evaluator.X_test)
             y_real = self.evaluator.y_test.values
-            dict_report['mean_error'] = str(round(tools.mean_error_localization(y_pred, y_real), 3))+'m'
+            error_loc, mean_loc = tools.mean_error_localization(y_pred, y_real)
+            dict_report['mean_error'] = str(round(mean_loc, 3))+'m'
 
 
             dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
@@ -455,6 +509,62 @@ class Improve():
     #     self.bestAlgorithms = report
     #
     #     print(self.bestAlgorithms)
+
+    def plot_cv_score(self, path):
+
+        boxplot_list = []
+        for m, gs in  self.search.items():
+            boxplot_dict = OrderedDict()
+            lst = []
+            for i in range(self.cv):
+                name = 'split' + str(i) + '_test_score'
+                lst.append(gs.cv_results_[name])
+            npa = np.array(lst)
+            maxnpa = npa.mean(axis=0)
+            values = npa[:, maxnpa.argmax()]
+
+            boxplot_dict['model'] = [tools.model_map_name(m)]*len(values)
+            boxplot_dict['values'] = list(values)
+
+            boxplot_list.append(boxplot_dict)
+
+
+        sns.set_style("whitegrid")
+
+        list_df = []
+        for d in boxplot_list:
+            list_df.append(pd.DataFrame(d))
+
+        df_errors = pd.concat(list_df, ignore_index=True)
+
+        print(df_errors)
+
+        data_name = path.replace(".csv", "")
+        # plt.figure(figsize=(10, 10))
+        ax = sns.boxplot(x="model", y="values", data=df_errors)
+        ax.set(xlabel='Model evaluated', ylabel='Score')
+        # _ = sns.boxplot(x="model", y="values", data=df_errors, showmeans=True)
+        # _ = sns.stripplot(x="model", y="values", data=df_errors, jitter=True, edgecolor="gray")
+
+        # tips = sns.load_dataset("tips")
+        # ax = sns.boxplot(x="day", y="total_bill", data=tips)
+
+        medians = df_errors.groupby(['model'], sort=False)['values'].mean().values
+        # medians = medians.sort_index(ascending=False).values
+        median_labels = [str(np.round(s, 3)) for s in medians]
+
+        print(median_labels)
+
+        pos = range(len(medians))
+        for tick, label in zip(pos, ax.get_xticklabels()):
+            print(pos[tick], medians[tick])
+            ax.text(pos[tick], medians[tick], median_labels[tick],
+                    horizontalalignment='center', size='x-small', color='black', weight='semibold')
+        print(df_errors.describe())
+        plt.savefig(data_name+'_score'+'.eps', format='eps')
+
+        plt.close()
+
 
     def plot_to_html(self, fig):
         plotly_html_div, plotdivid, width, height = _plot_html(
@@ -536,12 +646,12 @@ class Improve():
     def save_full_report(self, path):
 
         for index, elem in enumerate(self.full_report):
-            elem.to_csv(path+str(index)+'.csv', index=False)
+            elem.to_csv(path+'_model'+str(index+1)+'.csv', index=False)
 
 
     def save_score_report(self, path):
 
-        self.score_report.to_csv(path, index=False)
+        self.score_report.to_csv(path+'_score'+'.csv', index=False)
 
     class CustomFeature(TransformerMixin):
         """ A custome class for modeling """

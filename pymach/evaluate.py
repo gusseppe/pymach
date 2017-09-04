@@ -39,6 +39,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
 
 #Ensembles algorithms
 from sklearn.ensemble import ExtraTreesClassifier
@@ -91,6 +92,7 @@ class Evaluate():
         models.append(('LinearDiscriminantAnalysis', LinearDiscriminantAnalysis()))
         models.append(('SVC', SVC(random_state=rs)))
         models.append(('GaussianNB', GaussianNB()))
+        models.append(('MLPClassifier', MLPClassifier()))
         models.append(('KNeighborsClassifier', KNeighborsClassifier()))
         models.append(('DecisionTreeClassifier', DecisionTreeClassifier(random_state=rs)))
         models.append(('LogisticRegression', LogisticRegression()))

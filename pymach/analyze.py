@@ -134,11 +134,15 @@ class Analyze():
         return self.plot_html
 
     def scatter(self):
-        fig = self.data.scatter_matrix(
+        columns = [x for x in self.data.columns if x != self.response]
+
+        fig = self.data[columns].scatter_matrix(
                 asFigure=True,
-                # title="Correlation Matrix",
+                title="Scatter Matrix",
                 xTitle="Features",
                 yTitle="Features",
+                mode='markers',
+                columns=columns,
                 theme="white")
 
         self.plot_html = self.plot_to_html(fig)

@@ -279,7 +279,7 @@ def analyze_base():
 
 @app.route('/analyze_app', methods=['GET', 'POST'])
 def analyze_app():
-    figures = ['histogram', 'box', 'corr']
+    figures = ['histogram', 'box', 'corr', 'scatter']
     response = "class"
     data_name = ''
     data_path = ''

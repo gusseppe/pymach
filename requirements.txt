@@ -1,3 +1,4 @@
+seaborn
 appdirs==1.4.3
 click==6.7
 colorlover==0.2.1

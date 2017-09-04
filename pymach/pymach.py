@@ -34,7 +34,7 @@ This module provides the logic of the whole project.
     #definer = define.Define(nameData=name, className=className).pipeline()
 
     ##STEP 1: Analyze data by ploting it
-    ##analyze.Analyze(definer).pipeline()
+    # analyze.Analyze(definer).pipeline()
 
     ##STEP 2: Prepare data by scaling, normalizing, etc.
     #preparer = prepare.Prepare(definer).pipeline()
@@ -61,17 +61,15 @@ This module provides the logic of the whole project.
 # import evaluate
 # import improve
 #
+# # data_name = "./uploads/LocalizationNew_Tx4.csv"
 # data_name = "iris.csv"
 # class_name = "class"
 # definer = define.Define(
 #         data_path=data_name,
 #         header=None,
 #         response=class_name).pipeline()
-#
+
 # preparer = prepare.Prepare(definer).pipeline()
 # selector = fselect.Select(definer).pipeline()
 # evaluator = evaluate.Evaluate(definer, preparer, selector)
 # improver = improve.Improve(evaluator).pipeline()
-# # improver.improve_pipelines()
-# print(improver.score_report)
-# print(improver.full_report)

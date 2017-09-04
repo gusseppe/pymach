@@ -2,7 +2,8 @@ import os
 import re
 import csv
 import errno
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 import numpy as np
 
@@ -47,7 +48,88 @@ def mean_error_localization(y_pred, y_real):
     for a,b in zip(y_pred, y_real):
         error.append(np.linalg.norm(np.array(pos[str(a)]) - np.array(pos[str(b)])))
 
-    return np.mean(np.array(error))
+    return error, np.mean(np.array(error))
+
+def model_map_name(name):
+    models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
+              'RandomForestClassifier', 'DecisionTreeClassifier',
+              'LinearDiscriminantAnalysis', 'SVC', 'KNeighborsClassifier',
+              'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier',
+              'GaussianNB', 'MLPClassifier']
+
+    names = ['GDM', 'ET', 'RF', 'DT', 'LDA', 'SVM', 'k-NN', 'LoR',
+             'AB', 'Voting', 'GNB', 'MLP']
+
+    dict_names = dict(zip(models, names))
+
+    return dict_names[name]
+
+def total_report():
+    import define
+    # import analyze
+    import prepare
+    import fselect
+    import evaluate
+    import improve
+
+    path = './market/LocalizationNew_Tx'
+
+    for i in range(5, 8):
+
+        data_name = "./uploads/LocalizationNew_Tx"+str(i)+".csv"
+        # data_name = "iris.csv"
+        class_name = "class"
+        definer = define.Define(
+            data_path=data_name,
+            header=None,
+            response=class_name).pipeline()
+
+        preparer = prepare.Prepare(definer).pipeline()
+        selector = fselect.Select(definer).pipeline()
+        evaluator = evaluate.Evaluate(definer, preparer, selector)
+        improver = improve.Improve(evaluator).pipeline()
+
+        improver.save_full_report('./market/LocalizationNew_Tx'+str(i))
+        improver.save_score_report('./market/LocalizationNew_Tx'+str(i))
+
+
+def error_loc_plot(errors, path):
+    # d = {}
+    # d['values'] = errors
+    # d['Model'] = [path]*len(errors)
+    #
+    # df = pd.DataFrame(d)
+    sns.set_style("whitegrid")
+
+    list_df = []
+    for d in errors:
+        list_df.append(pd.DataFrame(d))
+
+    df_errors = pd.concat(list_df)
+    df_errors.reset_index(drop=True)
+
+    data_name = path.replace(".csv", "")
+    # plt.figure(figsize=(10, 10))
+    ax = sns.boxplot(x="model", y="values", data=df_errors)
+    ax.set(xlabel='Model evaluated', ylabel='Error (m)')
+    # _ = sns.boxplot(x="model", y="values", data=df_errors, showmeans=True)
+    # _ = sns.stripplot(x="model", y="values", data=df_errors, jitter=True, edgecolor="gray")
+
+    # tips = sns.load_dataset("tips")
+    # ax = sns.boxplot(x="day", y="total_bill", data=tips)
+
+    # medians = df_errors.groupby(['model'])['values'].mean().values
+    medians = df_errors.groupby(['model'], sort=False)['values'].mean().values
+    median_labels = [str(np.round(s, 2)) for s in medians]
+
+    pos = range(len(medians))
+    for tick, label in zip(pos, ax.get_xticklabels()):
+        ax.text(pos[tick], medians[tick], median_labels[tick],
+                horizontalalignment='center', size='x-small', color='black', weight='semibold')
+    print(df_errors.describe())
+    plt.savefig(data_name+'_error'+'.eps', format='eps')
+    plt.close()
+
 
 def localization():
     APP_PATH = os.path.dirname(os.path.abspath(__file__))
