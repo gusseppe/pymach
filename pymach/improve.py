@@ -221,7 +221,7 @@ class Improve():
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
             'selector__pca__whiten': [True,False],
-            'LinearDiscriminantAnalysis__solver': ['svd','lsqr', 'eigen']
+            'LinearDiscriminantAnalysis__solver': ['svd']
 
         }
         if method == 'random':
@@ -240,7 +240,7 @@ class Improve():
             # 'selector__pca__svd_solver': ['randomized'],
             # 'selector__pca__whiten': [True],
             'selector__pca__whiten': [True,False],
-            'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
+            'SVC__kernel': ['linear','poly', 'rbf','sigmoid'],
             # 'SVC__kernel': ['rbf'],
             'SVC__C': [1, 10, 100],
             'SVC__decision_function_shape': ['ovo','ovr']
@@ -374,7 +374,7 @@ class Improve():
                   'VotingClassifier'
                   ]
 
-        # models = ['GaussianNB', 'DecisionTreeClassifier']
+        models = ['SVC', 'LinearDiscriminantAnalysis']
         report = []
         grid_search = OrderedDict()
         boxplot_error_loc = []

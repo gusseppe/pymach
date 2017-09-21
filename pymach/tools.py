@@ -77,6 +77,7 @@ def total_report():
     for i in range(5, 8):
 
         data_name = "./uploads/LocalizationNew_Tx"+str(i)+".csv"
+        print(data_name)
         # data_name = "iris.csv"
         class_name = "class"
         definer = define.Define(
