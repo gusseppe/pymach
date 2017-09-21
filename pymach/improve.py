@@ -323,7 +323,7 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True],
-            'MLPClassifier__hidden_layer_sizes': [100, 150],
+            'MLPClassifier__hidden_layer_sizes': [100],
             'MLPClassifier__activation': ['identity', 'logistic', 'tanh', 'relu']
         }
         if method == 'random':
