@@ -374,7 +374,7 @@ class Improve():
                   'VotingClassifier'
                   ]
 
-        models = ['LinearDiscriminantAnalysis']
+        # models = ['LinearDiscriminantAnalysis']
         report = []
         grid_search = OrderedDict()
         boxplot_error_loc = []
