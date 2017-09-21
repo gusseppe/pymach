@@ -374,7 +374,7 @@ class Improve():
                   'VotingClassifier'
                   ]
 
-        models = ['SVC', 'LinearDiscriminantAnalysis']
+        models = ['ExtraTreesClassifier']
         report = []
         grid_search = OrderedDict()
         boxplot_error_loc = []
@@ -437,8 +437,8 @@ class Improve():
         self.best_model = self.best_search.best_estimator_
 
         # Save plots
-        # tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
-        # self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
+        tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
+        self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
 
     def improve_random_search(self):
         dic_pipeline = dict(self.pipelines)
@@ -509,7 +509,9 @@ class Improve():
         for r in report:
             full_report.append(pd.DataFrame(list(r.items()), columns=['Topic', "Value"]))
             score_report.append([r['name'], r['best_score']])
+            # score_report.append([r['name'], r['best_score'], r['mean_error']])
 
+        # score_report = pd.DataFrame(score_report, columns=['Model', "Score", "Error"])
         score_report = pd.DataFrame(score_report, columns=['Model', "Score"])
         score_report = self.sort_report(score_report)
 

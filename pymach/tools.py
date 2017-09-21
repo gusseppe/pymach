@@ -74,7 +74,7 @@ def total_report():
 
     path = './market/LocalizationNew_Tx'
 
-    for i in range(5, 8):
+    for i in range(1, 8):
 
         data_name = "./uploads/LocalizationNew_Tx"+str(i)+".csv"
         print(data_name)
