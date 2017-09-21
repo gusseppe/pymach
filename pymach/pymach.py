@@ -55,7 +55,7 @@ This module provides the logic of the whole project.
 
 # TESTING
 # import define
-# import analyze
+# # import analyze
 # import prepare
 # import fselect
 # import evaluate
@@ -68,7 +68,7 @@ This module provides the logic of the whole project.
 #         data_path=data_name,
 #         header=None,
 #         response=class_name).pipeline()
-
+#
 # preparer = prepare.Prepare(definer).pipeline()
 # selector = fselect.Select(definer).pipeline()
 # evaluator = evaluate.Evaluate(definer, preparer, selector)

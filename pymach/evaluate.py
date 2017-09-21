@@ -105,7 +105,7 @@ class Evaluate():
         # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
         models.append(('RandomForestClassifier', RandomForestClassifier(random_state=rs)))
         models.append(('GradientBoostingClassifier',
-                       GradientBoostingClassifier(n_estimators=200, learning_rate=0.2, random_state=rs)))
+                       GradientBoostingClassifier(random_state=rs)))
         # models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
 
         # Voting

@@ -74,11 +74,15 @@ class Improve():
     def adaboost_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'AdaBoostClassifier__n_estimators': [50, 100],
             'AdaBoostClassifier__learning_rate': [1.0, 2.0]
         }
@@ -91,11 +95,15 @@ class Improve():
     def voting_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'VotingClassifier__voting': ['hard', 'soft']
         }
 
@@ -107,14 +115,18 @@ class Improve():
     def gradientboosting_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
-            # 'GradientBoostingClassifier__n_estimators': [200],
-            'GradientBoostingClassifier__max_depth': [3,6,9]
-            # 'GradientBoostingClassifier__learning_rate': [0.2]
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
+            'GradientBoostingClassifier__n_estimators': [200, 250, 300],
+            'GradientBoostingClassifier__max_depth': [3,6,9],
+            'GradientBoostingClassifier__learning_rate': [0.1, 0.2, 0.3, 0.4]
         }
 
         if method == 'random':
@@ -124,20 +136,20 @@ class Improve():
 
     def extratrees_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            # 'selector__extraTC__n_estimators': [10, 15, 20, 25],
-            # 'selector__extraTC__criterion': ['gini', 'entropy'],
-            'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__criterion': ['entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            # 'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'ExtraTreesClassifier__n_estimators': [10, 15, 20, 25],
-            'ExtraTreesClassifier__criterion': ['gini', 'entropy']
-            # 'ExtraTreesClassifier__min_samples_leaf': range(200,1001,200),
-            # 'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
-            # 'ExtraTreesClassifier__max_depth': [2,3,4,5],
+            'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
+            'ExtraTreesClassifier__min_samples_leaf': range(200,1001,200),
+            'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
+            'ExtraTreesClassifier__max_depth': [2,3,4,5]
         }
 
         if method == 'random':
@@ -150,20 +162,20 @@ class Improve():
 
     def randomforest_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators': [10],
-            # 'selector__extraTC__n_estimators': [10, 15, 20, 25],
-            'selector__extraTC__criterion': ['entropy'],
-            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__n_estimators': [10],
+            'selector__extraTC__n_estimators': [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini', 'entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            # 'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'RandomForestClassifier__n_estimators': [10, 15, 20, 25],
             'RandomForestClassifier__criterion': ['gini', 'entropy'],
-            # 'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
-            # 'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
-            # 'RandomForestClassifier__max_depth': [2,3,4,5],
+            'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
+            'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
+            'RandomForestClassifier__max_depth': [2,3,4,5],
             'RandomForestClassifier__warm_start': [True,False]
         }
         if method == 'random':
@@ -175,19 +187,19 @@ class Improve():
 
     def decisiontree_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
-            'selector__extraTC__criterion': ['entropy'],
-            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            # 'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            # 'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
-            # 'DecisionTreeClassifier__max_depth': [2,3,4,5],
-            # 'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5,10,15,20]
+            'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
+            'DecisionTreeClassifier__max_depth': [2,3,4,5],
+            'DecisionTreeClassifier__min_samples_leaf': [1,2,3,4,5,10,15,20]
 
         }
         if method == 'random':
@@ -199,15 +211,15 @@ class Improve():
 
     def lda_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
-            'selector__extraTC__criterion': ['entropy'],
-            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            # 'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'LinearDiscriminantAnalysis__solver': ['svd','lsqr', 'eigen']
 
         }
@@ -218,20 +230,20 @@ class Improve():
 
     def svc_param(self, method='grid'):
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
-            'selector__extraTC__criterion': ['entropy'],
-            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__criterion': ['entropy'],
+            'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            # 'selector__pca__svd_solver': ['auto', 'full', 'arpack', 'randomized'],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
-            # 'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
-            'SVC__kernel': ['rbf'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__svd_solver': ['randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
+            'SVC__kernel': ['linear','poly', 'rbf','sigmoid','precomputed'],
+            # 'SVC__kernel': ['rbf'],
             'SVC__C': [1, 10, 100],
-            # 'SVC__decision_function_shape': ['ovo','ovr']
-            'SVC__decision_function_shape': ['ovr']
+            'SVC__decision_function_shape': ['ovo','ovr']
+            # 'SVC__decision_function_shape': ['ovr']
 
         }
 
@@ -243,17 +255,18 @@ class Improve():
     def knn_param(self, method='grid'):
 
         parameters = {
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
-            'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__n_estimators':  [10],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'KNeighborsClassifier__n_neighbors': [5,6,7,8,9,10],
             'KNeighborsClassifier__weights': ['uniform','distance'],
-            # 'KNeighborsClassifier__algorithm': ['auto','ball_tree','kd_tree','brute']
-            'KNeighborsClassifier__algorithm': ['auto']
+            'KNeighborsClassifier__algorithm': ['ball_tree','kd_tree','brute']
+            # 'KNeighborsClassifier__algorithm': ['auto']
 
         }
 
@@ -265,16 +278,17 @@ class Improve():
     def logistic_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
-            'selector__pca__whiten': [True],
-            # 'selector__pca__whiten': [True,False],
-            # 'LogisticRegression__penalty': ['l2'],
+            # 'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
+            'LogisticRegression__penalty': ['l2'],
             # 'LogisticRegression__solver': ['newton-cg','lbfgs','liblinear','sag'],
-            'LogisticRegression__solver': ['newton-cg','lbfgs'],
+            'LogisticRegression__solver': ['newton-cg','lbfgs', 'sag'],
             'LogisticRegression__warm_start': [True,False]
         }
         if method == 'random':
@@ -285,12 +299,13 @@ class Improve():
     def naivebayes_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
+            # 'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'GaussianNB__priors': [None]
         }
         if method == 'random':
@@ -301,14 +316,14 @@ class Improve():
     def mlperceptron_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators':  [10],
-            # 'selector__extraTC__n_estimators':  [10, 15, 20, 25],
+            # 'selector__extraTC__n_estimators':  [10],
+            'selector__extraTC__n_estimators':  [10, 15, 20, 25],
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
-            'selector__pca__svd_solver': ['randomized'],
+            'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True],
-            'MLPClassifier__hidden_layer_sizes': [100]
-            # 'MLPClassifier__activation': ['identity', 'logistic', 'tanh', 'relu']
+            'MLPClassifier__hidden_layer_sizes': [100, 150, 200],
+            'MLPClassifier__activation': ['identity', 'logistic', 'tanh', 'relu']
         }
         if method == 'random':
             pass
@@ -344,11 +359,19 @@ class Improve():
 
     def improve_grid_search(self):
         dic_pipeline = dict(self.pipelines)
-        models = ['GradientBoostingClassifier', 'ExtraTreesClassifier',
-                  'RandomForestClassifier', 'DecisionTreeClassifier',
-                  'SVC', 'KNeighborsClassifier',
-                  'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier',
-                  'GaussianNB', 'MLPClassifier']
+        models = ['LogisticRegression',
+                  'LinearDiscriminantAnalysis',
+                  'MLPClassifier',
+                  'GaussianNB',
+                  'SVC',
+                  'DecisionTreeClassifier',
+                  'KNeighborsClassifier',
+                  'RandomForestClassifier',
+                  'ExtraTreesClassifier',
+                  'GradientBoostingClassifier',
+                  'AdaBoostClassifier',
+                  'VotingClassifier'
+                  ]
 
         # models = ['GaussianNB', 'DecisionTreeClassifier']
         report = []
@@ -387,8 +410,9 @@ class Improve():
             dict_report['mean_error'] = str(round(mean_loc, 3))+'m'
 
 
-            dict_report['time'] = str(round((end-start)/60.0, 3))+'min'
             dict_report['fits'] = len(grid_search_t.grid_scores_)*self.cv
+            dict_report['time'] = str(round(((end-start)/60.0)/float(dict_report['fits']), 3))+'min'
+            # dict_report['time'] = str()+'min'
             dict_report.update(grid_search_t.best_params_)
     #         dict_report['best_params'] = grid_search.best_params_
 
@@ -412,8 +436,8 @@ class Improve():
         self.best_model = self.best_search.best_estimator_
 
         # Save plots
-        tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
-        self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
+        # tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
+        # self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
 
     def improve_random_search(self):
         dic_pipeline = dict(self.pipelines)

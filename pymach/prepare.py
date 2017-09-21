@@ -6,7 +6,7 @@
 """
 This module will prepare the dataset, i.e, modify the data. Thoughts:
     - Applying scaling, normalizing, cleaning, etc.
-    - Processing will be performed depending of the infered algorithm.
+    - Processing will be performed depending on the inferred algorithm.
 and so forth.
 """
 
