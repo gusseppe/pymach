@@ -1,0 +1,13 @@
+Topic,Value
+name,ExtraTreesClassifier
+best_score,0.832
+mean_error,0.584m
+fits,720
+time,0.008min
+selector__pca__svd_solver,arpack
+selector__extraTC__n_jobs,-1
+selector__extraTC__criterion,gini
+ExtraTreesClassifier__n_estimators,15
+selector__pca__whiten,False
+selector__extraTC__n_estimators,10
+ExtraTreesClassifier__criterion,gini

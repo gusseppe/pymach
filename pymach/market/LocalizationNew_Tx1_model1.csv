@@ -1,0 +1,14 @@
+Topic,Value
+name,DecisionTreeClassifier
+best_score,0.73
+mean_error,0.752m
+fits,1440
+time,0.005min
+DecisionTreeClassifier__criterion,entropy
+selector__pca__svd_solver,full
+selector__extraTC__n_jobs,-1
+selector__extraTC__criterion,gini
+selector__extraTC__n_estimators,15
+selector__pca__whiten,True
+DecisionTreeClassifier__splitter,best
+DecisionTreeClassifier__max_features,

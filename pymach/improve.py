@@ -146,11 +146,11 @@ class Improve():
             # 'selector__pca__whiten': [True],
             'selector__pca__whiten': [True,False],
             'ExtraTreesClassifier__n_estimators': [10, 15, 20],
-            'ExtraTreesClassifier__criterion': ['gini', 'entropy'],
-            'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5],
+            'ExtraTreesClassifier__criterion': ['gini', 'entropy']
+            # 'ExtraTreesClassifier__min_samples_leaf': [1,2,3,4,5],
             # 'ExtraTreesClassifier__min_samples_leaf': range(200,1001,200),
-            'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
-            'ExtraTreesClassifier__max_depth': [2,3,4,5]
+            # 'ExtraTreesClassifier__max_leaf_nodes': [2,3,4,5],
+            # 'ExtraTreesClassifier__max_depth': [2,3,4,5]
         }
 
         if method == 'random':
@@ -174,9 +174,9 @@ class Improve():
             'selector__pca__whiten': [True,False],
             'RandomForestClassifier__n_estimators': [10, 15],
             'RandomForestClassifier__criterion': ['gini', 'entropy'],
-            'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
-            'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
-            'RandomForestClassifier__max_depth': [2,3,4,5],
+            # 'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
+            # 'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
+            # 'RandomForestClassifier__max_depth': [2,3,4,5],
             'RandomForestClassifier__warm_start': [True,False]
         }
         if method == 'random':
@@ -197,10 +197,12 @@ class Improve():
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
             'selector__pca__whiten': [True,False],
-            'DecisionTreeClassifier__max_features': ['sqrt','log2', None],
-            'DecisionTreeClassifier__max_leaf_nodes': [2,3,4,5],
-            'DecisionTreeClassifier__max_depth': [2,3,4,5],
-            'DecisionTreeClassifier__min_samples_leaf': [1,3,5,10,15]
+            'DecisionTreeClassifier__criterion': ['gini','entropy'],
+            'DecisionTreeClassifier__splitter': ['best','random'],
+            'DecisionTreeClassifier__max_features': ['sqrt','log2', None]
+            # 'DecisionTreeClassifier__max_leaf_nodes': [2,3, None],
+            # 'DecisionTreeClassifier__max_depth': [2,3, None],
+            # 'DecisionTreeClassifier__min_samples_leaf': [1,3,5, None]
 
         }
         if method == 'random':
@@ -306,8 +308,8 @@ class Improve():
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
-            'selector__pca__whiten': [True,False],
-            'GaussianNB__priors': [None]
+            'selector__pca__whiten': [True,False]
+            # 'GaussianNB__priors': [None]
         }
         if method == 'random':
             pass
@@ -322,7 +324,7 @@ class Improve():
             'selector__extraTC__criterion': ['gini','entropy'],
             'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
-            'selector__pca__whiten': [True],
+            'selector__pca__whiten': [True,False],
             'MLPClassifier__hidden_layer_sizes': [100],
             'MLPClassifier__activation': ['identity', 'logistic', 'tanh', 'relu']
         }
@@ -374,7 +376,7 @@ class Improve():
                   'VotingClassifier'
                   ]
 
-        # models = ['LinearDiscriminantAnalysis']
+        models = ['DecisionTreeClassifier', 'ExtraTreesClassifier', 'RandomForestClassifier']
         report = []
         grid_search = OrderedDict()
         boxplot_error_loc = []
