@@ -376,7 +376,7 @@ class Improve():
                   'VotingClassifier'
                   ]
 
-        models = ['DecisionTreeClassifier', 'ExtraTreesClassifier', 'RandomForestClassifier']
+        # models = ['DecisionTreeClassifier', 'ExtraTreesClassifier', 'RandomForestClassifier']
         report = []
         grid_search = OrderedDict()
         boxplot_error_loc = []
