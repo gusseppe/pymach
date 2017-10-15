@@ -174,10 +174,10 @@ class Improve():
             'selector__pca__whiten': [True,False],
             'RandomForestClassifier__n_estimators': [10, 15],
             'RandomForestClassifier__criterion': ['gini', 'entropy'],
+            'RandomForestClassifier__warm_start': [True,False]
             # 'RandomForestClassifier__min_samples_leaf': [1,2,3,4,5],
             # 'RandomForestClassifier__max_leaf_nodes': [2,3,4,5],
             # 'RandomForestClassifier__max_depth': [2,3,4,5],
-            'RandomForestClassifier__warm_start': [True,False]
         }
         if method == 'random':
             parameters['RandomForestClassifier__min_samples_leaf'] = randint(1,20)
@@ -364,8 +364,8 @@ class Improve():
         dic_pipeline = dict(self.pipelines)
         models = ['LogisticRegression',
                   'LinearDiscriminantAnalysis',
-                  'MLPClassifier',
                   'GaussianNB',
+                  'MLPClassifier',
                   'SVC',
                   'DecisionTreeClassifier',
                   'KNeighborsClassifier',
@@ -571,7 +571,8 @@ class Improve():
         data_name = path.replace(".csv", "")
         # plt.figure(figsize=(10, 10))
         ax = sns.boxplot(x="model", y="values", data=df_errors)
-        ax.set(xlabel='Model evaluated', ylabel='Score')
+        ax.set(xlabel='Model', ylabel='Score')
+        ax.set(ylim=(0.3,1.0))
         # _ = sns.boxplot(x="model", y="values", data=df_errors, showmeans=True)
         # _ = sns.stripplot(x="model", y="values", data=df_errors, jitter=True, edgecolor="gray")
 

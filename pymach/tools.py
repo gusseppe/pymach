@@ -59,8 +59,8 @@ def model_map_name(name):
               'LogisticRegression', 'AdaBoostClassifier', 'VotingClassifier',
               'GaussianNB', 'MLPClassifier']
 
-    names = ['GDM', 'ET', 'RF', 'DT', 'LDA', 'SVM', 'k-NN', 'LoR',
-             'AB', 'Voting', 'GNB', 'MLP']
+    names = ['GBM', 'ET', 'RF', 'DT', 'LDA', 'SVM', 'k-NN', 'LoR',
+             'AB', 'VC', 'GNB', 'MLP']
 
     dict_names = dict(zip(models, names))
 
