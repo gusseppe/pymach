@@ -45,7 +45,7 @@ class Improve():
         self.full_report = None
         self.best_search = None
         self.best_model = None
-        self.cv = 5
+        self.cv = 10
 
     def pipeline(self):
 
