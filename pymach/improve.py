@@ -402,15 +402,15 @@ class Improve():
 
 
         # Calculating the localization error
-            model_t = grid_search_t.best_estimator_
-            y_pred = model_t.predict(self.evaluator.X_test)
-            y_real = self.evaluator.y_test.values
-            error_loc, mean_loc = tools.mean_error_localization(y_pred, y_real)
-            bp_error_loc = {}
-            bp_error_loc['model'] = [tools.model_map_name(m)]*len(error_loc)
-            bp_error_loc['values'] = error_loc
-            boxplot_error_loc.append(bp_error_loc)
-            dict_report['mean_error'] = str(round(mean_loc, 3))+'m'
+        #     model_t = grid_search_t.best_estimator_
+        #     y_pred = model_t.predict(self.evaluator.X_test)
+        #     y_real = self.evaluator.y_test.values
+        #     error_loc, mean_loc = tools.mean_error_localization(y_pred, y_real)
+        #     bp_error_loc = {}
+        #     bp_error_loc['model'] = [tools.model_map_name(m)]*len(error_loc)
+        #     bp_error_loc['values'] = error_loc
+        #     boxplot_error_loc.append(bp_error_loc)
+        #     dict_report['mean_error'] = str(round(mean_loc, 3))+'m'
 
 
             dict_report['fits'] = len(grid_search_t.grid_scores_)*self.cv
@@ -439,7 +439,7 @@ class Improve():
         self.best_model = self.best_search.best_estimator_
 
         # Save plots
-        tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
+        # tools.error_loc_plot(boxplot_error_loc, self.evaluator.definer.data_path) # Boxplot error
         self.plot_cv_score(self.evaluator.definer.data_path) # Boxplot error
 
     def improve_random_search(self):
