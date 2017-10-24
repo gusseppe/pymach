@@ -68,17 +68,18 @@ def model_map_name(name):
 
 def total_report():
     import define
-    # import analyze
     import prepare
     import fselect
     import evaluate
     import improve
 
-    path = './market/LocalizationNew_Tx'
+    # label = 'LocalizationNew_Tx'
+    label = 'BQ_AQUARIS_E5_'
 
-    for i in range(5, 8):
+    # for i in range(5, 8):
+    for i in [10,20,30,40,50]:
 
-        data_name = "./uploads/LocalizationNew_Tx"+str(i)+".csv"
+        data_name = "./uploads/"+label+str(i)+".csv"
         print(data_name)
         # data_name = "iris.csv"
         class_name = "class"
@@ -92,8 +93,8 @@ def total_report():
         evaluator = evaluate.Evaluate(definer, preparer, selector)
         improver = improve.Improve(evaluator).pipeline()
 
-        improver.save_full_report('./market/LocalizationNew_Tx'+str(i))
-        improver.save_score_report('./market/LocalizationNew_Tx'+str(i))
+        improver.save_full_report('./market/'+label+str(i))
+        improver.save_score_report('./market/'+label+str(i))
 
 
 def error_loc_plot(errors, path):
