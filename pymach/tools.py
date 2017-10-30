@@ -77,7 +77,7 @@ def total_report():
     label = 'BQ_AQUARIS_E5_'
 
     # for i in range(5, 8):
-    for i in [10,20,30,40,50]:
+    for i in [10,20,30,40]:
 
         data_name = "./uploads/"+label+str(i)+".csv"
         print(data_name)
@@ -204,7 +204,7 @@ def localization():
             df_no_outliers = df_no_outliers.assign(position=pd.Series(vector_no_out).values)
             df_outliers = df_outliers.assign(position=pd.Series(vector_out).values)
 
-            #Saving files with outliers and without it.
+            #Saving files with outliers and without them.
             df_outliers.to_csv(os.path.join(UPLOAD_FOLDER, name_file+'_outliers'+'.csv'), index=False)
             df_no_outliers.to_csv(os.path.join(UPLOAD_FOLDER, name_file+'_no_outliers'+'.csv'), index=False)
 
