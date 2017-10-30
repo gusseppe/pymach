@@ -17,6 +17,7 @@ from sklearn.feature_selection import chi2
 from sklearn.feature_selection import f_regression
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.decomposition import PCA
+from sklearn.feature_selection import SelectFromModel
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -51,7 +52,7 @@ class Select():
         pca = PCA(n_components=n_features, svd_solver='randomized', whiten=True)
         transformers.append(('pca', pca))
 
-        extraTC = ExtraTreesClassifier(criterion='entropy')
+        extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
         transformers.append(('extraTC', extraTC))
 
         #scaler = StandardScaler()
