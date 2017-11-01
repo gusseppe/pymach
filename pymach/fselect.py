@@ -52,7 +52,7 @@ class Select():
         pca = PCA(n_components=n_features, svd_solver='randomized', whiten=True)
         transformers.append(('pca', pca))
 
-        extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
+        # extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
         transformers.append(('extraTC', extraTC))
 
         #scaler = StandardScaler()
