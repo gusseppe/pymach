@@ -75,10 +75,10 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__n_estimators': [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators': [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -96,10 +96,10 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__n_estimators': [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators': [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -116,10 +116,10 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__n_estimators': [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators': [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -137,10 +137,10 @@ class Improve():
     def extratrees_param(self, method='grid'):
         parameters = {
             # 'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__n_estimators': [10, 15],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators': [10, 15],
+            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -164,10 +164,10 @@ class Improve():
     def randomforest_param(self, method='grid'):
         parameters = {
             # 'selector__extraTC__n_estimators': [10],
-            'selector__extraTC__n_estimators': [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini', 'entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators': [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini', 'entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -189,10 +189,10 @@ class Improve():
     def decisiontree_param(self, method='grid'):
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -215,10 +215,10 @@ class Improve():
     def lda_param(self, method='grid'):
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -234,10 +234,10 @@ class Improve():
     def svc_param(self, method='grid'):
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            # 'selector__extraTC__criterion': ['entropy'],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # # 'selector__extraTC__criterion': ['entropy'],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__svd_solver': ['randomized'],
             # 'selector__pca__whiten': [True],
@@ -258,10 +258,10 @@ class Improve():
     def knn_param(self, method='grid'):
 
         parameters = {
-            'selector__extraTC__n_estimators':  [10, 15],
-            # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # # 'selector__extraTC__n_estimators':  [10],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -282,9 +282,9 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             # 'selector__pca__svd_solver': ['randomized'],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
@@ -303,9 +303,9 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             # 'selector__pca__whiten': [True],
             'selector__pca__whiten': [True,False]
@@ -320,9 +320,9 @@ class Improve():
 
         parameters = {
             # 'selector__extraTC__n_estimators':  [10],
-            'selector__extraTC__n_estimators':  [10, 15],
-            'selector__extraTC__criterion': ['gini','entropy'],
-            'selector__extraTC__n_jobs': [-1],
+            # 'selector__extraTC__n_estimators':  [10, 15],
+            # 'selector__extraTC__criterion': ['gini','entropy'],
+            # 'selector__extraTC__n_jobs': [-1],
             'selector__pca__svd_solver': ['full', 'arpack', 'randomized'],
             'selector__pca__whiten': [True,False],
             'MLPClassifier__hidden_layer_sizes': [100],
