@@ -53,7 +53,7 @@ class Select():
         transformers.append(('pca', pca))
 
         # extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
-        transformers.append(('extraTC', extraTC))
+        # transformers.append(('extraTC', extraTC))
 
         #scaler = StandardScaler()
         #transformers.append(('scaler', scaler))
