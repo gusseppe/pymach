@@ -77,7 +77,7 @@ def total_report():
     label = 'BQ_AQUARIS_E5_'
 
     # for i in range(5, 8):
-    for i in [10,20,30,40]:
+    for i in [20,30,40]:
 
         data_name = "./uploads/"+label+str(i)+".csv"
         print(data_name)
