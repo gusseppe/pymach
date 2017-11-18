@@ -73,11 +73,11 @@ def total_report():
     import evaluate
     import improve
 
-    label = 'LocalizationNew_Tx'
-    #label = 'BQ_AQUARIS_E5_'
+    # label = 'LocalizationNew_Tx'
+    label = 'BQ_AQUARIS_E5_'
 
-    for i in range(7, 8):
-    #for i in [20,30,40]:
+    # for i in range(7, 8):
+    for i in ['20','30','40']:
 
         data_name = "./uploads/"+label+str(i)+".csv"
         print(data_name)
