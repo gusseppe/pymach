@@ -364,16 +364,16 @@ class Improve():
         dic_pipeline = dict(self.pipelines)
         models = ['LogisticRegression',
                   'LinearDiscriminantAnalysis',
-                  'GaussianNB',
+                  #  'GaussianNB',
                   'MLPClassifier',
-                  'SVC',
+                  #  'SVC',
                   'DecisionTreeClassifier',
-                  'KNeighborsClassifier',
+                  #  'KNeighborsClassifier',
                   'RandomForestClassifier',
                   'ExtraTreesClassifier',
-                  'GradientBoostingClassifier',
-                  'AdaBoostClassifier',
-                  'VotingClassifier'
+                  #  'GradientBoostingClassifier',
+                  #  'AdaBoostClassifier',
+                  #  'VotingClassifier'
                   ]
 
         # models = ['DecisionTreeClassifier', 'ExtraTreesClassifier', 'RandomForestClassifier']
