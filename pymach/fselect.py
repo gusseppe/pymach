@@ -16,6 +16,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.feature_selection import f_regression
 from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectFromModel
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -31,6 +32,7 @@ class Select():
     # data = None
 
     def __init__(self, definer):
+        self.definer = definer
         self.problem_type = definer.problem_type
         self.infer_algorithm = definer.infer_algorithm
         # self.response = definer.response
@@ -49,10 +51,14 @@ class Select():
         #kbest = SelectKBest(score_func=chi2, k=n_features)
         #transformers.append(('kbest', kbest))
 
-        pca = PCA(n_components=n_features, svd_solver='randomized', whiten=True)
-        transformers.append(('pca', pca))
+        # pca = PCA(n_components=n_features, svd_solver='randomized', whiten=True)
+        # transformers.append(('pca', pca))
 
-        extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
+        if self.definer.problem_type == 'classification':
+            extraTC = SelectFromModel(ExtraTreesClassifier(criterion='entropy'))
+        else:
+            extraTC = SelectFromModel(ExtraTreesRegressor())
+
         transformers.append(('extraTC', extraTC))
 
         #scaler = StandardScaler()

@@ -59,7 +59,8 @@ def report_model(response, data_path, data_name):
     definer = define.Define(
             data_path=data_path,
             header=None,
-            response=response).pipeline()
+            response=response,
+            problem_type='classification').pipeline()
 
     preparer = prepare.Prepare(definer).pipeline()
     selector = fselect.Select(definer).pipeline()

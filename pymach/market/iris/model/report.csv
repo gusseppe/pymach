@@ -4,10 +4,10 @@ GaussianNB,0.975,0.038
 KNeighborsClassifier,0.975,0.038
 DecisionTreeClassifier,0.975,0.038
 SVC,0.967,0.041
-MLPClassifier,0.967,0.041
 ExtraTreesClassifier,0.967,0.041
 AdaBoostClassifier,0.967,0.041
 RandomForestClassifier,0.967,0.041
 GradientBoostingClassifier,0.967,0.041
 VotingClassifier,0.967,0.041
+MLPClassifier,0.958,0.056
 LogisticRegression,0.917,0.083

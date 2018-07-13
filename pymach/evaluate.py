@@ -10,6 +10,7 @@ This module provides ideas for evaluating some machine learning algorithms.
 from __future__ import print_function
 import operator
 import warnings
+import time
 import pickle
 
 import numpy as np
@@ -33,6 +34,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import FunctionTransformer
 
 #Algorithms
+#Classification
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -48,6 +50,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import VotingClassifier
 
+
+#Regression
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.svm import SVR
+from sklearn.neural_network import MLPRegressor
+
+#Ensembles algorithms
+from sklearn.ensemble import ExtraTreesRegressor
+from sklearn.ensemble import AdaBoostRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 
 class Evaluate():
     """ A class for resampling and evaluation """
@@ -86,34 +101,50 @@ class Evaluate():
 
     def set_models(self):
 
-        rs = 1
         models = []
-        # LDA : Warning(Variables are collinear)
-        models.append(('LinearDiscriminantAnalysis', LinearDiscriminantAnalysis()))
-        models.append(('SVC', SVC(random_state=rs)))
-        models.append(('GaussianNB', GaussianNB()))
-        models.append(('MLPClassifier', MLPClassifier()))
-        models.append(('KNeighborsClassifier', KNeighborsClassifier()))
-        models.append(('DecisionTreeClassifier', DecisionTreeClassifier(random_state=rs)))
-        models.append(('LogisticRegression', LogisticRegression()))
+        rs = 1
 
-        # Bagging and Boosting
-        # models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
-        models.append(('ExtraTreesClassifier', ExtraTreesClassifier(random_state=rs)))
-        models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(random_state=rs),
-                                                                random_state=rs)))
-        # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
-        models.append(('RandomForestClassifier', RandomForestClassifier(random_state=rs)))
-        models.append(('GradientBoostingClassifier',
-                       GradientBoostingClassifier(random_state=rs)))
-        # models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
+        if self.definer.problem_type == 'classification':
+            # LDA : Warning(Variables are collinear)
+            models.append(('LinearDiscriminantAnalysis', LinearDiscriminantAnalysis()))
+            models.append(('SVC', SVC(random_state=rs)))
+            models.append(('GaussianNB', GaussianNB()))
+            models.append(('MLPClassifier', MLPClassifier()))
+            models.append(('KNeighborsClassifier', KNeighborsClassifier()))
+            models.append(('DecisionTreeClassifier', DecisionTreeClassifier(random_state=rs)))
+            models.append(('LogisticRegression', LogisticRegression()))
 
-        # Voting
-        estimators = []
-        estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(random_state=rs)))
-        estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier(random_state=rs)))
-        voting = VotingClassifier(estimators)
-        models.append(('VotingClassifier', voting))
+            # Bagging and Boosting
+            # models.append(('ExtraTreesClassifier', ExtraTreesClassifier(n_estimators=150)))
+            models.append(('ExtraTreesClassifier', ExtraTreesClassifier(random_state=rs)))
+            models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier(random_state=rs),
+                                                                    random_state=rs)))
+            # models.append(('AdaBoostClassifier', AdaBoostClassifier(DecisionTreeClassifier())))
+            models.append(('RandomForestClassifier', RandomForestClassifier(random_state=rs)))
+            models.append(('GradientBoostingClassifier',
+                           GradientBoostingClassifier(random_state=rs)))
+            # models.append(('GradientBoostingClassifier', GradientBoostingClassifier()))
+
+            # Voting
+            estimators = []
+            estimators.append(("Voting_GradientBoostingClassifier", GradientBoostingClassifier(random_state=rs)))
+            estimators.append(("Voting_ExtraTreesClassifier", ExtraTreesClassifier(random_state=rs)))
+            voting = VotingClassifier(estimators)
+            models.append(('VotingClassifier', voting))
+        else:
+            models.append(('LinearRegression', LinearRegression()))
+            models.append(('DecisionTreeRegressor', DecisionTreeRegressor(random_state=rs)))
+            # models.append(('KNeighborsRegressor', KNeighborsRegressor()))
+            # models.append(('SVR', SVR()))
+            # models.append(('MLPRegressor', MLPRegressor()))
+
+            # Bagging and Boosting
+            # models.append(('ExtraTreesRegressor', ExtraTreesRegressor(random_state=rs)))
+            # models.append(('AdaBoostRegressor', AdaBoostRegressor(DecisionTreeRegressor(random_state=rs),
+            #                                                         random_state=rs)))
+            models.append(('RandomForestRegressor', RandomForestRegressor(random_state=rs)))
+            models.append(('GradientBoostingRegressor',
+                           GradientBoostingRegressor(random_state=rs)))
 
         return models
 
@@ -154,7 +185,10 @@ class Evaluate():
         test_size = self.test_size
         num_folds = self.num_folds
         seed = self.seed
-        scoring = 'accuracy'
+        if self.definer.problem_type == 'classification':
+            scoring = 'accuracy'
+        else:
+            scoring = 'r2'
 
         #pipelines = self.build_pipelines(self.set_models())
         #pipelines = self.pipelines
@@ -162,7 +196,7 @@ class Evaluate():
 
         #self.report = {}
         #report_element = {}
-        self.report = [["Model", "Mean", "STD"]]
+        self.report = [["Model", "Mean", "STD", "Time"]]
         results = []
         names = []
 
@@ -172,9 +206,12 @@ class Evaluate():
             kfold = KFold(n_splits=num_folds, random_state=seed)
             #cv_results = cross_val_score(model, self.definer.data.ix[:,:-1], self.definer.data.ix[:,-1], cv=kfold, \
                     #scoring=scoring)
+            start = time.time()
             cv_results = cross_val_score(model, self.X_train, self.y_train, cv=kfold, \
                     scoring=scoring)
 
+            end = time.time()
+            duration = end - start
             # save the model to disk
             #filename = name+'.ml'
             #pickle.dump(model, open('./models/'+filename, 'wb'))
@@ -183,7 +220,8 @@ class Evaluate():
             mean = cv_results.mean()
             std = cv_results.std()
 
-            d = {'name': name, 'values': cv_results, 'mean': round(mean, 3), 'std': round(std, 3)}
+            d = {'name': name, 'values': cv_results, 'mean': round(mean, 3),
+                 'std': round(std, 3)}
             results.append(d)
             #results['result'] = cv_results
             #names.append(name)
@@ -192,7 +230,8 @@ class Evaluate():
 
             #report_print = "Model: {}, mean: {}, std: {}".format(name,
                     #mean, std)
-            self.report.append([name, round(mean,3), round(std,3)])
+            self.report.append([name, round(mean, 3), round(std, 3),
+                                round(duration/60.0, 3)])
             print("Score ", mean)
             print("---------------------")
             #print(report_print)
