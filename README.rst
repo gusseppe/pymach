@@ -26,17 +26,17 @@ Installation
 --------
 ```
 virtualenv -p python3 env
-```
+
 source env/bin/activate
-```
+
 git clone https://github.com/gusseppe/pymach
-```
+
 cd pymach
-```
+
 pip install -r requirements.txt
-```
+
 cd pymach
-```
+
 python index.py
 ```
 
