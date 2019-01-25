@@ -2,10 +2,11 @@ import os
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+from textwrap import dedent
 
 from app import app, server
-from dashboard.apps import  define_front, \
-    analyze_front, model_front
+from dashboard.apps import define_front, \
+    analyze_front, model_front, tune_front, predict_front
 
 
 current_path = os.getcwd()
@@ -83,9 +84,21 @@ def render_content(tab):
         return analyze_front.layout
     elif tab == "model":
         return model_front.layout
+    elif tab == "tune":
+        return tune_front.layout
+    elif tab == "predict":
+        return predict_front.layout
     else:
-        pass
+        message = html.Div([
+            dcc.Markdown(
+                dedent(f'''
+                > #### Under development
+                > ###### Head to [pymach](http://www.github.com/gusseppe/pymach)
+
+            '''))
+        ],className='two columns indicator')
+        return message
 
 
 if __name__ == "__main__":
-    app.run_server(host='0.0.0.0', debug=True, port=9088)
+    app.run_server(host='0.0.0.0', debug=False, port=9088)

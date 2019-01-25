@@ -49,7 +49,7 @@ def list_files_market():
     files_dict = [
         {"label": file, "value": file} for file in files
     ]
-    print(files_dict)
+    print('analyze>>>>', files_dict)
     return files_dict
 
 layout = [
@@ -589,3 +589,10 @@ def show_plots_analyze(uploaded_file):
         return tuple(None for _ in range(10))
 
 
+# @app.callback(Output('files_uploaded_analyze_dropdown', 'options'),
+#               [Input('files_uploaded_analyze_dropdown', 'value')])
+# def update_dropdown(uploaded_file):
+#     if uploaded_file != '':
+#         print('uploaded >>>>>>>>>>>>>>>>>>>>>', uploaded_file)
+#         options_uploaded = list_files_market()
+#         return options_uploaded

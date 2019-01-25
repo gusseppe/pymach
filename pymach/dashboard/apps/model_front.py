@@ -788,6 +788,7 @@ def show_out_models_model(n_clicks, uploaded_file, models):
     #         print(name)
             # return tuple([plot, report.to_dict('rows'), columns_table, evaluator.plot_metrics(name)])
 
+
 @app.callback(Output('models_model_dropdown', 'value'),
               [Input('autocomplete_models_model_button', 'n_clicks')],
               [State('problem_type_model_indicator', 'children')])

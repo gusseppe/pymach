@@ -40,6 +40,7 @@ def parse_contents(contents, filename, date):
 
     return df, filename, datetime.datetime.fromtimestamp(date)
 
+
 def list_files_market():
     files_path = glob.glob(os.path.join(MARKET_PATH, '*', '*.csv'))
     # folders = [folder for folder in os.listdir(MARKET_PATH)]
@@ -47,6 +48,7 @@ def list_files_market():
     files_dict = [
                 {"label": file, "value": file} for file in files
             ]
+    print('define>>>>', files_dict)
     return files_dict
 
 layout = [
@@ -94,7 +96,7 @@ layout = [
                             value="",
                             clearable=False,
                             searchable=False,
-                            className='indicator_value'
+                            # className='indicator_value'
                         ),
                     ],
                     className="four columns indicator",

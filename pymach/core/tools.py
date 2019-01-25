@@ -25,6 +25,7 @@ def sizeof_file(name, suffix='B'):
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
 
+
 def sizeof_df(df, suffix='B'):
     num =  sys.getsizeof(df)
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -32,6 +33,7 @@ def sizeof_df(df, suffix='B'):
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
+
 
 def path_exists(path):
     try:
