@@ -11,7 +11,6 @@ for describing the dataset which is to be studied.
 from __future__ import print_function
 import plotly.graph_objs as go
 import pandas as pd
-import hickle
 
 import core.tools as tools
 from plotly.offline.offline import _plot_html
