@@ -1,5 +1,0 @@
-Model,Mean,STD,Time
-RandomForestRegressor,0.997,0.002,0.016
-GradientBoostingRegressor,0.997,0.001,0.021
-DecisionTreeRegressor,0.995,0.002,0.009
-LinearRegression,0.83,0.019,0.007

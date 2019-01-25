@@ -1,0 +1,6 @@
+
+### Explanation: Boxplot
+###### **Features that contain outliers**: ['malic_acid', 'ash', 'alcalinity_of_ash', 'magnesium', 'proanthocyanins', 'color_intensity', 'hue']
+###### **Advice**: We are going to take into account this insight for you.
+###### By the way, check if your dataset follows this pattern.
+

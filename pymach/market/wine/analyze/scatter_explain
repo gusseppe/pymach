@@ -1,0 +1,6 @@
+
+### Explanation: Scatter
+###### **If it is a classification problem**:
+######  Check the clusters or groups between two features, are they overlapped?
+###### **If it is a regression problem**:
+######  Check how linear are the pair of features, are they non linear?

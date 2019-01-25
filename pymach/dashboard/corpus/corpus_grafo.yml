@@ -1,0 +1,22 @@
+categories:
+- grafo
+- spanish
+conversations:
+- - A quien le vende a este ruc?
+  - Perfecto, estamos vinculando a todos los RUCs que le compran a este RUC | compradores 
+- - A Quien le vende a ?
+  - No problem, estamos vinculando a todos los RUCs que le compran a este RUC | compradores 
+- - A quien le compra a este ruc? 
+  - Interesante pregunta, estamos buscando sus vendedores | vendedores
+- - A Quien le compra a ruc? 
+  - Interesante pregunta, estamos buscando sus vendedores | vendedores
+- - Quien eres? 
+  - Soy Adaline. Tu asistente.
+  - Como te llamas?
+  - Me llamo Adaline. Un gusto.
+- - Muestrame todo el grafo.
+  - Estas preparado?, cargando todo el grafo ... | todo
+- - Quien es tu creador.
+  - The data science team - BID.
+- - cuentame un chiste.
+  - Me se mil chistes, cual quieres?.

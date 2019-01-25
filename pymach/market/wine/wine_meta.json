@@ -1,0 +1,24 @@
+{
+    "cat_features": [],
+    "filename": "wine.csv",
+    "n_features": 13,
+    "n_samples": 178,
+    "num_features": [
+        "alcohol",
+        "malic_acid",
+        "ash",
+        "alcalinity_of_ash",
+        "magnesium",
+        "total_phenols",
+        "flavanoids",
+        "nonflavanoid_phenols",
+        "proanthocyanins",
+        "color_intensity",
+        "hue",
+        "diluted_wines",
+        "proline"
+    ],
+    "problem_type": "classification",
+    "response": "class",
+    "size": "20.9KiB"
+}

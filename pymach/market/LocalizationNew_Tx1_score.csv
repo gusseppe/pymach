@@ -1,4 +1,0 @@
-Model,Score
-ExtraTreesClassifier,0.832
-RandomForestClassifier,0.815
-DecisionTreeClassifier,0.73

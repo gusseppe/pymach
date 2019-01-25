@@ -1,0 +1,6 @@
+
+### Explanation: Histogram
+###### **Most symmetrical variable**: sepal_width
+###### **Least symmetrical variable**: petal_length
+###### **Advice**: Apply log to petal_length
+

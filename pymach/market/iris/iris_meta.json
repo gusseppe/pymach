@@ -1,0 +1,15 @@
+{
+    "cat_features": [],
+    "filename": "iris.csv",
+    "n_features": 4,
+    "n_samples": 150,
+    "num_features": [
+        "sepal_length",
+        "sepal_width",
+        "petal_length",
+        "petal_width"
+    ],
+    "problem_type": "classification",
+    "response": "class",
+    "size": "15.5KiB"
+}

@@ -1,1 +1,0 @@
-This directory contains fixes for Bootstrap4 javascript files. There are still many bugs in BS4 so we have to resolve them

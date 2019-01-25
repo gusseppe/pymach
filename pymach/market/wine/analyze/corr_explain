@@ -1,0 +1,6 @@
+
+### Explanation: Correlation Matrix
+###### **Features that are correlated (0.80 threshold)**: ['flavanoids']
+###### **Advice**: Most likely, I'm going to drop a half of them to increase 
+###### the overall performance. In the meantime, consider not include correlated variables 
+###### the next time to model this dataset.
