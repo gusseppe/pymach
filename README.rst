@@ -39,9 +39,9 @@ Analyze
 Model
 --------
 
-.. image:: .. image:: https://github.com/gusseppe/pymach/blob/master/examples/model1.png
+.. image:: https://github.com/gusseppe/pymach/blob/master/examples/model1.png
 
-.. image:: .. image:: https://github.com/gusseppe/pymach/blob/master/examples/model2.png
+.. image:: https://github.com/gusseppe/pymach/blob/master/examples/model2.png
 
 Predict
 --------
