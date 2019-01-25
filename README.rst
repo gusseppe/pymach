@@ -43,7 +43,7 @@ Installation
 
 Define
 --------
-.. image:: https://cloud.githubusercontent.com/assets/6261900/23687973/639d933c-037f-11e7-86ed-1d6e4bd6d396.png
+.. image:: https://github.com/gusseppe/pymach/blob/master/examples/define.png
 
 Analyze
 --------
