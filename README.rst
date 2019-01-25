@@ -22,6 +22,16 @@ Pymach is a tool to accelerate the development of models based on Machine Learni
 
 Visit the demo: http://pymach.com
 
+Getting started
+--------
+> virtualenv -p python3 env
+> source env/bin/activate
+> git clone https://github.com/gusseppe/pymach
+> cd pymach
+> pip install -r requirements.txt
+> cd pymach
+> python index.py
+
 Define
 --------
 .. image:: https://cloud.githubusercontent.com/assets/6261900/23687973/639d933c-037f-11e7-86ed-1d6e4bd6d396.png
