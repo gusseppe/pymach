@@ -2,22 +2,6 @@
 pymach
 ===============================
 
-
-.. image:: https://img.shields.io/pypi/v/pymach.svg
-        :target: https://pypi.python.org/pypi/pymach
-
-.. image:: https://img.shields.io/travis/gusseppe/pymach.svg
-        :target: https://travis-ci.org/gusseppe/pymach
-
-.. image:: https://readthedocs.org/projects/pymach/badge/?version=latest
-        :target: https://pymach.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-.. image:: https://pyup.io/repos/github/gusseppe/pymach/shield.svg
-     :target: https://pyup.io/repos/github/gusseppe/pymach/
-     :alt: Updates
-
-
 Pymach is a tool to accelerate the development of models based on Machine Learning, looking for the best model for your data. It aims to develop a first roadmap that gives an idea of the problem we are dealing with. The following pictures best explain the concept behind pymach.
 
 Visit the demo: http://pymach.com
@@ -48,12 +32,16 @@ Define
 Analyze
 --------
 
-.. image:: https://cloud.githubusercontent.com/assets/6261900/23687972/639ce8e2-037f-11e7-87d0-7ab6ec5db7db.png
+.. image:: https://github.com/gusseppe/pymach/blob/master/examples/analyze1.png
+
+.. image:: https://github.com/gusseppe/pymach/blob/master/examples/analyze2.png
 
 Model
 --------
 
-.. image:: https://cloud.githubusercontent.com/assets/6261900/23687974/63a12ba0-037f-11e7-94a5-489431fdc96b.png
+.. image:: .. image:: https://github.com/gusseppe/pymach/blob/master/examples/model1.png
+
+.. image:: .. image:: https://github.com/gusseppe/pymach/blob/master/examples/model2.png
 
 Predict
 --------
