@@ -25,21 +25,20 @@ Visit the demo: http://pymach.com
 Installation
 --------
 
-```
-virtualenv -p python3 env
+* virtualenv -p python3 env
 
-source env/bin/activate
+* source env/bin/activate
 
-git clone https://github.com/gusseppe/pymach
+* git clone https://github.com/gusseppe/pymach
 
-cd pymach
+* cd pymach
 
-pip install -r requirements.txt
+* pip install -r requirements.txt
 
-cd pymach
+* cd pymach
 
-python index.py
-```
+* python index.py
+
 
 
 Define
