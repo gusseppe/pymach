@@ -2,21 +2,11 @@ import os
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-import pandas as pd
-import flask
-import plotly.plotly as py
-import dash_table_experiments as dt
-import math
 
-from plotly import graph_objs as go
-from app import app
 from app import app, server
 from dashboard.apps import  define_front, \
     analyze_front, model_front
 
-#from pymongo import MongoClient
-#client = MongoClient('localhost', 27017)
-#db = client.test_database
 
 current_path = os.getcwd()
 app.layout = html.Div(
@@ -68,31 +58,11 @@ app.layout = html.Div(
             className="row tabs_div"
             ),
        
-                
-        # divs that save dataframe for each tab
-#         html.Div(
-#                 sf_manager.get_opportunities().to_json(orient="split"),  # opportunities df
-# #                 pd.read_csv('/data/users/Gusseppe/reto_IGV/dashboard/dash-salesforce-crm/assets/get_opportunities.csv').to_json(orient="split"),  # opportunities df
-#                 id="opportunities_df",
-#                 style={"display": "none"},
-#             ),
-        #html.Div(sf_manager.get_leads().to_json(orient="split"), id="leads_df", style={"display": "none"}), # leads df
-        #html.Div(sf_manager.get_leads().to_json(orient="split"), id="leads_df2", style={"display": "none"}),
-#         html.Div(sf_manager.get_cases().to_json(orient="split"), id="cases_df", style={"display": "none"}), # cases df
-#         html.Div(pd.read_csv('/data/users/Gusseppe/reto_IGV/dashboard/dash-salesforce-crm/assets/get_leads.csv').to_json(orient="split"), id="leads_df", style={"display": "none"}), # leads df
-#         html.Div(pd.read_csv('/data/users/Gusseppe/reto_IGV/dashboard/dash-salesforce-crm/assets/get_cases.csv').to_json(orient="split"), id="cases_df", style={"display": "none"}), # cases df
-
 
         # Tab content
         html.Div(id="tab_content", className="row", style={"margin": "2% 3%"}),
         
-        # html.Div([
-        #
-        #     dt.DataTable(
-        #         id='my-datatable', rows=[{}]
-        #     ),
-        # ], style={"display": "none"}),
-        
+
 #         html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",rel="stylesheet"),
 #         html.Link(href="https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css",rel="stylesheet"),
 #         html.Link(href="https://fonts.googleapis.com/css?family=Dosis", rel="stylesheet"),
@@ -111,12 +81,10 @@ def render_content(tab):
         return define_front.layout
     elif tab == "analyze":
         return analyze_front.layout
-        # return cases.layout
     elif tab == "model":
         return model_front.layout
     else:
         pass
-        # return opportunities.layout
 
 
 if __name__ == "__main__":

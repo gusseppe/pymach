@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-import math
 import base64
 import datetime
 import io
@@ -8,45 +7,24 @@ import os
 import glob
 
 import pandas as pd
-import time
 import numpy as np
-import flask
-import dash
 import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.plotly as py
-import functools
-# import cufflinks as cf # Needed
-from textwrap import dedent
 
 from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
-from plotly import graph_objs as go
-from flask_caching import Cache
-from app import app, indicator, millify, df_to_table
+from app import app, indicator
 from core import define
-from core import analyze
 from core import prepare
 from core import fselect
 from core import evaluate
 
-import core.tools as tools
 
 current_path = os.getcwd()
 MARKET_PATH = os.path.join(current_path, 'market')
 
 
-# cache = Cache(app.server, config={
-#     'CACHE_TYPE': 'filesystem',
-#     'CACHE_DIR': '/data/users/Gusseppe/reto_IGV/dashboard/piloto1/cache'
-# })
-# returns pie chart that shows lead source repartition
-TIMEOUT = 60
-total_monto = 0
-#@cache.memoize(timeout=TIMEOUT)
-
-@functools.lru_cache(maxsize=32)
+# @functools.lru_cache(maxsize=32)
 def parse_contents(contents, filename, date):
     content_type, content_string = contents.split(',')
 

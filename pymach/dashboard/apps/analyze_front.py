@@ -5,16 +5,13 @@ import datetime
 import io
 import os
 import glob
-
 import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
-import functools
-import core.tools as tools
 
 from collections import OrderedDict
 from dash.dependencies import Input, Output, State
-from app import app, indicator, millify, df_to_table
+from app import app, indicator
 from core import define
 from core import analyze
 from core import explain
@@ -23,16 +20,7 @@ current_path = os.getcwd()
 MARKET_PATH = os.path.join(current_path, 'market')
 
 
-# cache = Cache(app.server, config={
-#     'CACHE_TYPE': 'filesystem',
-#     'CACHE_DIR': '/data/users/Gusseppe/reto_IGV/dashboard/piloto1/cache'
-# })
-# returns pie chart that shows lead source repartition
-TIMEOUT = 60
-total_monto = 0
-#@cache.memoize(timeout=TIMEOUT)
-
-@functools.lru_cache(maxsize=32)
+# @functools.lru_cache(maxsize=32)
 def parse_contents(contents, filename, date):
     df = None
     content_type, content_string = contents.split(',')

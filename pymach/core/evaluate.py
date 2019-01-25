@@ -195,7 +195,7 @@ class Evaluate:
     def split_data(self, test_size=0.30, seed=7):
         """ Need to fill """
 
-        X_train, X_test, y_train, y_test =  train_test_split(
+        X_train, X_test, y_train, y_test = train_test_split(
                 self.definer.X, self.definer.y, test_size=test_size, random_state=seed)
 
         self.X_train = X_train
