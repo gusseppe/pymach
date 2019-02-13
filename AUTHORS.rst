@@ -10,5 +10,6 @@ Development Lead
 Contributors
 ------------
 
-Enrique Peinado 
-Oscar Huarcaya
+* Enrique Peinado 
+
+* Oscar Huarcaya
