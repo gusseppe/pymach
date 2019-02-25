@@ -206,7 +206,7 @@ layout = [
                     )
 
                 ],
-                className="four columns",
+                className="six columns",
             ),
             html.Div(
                 [
@@ -248,7 +248,7 @@ layout = [
                     )
 
                 ],
-                className="four columns",
+                className="six columns",
             ),
             # html.Div(id='metrics_predict_graph',
             #          className="four columns",
@@ -315,7 +315,7 @@ layout = [
      Output('models_predict_dropdown', 'options'),
      Output('models_predict_dropdown', 'value')],
     [Input('files_uploaded_predict_dropdown', 'value')])
-def update_metadata_model(uploaded_file):
+def update_metadata_predict(uploaded_file):
     if uploaded_file != '':
         metadata_folder = os.path.join(MARKET_PATH, uploaded_file.replace('.csv', ''))
         metadata_filename = uploaded_file.replace('.csv', '') + '_meta.json'
@@ -368,7 +368,7 @@ def update_metadata_model(uploaded_file):
                Output('fill_predict_table', 'data'),
                Output('fill_predict_table', 'columns')],
               [Input('files_uploaded_predict_dropdown', 'value')])
-def show_tables_model(uploaded_file):
+def show_tables_predict(uploaded_file):
     if uploaded_file != '':
 
         print('tuning>>>>>', uploaded_file)
@@ -386,7 +386,7 @@ def show_tables_model(uploaded_file):
         # df_predict = df.loc[:, df.columns != metadata['response']]
         df_predict = df.copy()
         df_predict[metadata['response']] = np.zeros(len(df))
-        df_predict.rename(columns={metadata['response']:'predicted'}, inplace=True)
+        df_predict.rename(columns={metadata['response']: 'prediction'}, inplace=True)
 
         columns_table=[
                     {'name': i, 'id': i, 'deletable': True} for i in df.columns
@@ -404,12 +404,11 @@ def show_tables_model(uploaded_file):
 
 
 @app.callback(
-    [Output('metrics_predict_graph', "children"),
-     Output('fi_predict_graph', "children")],
-    [Input('sample_predict_table', "derived_virtual_data"),
-     Input('sample_predict_table', "derived_virtual_selected_rows")],
+    Output('fill_predict_table2', "data"),
+    [Input('fill_predict_table', "derived_virtual_data"),
+     Input('fill_predict_table', "derived_virtual_selected_rows")],
     [State('files_uploaded_predict_dropdown', 'value')])
-def show_confmatrix_featimportance(rows, selected_rows, uploaded_file):
+def show_prediction_predict(rows, selected_rows, uploaded_file):
     # print('selected>>>', selected_rows)
     if selected_rows is None:
         selected_rows = []

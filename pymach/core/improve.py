@@ -8,7 +8,7 @@ This module provides ideas for improving some machine learning algorithms.
 
 """
 from __future__ import print_function
-import tools
+from core import tools
 
 import warnings
 import sys

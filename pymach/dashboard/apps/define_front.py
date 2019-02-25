@@ -75,7 +75,7 @@ layout = [
                                 'borderWidth': '2px', 'borderStyle': 'dashed',
                                 'borderRadius': '5px', 'textAlign': 'center', 'margin': '0px'
                             },
-                            max_size=1000e3, # 100kb
+                            # max_size=1000e3, # 100kb
                             multiple=True,
                         ),
                     ],
@@ -281,6 +281,7 @@ layout = [
     ),
 ]
 
+
 @app.callback(Output('intermediate-value', 'children'),
               [Input('upload-data', 'contents'),
                Input('files_uploaded_dropdown', 'value'),
@@ -308,7 +309,6 @@ def store_table_define(list_of_contents, uploaded_file, list_of_names, list_of_d
             'date': json.dumps(date, indent=4, sort_keys=True, default=str),
         }
         return json.dumps(info)
-
 
     # if a file is chosen from the dropdown
     if uploaded_file != '':

@@ -148,7 +148,7 @@ class Evaluate:
             if 'LogisticRegression' in list_models:
                 models.append( ('LogisticRegression', LogisticRegression()) )
             if 'XGBoostClassifier' in list_models:
-                models.append( ('XGBoostClassifier', XGBClassifier()) )
+                models.append( ('XGBoostClassifier', XGBClassifier(n_jobs=-1)) )
             if 'LGBMClassifier' in list_models:
                 models.append( ('LGBMClassifier', LGBMClassifier()) )
             # Voting
@@ -186,7 +186,7 @@ class Evaluate:
             if 'BayesianRidge' in list_models:
                 models.append( ('BayesianRidge', BayesianRidge()) )
             if 'XGBoostRegressor' in list_models:
-                models.append( ('XGBoostRegressor', XGBRegressor()) )
+                models.append( ('XGBoostRegressor', XGBRegressor(n_jobs=-1)) )
             if 'LGBMRegressor' in list_models:
                 models.append( ('LGBMRegressor', LGBMRegressor()) )
 
@@ -209,7 +209,7 @@ class Evaluate:
         pipelines = []
         models = self.set_models(list_models)
 
-        if self.definer.n_features > 20:
+        if self.definer.n_features > 200:
             for m in models:
                 pipelines.append((m[0],
                     Pipeline([

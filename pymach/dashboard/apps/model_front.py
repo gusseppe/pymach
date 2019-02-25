@@ -161,7 +161,7 @@ layout = [
         className="row",
         style={"marginBottom": "10"},
     ),
-    ########################### Indicators II ##################################
+    ########################### Indicators III ##################################
     html.Div(
         [
             html.Div(
@@ -628,7 +628,7 @@ def update_metadata_model(uploaded_file):
     models_value = np.random.choice(list_models(problem_type), 3, replace=False)
 
     out = tuple([filename, n_samples, n_features, size,
-                 cat_options, cat_features, num_options, num_features,
+                 cat_options, cat_features[:10], num_options, num_features[:10],
                  response_options, response, problem_type,
                  models_options, models_value])
     return out

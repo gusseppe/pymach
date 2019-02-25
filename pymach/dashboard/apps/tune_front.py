@@ -161,6 +161,100 @@ layout = [
         className="row",
         style={"marginBottom": "10"},
     ),
+    ########################### Indicators III ##################################
+    html.Div([
+        html.Div(
+            [
+                html.P(
+                    'Methods',
+                    className="twelve columns indicator_text"
+                ),
+                html.Hr(),
+                dcc.Dropdown(
+                    id="prepare_tune_dropdown",
+                    options=list_prepare(),
+                    # options = [
+                    #     {"label": 'model'+str(file), "value": file} for file in range(20)
+                    # ],
+                    value=list_prepare(),
+                    # value=[],
+                    clearable=False,
+                    searchable=False,
+                    disabled=True,
+                    className="twelve columns indicator_text",
+                    multi=True,
+                    # className="four columns chart_div"
+                    # className='indicator_value'
+                ),
+                # dcc.Checklist(
+                #     id='models_checklist',
+                #     options=[
+                #         {'label': 'New York City', 'value': 'NYC'},
+                #         {'label': 'Montréal', 'value': 'MTL'},
+                #         {'label': 'San Francisco', 'value': 'SF'}
+                #     ],
+                #     values=['MTL', 'SF']
+                # )
+
+            ],
+            className="four columns chart_div",
+        ),
+        html.Div(
+            [
+                html.P(
+                    'Methods',
+                    className="twelve columns indicator_text"
+                ),
+                html.Hr(),
+                dcc.Dropdown(
+                    id="selector_tune_dropdown",
+                    options=list_select(),
+                    value=list_select(),
+                    # value=[],
+                    clearable=False,
+                    searchable=False,
+                    disabled=True,
+                    className="twelve columns indicator_text",
+                    multi=True,
+                    # className="four columns chart_div"
+                    # className='indicator_value'
+                ),
+
+            ],
+            className="four columns chart_div",
+        ),
+        html.Div(
+            [
+                html.P(
+                    'Modelers',
+                    className="twelve columns indicator_text"
+                ),
+                html.Hr(),
+                dcc.Dropdown(
+                    id="models_tune_dropdown",
+                    # options=[],
+                    options=[],
+                    # options = [
+                    #     {"label": 'model'+str(file), "value": file} for file in range(20)
+                    # ],
+                    value=[],
+                    # value=[],
+                    clearable=False,
+                    searchable=False,
+                    # disabled=True,
+                    className="twelve columns indicator_text",
+                    multi=True,
+                    # className="four columns chart_div"
+                    # className='indicator_value'
+                ),
+            ],
+            className="four columns chart_div",
+        ),
+
+    ],
+        className="row",
+        style={"marginBottom": "10", "marginTop": "10"},
+    ),
 
     html.Hr(),
     ########################### Table results ##################################
@@ -307,7 +401,7 @@ layout = [
      Output('models_tune_dropdown', 'options'),
      Output('models_tune_dropdown', 'value')],
     [Input('files_uploaded_tune_dropdown', 'value')])
-def update_metadata_model(uploaded_file):
+def update_metadata_tune(uploaded_file):
     if uploaded_file != '':
         metadata_folder = os.path.join(MARKET_PATH, uploaded_file.replace('.csv', ''))
         metadata_filename = uploaded_file.replace('.csv', '') + '_meta.json'
@@ -358,7 +452,7 @@ def update_metadata_model(uploaded_file):
 @app.callback([Output('results_tune_table', 'data'),
                Output('results_tune_table', 'columns')],
               [Input('files_uploaded_tune_dropdown', 'value')])
-def show_out_models_model(uploaded_file):
+def show_out_models_tune(uploaded_file):
     if uploaded_file != '':
 
         print('tuning>>>>>', uploaded_file)
@@ -392,7 +486,7 @@ def show_out_models_model(uploaded_file):
 @app.callback(Output('models_tune_dropdown', 'value'),
               [Input('autocomplete_models_tune_button', 'n_clicks')],
               [State('problem_type_tune_indicator', 'children')])
-def autocomplete_models_model(n_clicks, problem_type):
+def autocomplete_models_tune(n_clicks, problem_type):
     if n_clicks > 0:
         models_value = list_models(problem_type)
         print(models_value)
@@ -408,7 +502,7 @@ def autocomplete_models_model(n_clicks, problem_type):
     [Input('results_tune_table', "derived_virtual_data"),
      Input('results_tune_table', "derived_virtual_selected_rows")],
     [State('files_uploaded_tune_dropdown', 'value')])
-def show_confmatrix_featimportance(rows, selected_rows, uploaded_file):
+def show_confmatrix_featimportance_tune(rows, selected_rows, uploaded_file):
     # print('selected>>>', selected_rows)
     if selected_rows is None:
         selected_rows = []
@@ -448,3 +542,5 @@ def show_confmatrix_featimportance(rows, selected_rows, uploaded_file):
         return_figs_fi = [dcc.Graph(figure=f) for f in list_figs_fi]
 
         return html.Div(return_figs_metrics), html.Div(return_figs_fi)
+    else:
+        return tuple([None, None])
