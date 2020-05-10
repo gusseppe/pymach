@@ -7,11 +7,13 @@ Pymach is a tool to accelerate the development of models based on Machine Learni
 Visit the demo: http://pymach.com
 
 Installation
---------
+------------
 
-* virtualenv -p python3 env
+Using conda
 
-* source env/bin/activate
+* conda create -n pymach python=3.6
+
+* source activate pymach
 
 * git clone https://github.com/gusseppe/pymach
 
@@ -24,6 +26,14 @@ Installation
 * python index.py
 
 
+Using Docker
+
+* git clone https://github.com/gusseppe/pymach
+* cd pymach/pymach
+* docker run -it -p 9080:9088 -v ${PWD}:/app gusseppe/pymach python index.py
+* Open a browser and enter http://localhost:9080
+
+You can modify the files in your current folder and see the modification in your container.
 
 Define
 --------
