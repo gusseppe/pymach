@@ -24,7 +24,7 @@ requirements = [
      'dash-table==3.1.11',
      'dash-table-experiments==0.6.0',
      'decorator==4.3.0',
-     'Flask==0.12.1',
+     'Flask==1.0',
      'Flask-Caching==1.4.0',
      'Flask-Compress==1.4.0',
      'h5py==2.9.0',

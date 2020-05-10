@@ -6,7 +6,7 @@ dash-html-components==0.13.4
 dash-renderer==0.17.0rc1
 dash-table==3.1.11
 dash-table-experiments==0.6.0
-Flask==0.12.1
+Flask==1.0
 Flask-Caching==1.4.0
 Flask-Compress==1.4.0
 h5py==2.9.0
