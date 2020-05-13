@@ -2,7 +2,7 @@
 pymach
 ===============================
 
-Pymach is a tool to accelerate the development of models based on Machine Learning, looking for the best model for your data. It aims to develop a first roadmap that gives an idea of the problem we are dealing with. The following pictures best explain the concept behind pymach.
+Pymach is a tool to accelerate the development of models based on Machine Learning, check if there are patterns to exploit on a dataset. It aims to develop a first roadmap that gives an idea of the problem we are dealing with. The following pictures best explain the concept behind pymach.
 
 
 Installation
@@ -11,6 +11,7 @@ Installation
 
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/drive/1eI59Mud0oczOl6UMmTocA7vN1x0tOC3V?usp=sharing
+   
 
 
 **Using conda**
@@ -30,7 +31,7 @@ Installation
 * python index.py
 
 
-Using Docker
+**Using Docker**
 
 * git clone https://github.com/gusseppe/pymach
 * cd pymach/pymach
