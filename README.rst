@@ -4,7 +4,6 @@ pymach
 
 Pymach is a tool to accelerate the development of models based on Machine Learning, looking for the best model for your data. It aims to develop a first roadmap that gives an idea of the problem we are dealing with. The following pictures best explain the concept behind pymach.
 
-Visit the demo: http://pymach.com
 
 Installation
 ------------
