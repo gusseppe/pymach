@@ -8,8 +8,13 @@ Visit the demo: http://pymach.com
 
 Installation
 ------------
+**Run using google colab:**
 
-Using conda
+.. image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/drive/1eI59Mud0oczOl6UMmTocA7vN1x0tOC3V?usp=sharing
+
+
+**Using conda**
 
 * conda create -n pymach python=3.6
 
