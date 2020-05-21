@@ -57,7 +57,7 @@ requirements = [
      'pyparsing==2.2.0',
      'python-dateutil==2.6.0',
      'pytz==2017.2',
-     'requests==2.14.2',
+     'requests==2.20.0',
      'retrying==1.3.3',
      'scikit-learn==0.18.1',
      'scipy==0.19.0',
