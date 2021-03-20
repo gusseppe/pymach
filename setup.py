@@ -33,7 +33,7 @@ requirements = [
      'ipython-genutils==0.2.0',
      'itsdangerous==0.24',
      'jedi==0.10.2',
-     'Jinja2==2.9.6',
+     'Jinja2==2.11.3',
      'jsonschema==2.6.0',
      'jupyter-core==4.3.0',
      'lightgbm==2.2.2',
