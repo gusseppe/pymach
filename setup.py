@@ -53,7 +53,7 @@ requirements = [
      'prompt-toolkit==1.0.14',
      'ptyprocess==0.5.1',
      'py==1.4.34',
-     'Pygments==2.2.0',
+     'Pygments==2.7.4',
      'pyparsing==2.2.0',
      'python-dateutil==2.6.0',
      'pytz==2017.2',
