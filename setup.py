@@ -29,7 +29,7 @@ requirements = [
      'Flask-Compress==1.4.0',
      'h5py==2.9.0',
      'hickle==3.3.2',
-     'ipython==6.0.0',
+     'ipython==7.16.3',
      'ipython-genutils==0.2.0',
      'itsdangerous==0.24',
      'jedi==0.10.2',
