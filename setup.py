@@ -42,7 +42,7 @@ requirements = [
      'MyApplication==0.1.0',
      'nbformat==4.3.0',
      'networkx==2.2',
-     'numpy==1.12.1',
+     'numpy==1.21.0',
      'packaging==16.8',
      'pandas==0.20.1',
      'pexpect==4.2.1',
