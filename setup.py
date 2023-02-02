@@ -68,7 +68,7 @@ requirements = [
      'typing==3.6.1',
      'virtualenv==15.1.0',
      'wcwidth==0.1.7',
-     'Werkzeug==0.12.1',
+     'Werkzeug==0.15.5',
      'xgboost==0.81',
 
 ]
